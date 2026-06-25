@@ -2,12 +2,13 @@ import { Quote, Star } from "lucide-react";
 import { TESTIMONIALS } from "@/lib/content";
 import { Container, SectionHeading } from "@/components/ui/section";
 import { Reveal } from "@/components/ui/reveal";
-import { FloatingDoodles } from "@/components/graphics/doodles";
+import { FloatingDoodles, SquirrelPeek } from "@/components/graphics/doodles";
 
 export function Testimonials() {
   return (
     <section className="relative overflow-hidden py-20 sm:py-24">
       <FloatingDoodles />
+      <SquirrelPeek className="pointer-events-none absolute right-[8%] top-2 hidden h-16 w-16 text-brown/15 lg:block" />
       <Container className="relative z-10">
         <SectionHeading eyebrow="Loved by thousands" title="Don't just take our word for it" />
         <div className="mt-14 grid gap-5 md:grid-cols-2">

@@ -54,6 +54,63 @@ export function Squirrel({ className }: DoodleProps) {
   );
 }
 
+/* ---------------- Squirrel waving hello (standing) ---------------- */
+export function SquirrelWave({ className }: DoodleProps) {
+  return (
+    <svg viewBox="0 0 120 120" className={className} fill="none" aria-hidden="true">
+      {/* tail */}
+      <path d="M40 110C12 106 4 74 16 50 25 30 48 24 58 36c6 8 2 18-8 18-9 0-15 8-13 17 1 7 8 13 16 12-8 9-20 16-29 15Z" fill="currentColor" />
+      <path d="M30 96C20 78 22 56 38 44" stroke="#fff7ec" strokeWidth="3.2" strokeLinecap="round" opacity="0.45" />
+      {/* body standing */}
+      <ellipse cx="66" cy="86" rx="20" ry="24" fill="currentColor" />
+      <ellipse cx="65" cy="90" rx="11" ry="15" fill="#fff7ec" opacity="0.9" />
+      {/* feet */}
+      <ellipse cx="56" cy="108" rx="6" ry="4" fill="currentColor" />
+      <ellipse cx="78" cy="108" rx="6" ry="4" fill="currentColor" />
+      {/* lower waving arm origin */}
+      <path d="M82 74c10-6 18-14 20-26" stroke="currentColor" strokeWidth="9" strokeLinecap="round" />
+      <circle cx="104" cy="44" r="6" fill="currentColor" />
+      {/* head */}
+      <circle cx="64" cy="46" r="20" fill="currentColor" />
+      <path d="M50 30c-3-10 6-14 12-7-6 0-10 3-12 7Z" fill="currentColor" />
+      <path d="M78 30c3-10-6-14-12-7 6 0 10 3 12 7Z" fill="currentColor" />
+      <circle cx="54" cy="52" r="4.5" fill="#e89b9b" opacity="0.5" />
+      <ellipse cx="64" cy="53" rx="10" ry="7" fill="#fff7ec" opacity="0.92" />
+      <circle cx="58" cy="44" r="3.6" fill="#2f2118" />
+      <circle cx="59.2" cy="42.8" r="1.2" fill="#fff" />
+      <circle cx="72" cy="44" r="3.6" fill="#2f2118" />
+      <circle cx="73.2" cy="42.8" r="1.2" fill="#fff" />
+      <ellipse cx="65" cy="51" rx="2.4" ry="1.8" fill="#2f2118" />
+      <path d="M65 53c0 3-3 4-5 3M65 53c0 3 3 4 5 3" stroke="#2f2118" strokeWidth="1.2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+/* ---------------- Squirrel peeking over an edge ---------------- */
+export function SquirrelPeek({ className }: DoodleProps) {
+  return (
+    <svg viewBox="0 0 120 90" className={className} fill="none" aria-hidden="true">
+      {/* ears */}
+      <path d="M40 30c-3-12 8-16 14-8-7 0-11 4-14 8Z" fill="currentColor" />
+      <path d="M80 30c3-12-8-16-14-8 7 0 11 4 14 8Z" fill="currentColor" />
+      {/* head */}
+      <circle cx="60" cy="44" r="26" fill="currentColor" />
+      <circle cx="44" cy="52" r="6" fill="#e89b9b" opacity="0.5" />
+      <circle cx="76" cy="52" r="6" fill="#e89b9b" opacity="0.5" />
+      <ellipse cx="60" cy="54" rx="13" ry="9" fill="#fff7ec" opacity="0.92" />
+      <circle cx="51" cy="42" r="4.6" fill="#2f2118" />
+      <circle cx="52.4" cy="40.4" r="1.4" fill="#fff" />
+      <circle cx="69" cy="42" r="4.6" fill="#2f2118" />
+      <circle cx="70.4" cy="40.4" r="1.4" fill="#fff" />
+      <ellipse cx="60" cy="52" rx="3" ry="2.3" fill="#2f2118" />
+      <path d="M60 54.5c0 3.5-4 4.5-6 3.5M60 54.5c0 3.5 4 4.5 6 3.5" stroke="#2f2118" strokeWidth="1.4" strokeLinecap="round" />
+      {/* paws gripping the edge */}
+      <path d="M30 74c0-5 5-8 10-8s9 4 9 9H30Z" fill="currentColor" />
+      <path d="M71 75c0-5 4-9 9-9s10 3 10 8H71Z" fill="currentColor" />
+    </svg>
+  );
+}
+
 /* ---------------- Makhana / foxnut puff ---------------- */
 export function Makhana({ className }: DoodleProps) {
   return (
@@ -143,13 +200,13 @@ export function FloatingDoodles({
       : { a: "text-butter", b: "text-mint", c: "text-sky", d: "text-peach", e: "text-accent/30" };
   return (
     <div aria-hidden="true" className={cn("pointer-events-none absolute overflow-hidden", className)}>
-      <Almond className={`absolute left-[4%] top-[14%] h-9 w-9 rotate-12 ${c.a} animate-float`} />
-      <Sparkle className={`absolute left-[18%] top-[68%] h-6 w-6 ${c.e} animate-bob`} />
-      <Cashew className={`absolute right-[6%] top-[22%] h-11 w-11 -rotate-12 ${c.b} animate-sway`} />
-      <Makhana className={`absolute right-[16%] top-[72%] h-9 w-9 ${c.c} animate-float-slow`} />
-      <Leaf className={`absolute left-[46%] top-[8%] h-8 w-8 -rotate-12 ${c.d} animate-sway`} />
-      <Sparkle className={`absolute right-[40%] bottom-[12%] h-5 w-5 ${c.e} animate-bob`} />
-      <Makhana className={`absolute left-[8%] bottom-[16%] h-7 w-7 ${c.a} animate-float`} />
+      <Almond className={`absolute left-[4%] top-[16%] h-12 w-12 rotate-12 ${c.a} animate-float`} />
+      <Sparkle className={`absolute left-[20%] top-[66%] h-8 w-8 ${c.e} animate-bob`} />
+      <Cashew className={`absolute right-[5%] top-[24%] h-14 w-14 -rotate-12 ${c.b} animate-float-slow`} />
+      <Makhana className={`absolute right-[16%] top-[70%] h-11 w-11 ${c.c} animate-float`} />
+      <Leaf className={`absolute left-[45%] top-[10%] h-10 w-10 -rotate-12 ${c.d} animate-sway`} />
+      <Sparkle className={`absolute right-[38%] bottom-[14%] h-7 w-7 ${c.e} animate-bob`} />
+      <Makhana className={`absolute left-[9%] bottom-[18%] h-10 w-10 ${c.a} animate-float-slow`} />
     </div>
   );
 }

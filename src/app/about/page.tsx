@@ -6,7 +6,7 @@ import { Reveal } from "@/components/ui/reveal";
 import { CtaBand } from "@/components/home/cta-band";
 import { STATS } from "@/lib/content";
 import { SITE } from "@/lib/site";
-import { WaveDivider, Squirrel, Leaf } from "@/components/graphics/doodles";
+import { WaveDivider, SquirrelPeek, SquirrelWave, Leaf } from "@/components/graphics/doodles";
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -42,6 +42,7 @@ export default function AboutPage() {
       {/* Story */}
       <section className="relative py-16 sm:py-20">
         <Leaf className="pointer-events-none absolute right-[6%] top-12 hidden h-14 w-14 -rotate-12 text-mint animate-sway lg:block" />
+        <SquirrelWave className="pointer-events-none absolute left-[6%] bottom-6 hidden h-20 w-20 text-brown/15 animate-bob lg:block" />
         <Container className="relative max-w-3xl text-center">
           <p className="font-script text-2xl text-accent sm:text-3xl">Hand-picked with care &amp; love</p>
           <p className="mt-4 text-lg leading-relaxed text-brown/80">
@@ -91,10 +92,10 @@ export default function AboutPage() {
       </section>
 
       {/* Quality assurance process */}
-      <section className="relative overflow-hidden bg-cream-deep py-16 sm:py-20">
+      <section className="relative overflow-hidden bg-cream-deep">
         <WaveDivider color="var(--cream)" className="-mt-px" />
-        <Squirrel className="pointer-events-none absolute right-[6%] bottom-8 hidden h-24 w-24 text-brown/10 animate-bob lg:block" />
-        <Container className="relative">
+        <SquirrelPeek className="pointer-events-none absolute right-[6%] top-0 hidden h-20 w-20 text-brown/15 lg:block" />
+        <Container className="relative z-10 py-16 sm:py-20">
           <SectionHeading eyebrow="How we do it" title="Our quality assurance process" />
           <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {PROCESS.map((s, i) => (

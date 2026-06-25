@@ -3,7 +3,7 @@ import { RECIPE_STEPS } from "@/lib/content";
 import { PLATFORMS } from "@/lib/site";
 import { Container, SectionHeading } from "@/components/ui/section";
 import { Reveal } from "@/components/ui/reveal";
-import { Lotus, Leaf, Makhana, WaveDivider, FloatingDoodles } from "@/components/graphics/doodles";
+import { Lotus, WaveDivider, FloatingDoodles, SquirrelWave, SquirrelPeek } from "@/components/graphics/doodles";
 import { img } from "@/lib/utils";
 
 const STEP_BG: Record<string, string> = {
@@ -18,6 +18,7 @@ export function PondsToPlates() {
       <FloatingDoodles variant="soft" className="inset-x-0 top-28 bottom-28" />
       <Lotus className="pointer-events-none absolute left-[8%] top-1/3 h-20 w-20 text-white/50 animate-float-slow" />
       <Lotus className="pointer-events-none absolute right-[10%] bottom-1/3 h-14 w-14 text-white/50 animate-float" />
+      <SquirrelWave className="pointer-events-none absolute bottom-6 right-[7%] hidden h-24 w-24 text-white/70 animate-bob lg:block" />
 
       <Container className="relative py-20 text-center sm:py-28">
         <p className="font-script text-3xl text-accent sm:text-4xl">From Ponds to Plates</p>
@@ -62,10 +63,11 @@ export function GiftHampersStrip({
   hampers: { slug: string; name: string; price: number; imageId: string }[];
 }) {
   return (
-    <section className="relative overflow-hidden bg-cream-deep py-20 sm:py-24">
+    <section className="relative overflow-hidden bg-cream-deep">
       <WaveDivider color="var(--cream)" className="-mt-px" />
-      <FloatingDoodles className="inset-x-0 top-28 bottom-28" />
-      <Container className="relative z-10">
+      <SquirrelPeek className="pointer-events-none absolute left-[5%] top-1 hidden h-16 w-16 text-brown/15 lg:block" />
+      <FloatingDoodles className="inset-x-0 top-32 bottom-32" />
+      <Container className="relative z-10 py-16 sm:py-20">
         <SectionHeading eyebrow="Gift hampers & combos" title="Made to give, made to delight" />
         <div className="mt-14 grid gap-5 sm:grid-cols-3">
           {hampers.map((h, i) => (
