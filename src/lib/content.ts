@@ -39,10 +39,6 @@ export const BENEFITS: Benefit[] = [
   { icon: "shield", title: "Rich in Antioxidants", body: "Helps fight free radicals and keeps you glowing from within." },
   { icon: "heart", title: "Supports Heart Health", body: "Good fats and fibre that look after your heart." },
   { icon: "scale", title: "Aids Weight Loss", body: "Light, low-calorie snacking that keeps cravings in check." },
-  { icon: "sparkles", title: "Anti-Inflammatory", body: "Naturally soothing nutrients for everyday wellbeing." },
-  { icon: "brain", title: "Brain Food", body: "Omega-3s and minerals to help keep your mind sharp." },
-  { icon: "bone", title: "Rich in Calcium", body: "Supports strong bones and teeth, the natural way." },
-  { icon: "zap", title: "Gluten-Free", body: "Wholesome, clean snacking the whole family can enjoy." },
 ];
 
 // Real clients drawn from the company profile
