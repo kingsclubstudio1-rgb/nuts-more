@@ -10,7 +10,7 @@ import { WaveDivider, Leaf, Makhana } from "@/components/graphics/doodles";
 export function Footer() {
   return (
     <footer className="relative mt-24">
-      <WaveDivider color="var(--brown-ink)" className="-mb-px" />
+      <WaveDivider color="var(--brown-ink)" flip className="-mb-px" />
       <div className="relative overflow-hidden bg-brown-ink text-[#f3e7d6]">
         {/* faint doodles */}
         <Leaf className="pointer-events-none absolute -left-6 top-16 h-32 w-32 text-white/[0.04] animate-sway" />

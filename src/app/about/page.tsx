@@ -92,7 +92,7 @@ export default function AboutPage() {
 
       {/* Quality assurance process */}
       <section className="relative overflow-hidden bg-cream-deep py-16 sm:py-20">
-        <WaveDivider color="var(--cream)" flip className="-mt-px" />
+        <WaveDivider color="var(--cream)" className="-mt-px" />
         <Squirrel className="pointer-events-none absolute right-[6%] bottom-8 hidden h-24 w-24 text-brown/10 animate-bob lg:block" />
         <Container className="relative">
           <SectionHeading eyebrow="How we do it" title="Our quality assurance process" />
@@ -111,7 +111,7 @@ export default function AboutPage() {
             ))}
           </div>
         </Container>
-        <WaveDivider color="var(--cream)" className="-mb-px" />
+        <WaveDivider color="var(--cream)" flip className="-mb-px" />
       </section>
 
       <CtaBand />

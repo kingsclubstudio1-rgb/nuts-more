@@ -14,12 +14,10 @@ const STEP_BG: Record<string, string> = {
 export function PondsToPlates() {
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-mint via-sky to-lavender">
-      <WaveDivider color="var(--cream)" flip className="-mt-px" />
-      <FloatingDoodles variant="soft" />
-      <Lotus className="pointer-events-none absolute left-[8%] top-10 h-20 w-20 text-white/50 animate-float-slow" />
-      <Lotus className="pointer-events-none absolute right-[10%] bottom-10 h-14 w-14 text-white/50 animate-float" />
-      <Leaf className="pointer-events-none absolute right-[24%] top-12 h-12 w-12 -rotate-12 text-brown/10 animate-sway" />
-      <Makhana className="pointer-events-none absolute left-[28%] bottom-12 h-12 w-12 text-brown/10 animate-bob" />
+      <WaveDivider color="var(--cream)" className="-mt-px" />
+      <FloatingDoodles variant="soft" className="inset-x-0 top-28 bottom-28" />
+      <Lotus className="pointer-events-none absolute left-[8%] top-1/3 h-20 w-20 text-white/50 animate-float-slow" />
+      <Lotus className="pointer-events-none absolute right-[10%] bottom-1/3 h-14 w-14 text-white/50 animate-float" />
 
       <Container className="relative py-20 text-center sm:py-28">
         <p className="font-script text-3xl text-accent sm:text-4xl">From Ponds to Plates</p>
@@ -30,7 +28,7 @@ export function PondsToPlates() {
           The guilt-free snack for a healthy you — popped from lotus seeds, roasted with love.
         </p>
       </Container>
-      <WaveDivider color="var(--cream)" className="-mb-px" />
+      <WaveDivider color="var(--cream)" flip className="-mb-px" />
     </section>
   );
 }
@@ -65,8 +63,8 @@ export function GiftHampersStrip({
 }) {
   return (
     <section className="relative overflow-hidden bg-cream-deep py-20 sm:py-24">
-      <WaveDivider color="var(--cream)" flip className="-mt-px" />
-      <FloatingDoodles />
+      <WaveDivider color="var(--cream)" className="-mt-px" />
+      <FloatingDoodles className="inset-x-0 top-28 bottom-28" />
       <Container className="relative z-10">
         <SectionHeading eyebrow="Gift hampers & combos" title="Made to give, made to delight" />
         <div className="mt-14 grid gap-5 sm:grid-cols-3">
@@ -88,7 +86,7 @@ export function GiftHampersStrip({
           ))}
         </div>
       </Container>
-      <WaveDivider color="var(--cream)" className="-mb-px" />
+      <WaveDivider color="var(--cream)" flip className="-mb-px" />
     </section>
   );
 }

@@ -132,15 +132,17 @@ export function Sparkle({ className }: DoodleProps) {
  * variant "soft"   → white doodles for coloured / dark bands               */
 export function FloatingDoodles({
   variant = "light",
+  className = "inset-0",
 }: {
   variant?: "light" | "soft";
+  className?: string;
 }) {
   const c =
     variant === "soft"
       ? { a: "text-white/15", b: "text-white/10", c: "text-white/20", d: "text-white/15", e: "text-white/25" }
       : { a: "text-butter", b: "text-mint", c: "text-sky", d: "text-peach", e: "text-accent/30" };
   return (
-    <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+    <div aria-hidden="true" className={cn("pointer-events-none absolute overflow-hidden", className)}>
       <Almond className={`absolute left-[4%] top-[14%] h-9 w-9 rotate-12 ${c.a} animate-float`} />
       <Sparkle className={`absolute left-[18%] top-[68%] h-6 w-6 ${c.e} animate-bob`} />
       <Cashew className={`absolute right-[6%] top-[22%] h-11 w-11 -rotate-12 ${c.b} animate-sway`} />
@@ -166,10 +168,13 @@ export function WaveDivider({
   flip?: boolean;
   variant?: "round" | "scallop";
 }) {
+  // Solid block with a single wavy bottom hem (no flat transparent band).
+  // Place at the TOP of a section (fill = colour of the section ABOVE) to
+  // transition into it; add `flip` at the BOTTOM (fill = colour BELOW).
   const d =
     variant === "scallop"
-      ? "M0 40 Q 90 0 180 40 T 360 40 T 540 40 T 720 40 T 900 40 T 1080 40 T 1260 40 T 1440 40 V120 H0 Z"
-      : "M0 60 C 240 110 480 110 720 70 C 960 30 1200 30 1440 70 V120 H0 Z";
+      ? "M0 0 H1440 V40 Q 1350 80 1260 40 T 1080 40 T 900 40 T 720 40 T 540 40 T 360 40 T 180 40 T 0 40 Z"
+      : "M0 0 H1440 V70 C 1200 116 960 116 720 78 C 480 40 240 40 0 70 Z";
   return (
     <div
       aria-hidden="true"
