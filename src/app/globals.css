@@ -1,0 +1,155 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ *
+ * Nuts&More — playful, pastel, hand-drawn brand system
+ * Anchored on the brand brown (squirrel logo) with soft candy pastels
+ * for fun, light section colour-blocking.
+ * ------------------------------------------------------------------ */
+
+:root {
+  --cream: #fff9ef; /* page background */
+  --cream-deep: #fdf1df; /* alt panels */
+  --surface: #fffdf9; /* cards */
+
+  --brown: #4a3526; /* brand brown — primary / buttons */
+  --brown-ink: #2f2118; /* headings / darkest text */
+  --brown-soft: #efe4d6; /* tan wash */
+  --muted: #806f60; /* secondary text (>=4.5:1 on cream) */
+
+  --accent: #e26d8a; /* candy pink — script + highlights */
+  --accent-ink: #b14e69;
+
+  /* pastel section tints + readable ink on each */
+  --blush: #fcdde4;
+  --peach: #fbe0cf;
+  --butter: #fcecae;
+  --mint: #d3edd9;
+  --sky: #cde8f2;
+  --lavender: #e7dcf6;
+  --sage: #e6eccf;
+
+  --border: #efe2cf;
+  --ring: #e26d8a;
+  --destructive: #c2483a;
+
+  --radius: 1.5rem;
+}
+
+@theme inline {
+  --color-cream: var(--cream);
+  --color-cream-deep: var(--cream-deep);
+  --color-surface: var(--surface);
+
+  --color-background: var(--cream);
+  --color-foreground: var(--brown-ink);
+
+  --color-brown: var(--brown);
+  --color-brown-ink: var(--brown-ink);
+  --color-brown-soft: var(--brown-soft);
+  --color-muted-foreground: var(--muted);
+
+  --color-primary: var(--brown);
+  --color-primary-foreground: #fff7ec;
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-foreground: #ffffff;
+
+  --color-blush: var(--blush);
+  --color-peach: var(--peach);
+  --color-butter: var(--butter);
+  --color-mint: var(--mint);
+  --color-sky: var(--sky);
+  --color-lavender: var(--lavender);
+  --color-sage: var(--sage);
+
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+  --color-destructive: var(--destructive);
+
+  --font-heading: var(--font-fredoka);
+  --font-body: var(--font-nunito);
+  --font-script: var(--font-pacifico);
+
+  --radius-sm: 0.625rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.5rem;
+  --radius-xl: 2rem;
+  --radius-2xl: 2.5rem;
+
+  --shadow-soft: 0 2px 4px rgba(74, 53, 38, 0.05),
+    0 12px 28px -14px rgba(74, 53, 38, 0.22);
+  --shadow-lift: 0 4px 8px rgba(74, 53, 38, 0.06),
+    0 26px 48px -18px rgba(74, 53, 38, 0.32);
+
+  --animate-marquee: marquee 30s linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-float-slow: float 9s ease-in-out infinite;
+  --animate-sway: sway 7s ease-in-out infinite;
+  --animate-bob: bob 3s ease-in-out infinite;
+  --animate-spin-slow: spin 26s linear infinite;
+}
+
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+@keyframes bob {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-7px) rotate(-3deg); }
+}
+@keyframes sway {
+  0%, 100% { transform: rotate(-5deg); }
+  50% { transform: rotate(5deg); }
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--cream);
+  color: var(--brown-ink);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, .font-heading {
+  font-family: var(--font-heading), ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+.font-script {
+  font-family: var(--font-script), ui-serif, cursive;
+  letter-spacing: 0;
+}
+
+::selection {
+  background: var(--accent);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
