@@ -228,7 +228,7 @@ export function Navbar() {
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 placeholder="Search almonds, dates, makhana…"
-                className="h-10 flex-1 border-b border-white/15 bg-transparent text-on-dark placeholder:text-muted-on-dark focus:border-gold focus:outline-none"
+                className="h-10 min-w-0 flex-1 border-b border-white/15 bg-transparent text-on-dark placeholder:text-muted-on-dark focus:border-gold focus:outline-none"
               />
               <button
                 type="submit"

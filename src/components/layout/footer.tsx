@@ -30,7 +30,7 @@ export function Footer() {
               required
               placeholder="you@email.com"
               autoComplete="email"
-              className="h-12 flex-1 rounded-full border border-white/20 bg-white/10 px-5 text-on-dark placeholder:text-muted-on-dark focus:border-gold focus:outline-none"
+              className="h-12 w-full min-w-0 flex-1 rounded-full border border-white/20 bg-white/10 px-5 text-on-dark placeholder:text-muted-on-dark focus:border-gold focus:outline-none"
             />
             <button
               type="submit"

@@ -311,7 +311,7 @@ export function ProductForm({
               {uploading ? "Uploading…" : "Upload image"}
             </button>
             <div className="mt-2 flex gap-2">
-              <input value={urlInput} onChange={(e) => setUrlInput(e.target.value)} placeholder="…or paste URL / /img/103.jpg" className="h-10 flex-1 rounded-xl border border-line bg-cream px-3 text-xs focus:border-gold focus:outline-none" />
+              <input value={urlInput} onChange={(e) => setUrlInput(e.target.value)} placeholder="…or paste URL / /img/103.jpg" className="h-10 min-w-0 flex-1 rounded-xl border border-line bg-cream px-3 text-xs focus:border-gold focus:outline-none" />
               <button type="button" onClick={() => { addImage(urlInput); setUrlInput(""); }} className="flex h-10 w-10 items-center justify-center rounded-xl border border-line text-foreground hover:border-gold" aria-label="Add image URL">
                 <Plus className="h-4 w-4" />
               </button>
