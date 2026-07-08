@@ -24,12 +24,12 @@ const sb = createClient(env.NEXT_PUBLIC_SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_
 });
 
 const CATEGORIES = [
-  { slug: "nuts", name: "Nuts", tagline: "The wholesome classics", description: "Hand-picked almonds, cashews, pistachios, walnuts, hazelnuts & more.", image: "/img/140.jpg", sort: 1 },
-  { slug: "dry-fruits", name: "Dry Fruits", tagline: "Nature's sweet jewels", description: "Plump Medjool & Mabroom dates, golden raisins and tangy berries.", image: "/img/141.jpg", sort: 2 },
+  { slug: "nuts", name: "Nuts", tagline: "The wholesome classics", description: "Hand-picked almonds, cashews, pistachios, walnuts, hazelnuts & more.", image: "/img/hero-2.jpg", sort: 1 },
+  { slug: "dry-fruits", name: "Dry Fruits", tagline: "Nature's sweet jewels", description: "Plump Medjool & Mabroom dates, golden raisins and tangy berries.", image: "/img/hero-3.jpg", sort: 2 },
   { slug: "seeds", name: "Seeds", tagline: "Tiny but mighty", description: "Chia, pumpkin, sunflower, flax, basil & watermelon superfoods.", image: "/img/142.jpg", sort: 3 },
   { slug: "makhana", name: "Makhana", tagline: "A delightful crunch", description: "Roasted foxnuts in fun, moreish flavours.", image: "/img/130.jpg", sort: 4 },
   { slug: "trail-muesli", name: "Trail Mix & Muesli", tagline: "Fuel for every day", description: "Panch Rathan, trail mixes and wholesome muesli.", image: "/img/144.jpg", sort: 5 },
-  { slug: "gift-hampers", name: "Gift Hampers", tagline: "Gifting, perfected", description: "Bespoke gourmet hampers for unforgettable moments.", image: "/img/136.jpg", sort: 6 },
+  { slug: "gift-hampers", name: "Gift Hampers", tagline: "Gifting, perfected", description: "Bespoke gourmet hampers for unforgettable moments.", image: "/img/hero-4.jpg", sort: 6 },
 ];
 
 const HERO = [

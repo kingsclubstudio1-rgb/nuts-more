@@ -66,7 +66,7 @@ export const CATEGORIES: Category[] = [
     tagline: "The wholesome classics",
     description:
       "Hand-picked almonds, cashews, pistachios, walnuts, hazelnuts & more — from premier global orchards.",
-    image: "/img/140.jpg",
+    image: "/img/hero-2.jpg",
   },
   {
     slug: "dry-fruits",
@@ -74,7 +74,7 @@ export const CATEGORIES: Category[] = [
     tagline: "Nature's sweet jewels",
     description:
       "Plump Medjool & Mabroom dates, golden raisins and tangy berries — dried slow to keep the goodness in.",
-    image: "/img/141.jpg",
+    image: "/img/hero-3.jpg",
   },
   {
     slug: "seeds",
@@ -106,7 +106,7 @@ export const CATEGORIES: Category[] = [
     tagline: "Gifting, perfected",
     description:
       "Bespoke gourmet hampers that turn dates, nuts and dry fruits into unforgettable moments.",
-    image: "/img/136.jpg",
+    image: "/img/hero-4.jpg",
   },
 ];
 

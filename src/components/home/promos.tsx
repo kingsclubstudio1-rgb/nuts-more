@@ -10,7 +10,7 @@ export function GiftHamperCard() {
       className="group relative flex h-full min-h-[15rem] flex-col justify-between overflow-hidden rounded-2xl bg-espresso p-6 text-on-dark ring-1 ring-gold/15"
     >
       <Image
-        src="/img/136.jpg"
+        src="/img/hero-1.jpg"
         alt=""
         fill
         sizes="(max-width:1024px) 100vw, 33vw"
