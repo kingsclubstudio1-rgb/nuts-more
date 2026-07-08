@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Search, SlidersHorizontal } from "lucide-react";
-import type { Product, CategorySlug } from "@/lib/catalog";
+import type { Product, CategorySlug, Category } from "@/lib/catalog";
 import { CATEGORIES, lowestPrice } from "@/lib/catalog";
 import { ProductCard } from "./product-card";
 
@@ -10,10 +10,12 @@ type Sort = "featured" | "price-asc" | "price-desc" | "rating";
 
 export function ProductBrowser({
   products,
+  categories = CATEGORIES,
   initialQuery = "",
   initialCategory = "all",
 }: {
   products: Product[];
+  categories?: Category[];
   initialQuery?: string;
   initialCategory?: string;
 }) {
@@ -82,7 +84,7 @@ export function ProductBrowser({
           <Chip active={category === "all"} onClick={() => setCategory("all")}>
             All
           </Chip>
-          {CATEGORIES.map((c) => (
+          {categories.map((c) => (
             <Chip
               key={c.slug}
               active={category === c.slug}
@@ -96,7 +98,7 @@ export function ProductBrowser({
 
       <p className="mt-6 text-sm text-muted-foreground">
         {filtered.length} product{filtered.length === 1 ? "" : "s"}
-        {category !== "all" && <> in {CATEGORIES.find((c) => c.slug === category)?.name}</>}
+        {category !== "all" && <> in {categories.find((c) => c.slug === category)?.name}</>}
       </p>
 
       {filtered.length === 0 ? (

@@ -1,23 +1,16 @@
 import Link from "next/link";
 import { PlusCircle, Package, Layers, AlertTriangle, XCircle } from "lucide-react";
 import { InventoryTable } from "@/components/admin/inventory-table";
-import { listProducts, countLowStock, countOutOfStock } from "@/lib/inventory";
+import { inventoryStats } from "@/lib/cms";
 import { formatINR } from "@/lib/catalog";
 
 export const dynamic = "force-dynamic";
 
-export default function AdminDashboard() {
-  const products = listProducts({ includeHidden: true });
-  const totalVariants = products.reduce((n, p) => n + p.variants.length, 0);
-  const inventoryValue = products.reduce(
-    (s, p) => s + p.variants.reduce((a, v) => a + v.price * Math.max(0, v.stock), 0),
-    0,
-  );
-  const low = countLowStock();
-  const out = countOutOfStock();
+export default async function AdminDashboard() {
+  const { products, count, totalVariants, low, out, value: inventoryValue } = await inventoryStats();
 
   const stats = [
-    { icon: Package, label: "Products", value: String(products.length) },
+    { icon: Package, label: "Products", value: String(count) },
     { icon: Layers, label: "Weight options", value: String(totalVariants) },
     { icon: AlertTriangle, label: "Low stock (≤5)", value: String(low), tone: "amber" },
     { icon: XCircle, label: "Out of stock", value: String(out), tone: "red" },

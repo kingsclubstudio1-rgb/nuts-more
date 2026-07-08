@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { redirect } from "next/navigation";
-import { LayoutGrid, PlusCircle, ExternalLink, LogOut } from "lucide-react";
+import { LayoutGrid, PlusCircle, ExternalLink, LogOut, Tags, Image as ImageIcon } from "lucide-react";
 import { isAuthed } from "@/lib/auth";
 import { logoutAction } from "./actions";
 
@@ -37,6 +37,20 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             >
               <PlusCircle className="h-4 w-4" />
               <span className="hidden sm:inline">Add product</span>
+            </Link>
+            <Link
+              href="/admin/categories"
+              className="flex items-center gap-1.5 rounded-full px-3 py-2 font-medium text-on-dark/85 hover:bg-white/10 hover:text-gold"
+            >
+              <Tags className="h-4 w-4" />
+              <span className="hidden sm:inline">Categories</span>
+            </Link>
+            <Link
+              href="/admin/content"
+              className="flex items-center gap-1.5 rounded-full px-3 py-2 font-medium text-on-dark/85 hover:bg-white/10 hover:text-gold"
+            >
+              <ImageIcon className="h-4 w-4" />
+              <span className="hidden sm:inline">Content</span>
             </Link>
             <Link
               href="/"

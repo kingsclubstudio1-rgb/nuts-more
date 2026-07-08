@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { decrementStock } from "@/lib/inventory";
+import { decrementStock } from "@/lib/cms";
 import { recordOrder, type OrderItem } from "@/lib/orders";
 
 /**
@@ -18,7 +18,7 @@ export async function placeOrderAction(order: {
   const items = order.items ?? [];
   if (!items.length) return { ok: false, saved: false };
 
-  decrementStock(
+  await decrementStock(
     items.map((i) => ({ id: i.id, weight: i.weight, qty: Math.max(1, Math.floor(i.qty || 1)) })),
   );
 

@@ -4,7 +4,7 @@ import { useState, useTransition, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Plus, Trash2, Upload, Loader2, ImageIcon, ArrowLeft, Star } from "lucide-react";
 import Link from "next/link";
-import type { Product, CategorySlug } from "@/lib/catalog";
+import type { Product, CategorySlug, Category } from "@/lib/catalog";
 import { CATEGORIES } from "@/lib/catalog";
 import { saveProductAction } from "@/app/admin/actions";
 import { cn } from "@/lib/utils";
@@ -15,7 +15,13 @@ type NutritionRow = { label: string; value: string };
 const WEIGHT_SUGGESTIONS = ["1000g", "500g", "250g", "200g", "100g", "50g", "Assorted"];
 const BADGES = ["", "Bestseller", "New", "Limited"] as const;
 
-export function ProductForm({ product }: { product?: Product }) {
+export function ProductForm({
+  product,
+  categories = CATEGORIES,
+}: {
+  product?: Product;
+  categories?: Category[];
+}) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const fileRef = useRef<HTMLInputElement>(null);
@@ -150,7 +156,7 @@ export function ProductForm({ product }: { product?: Product }) {
             <label className="block">
               <span className="mb-1.5 block text-sm font-medium text-foreground">Category *</span>
               <select value={category} onChange={(e) => setCategory(e.target.value as CategorySlug)} className={field}>
-                {CATEGORIES.map((c) => (
+                {categories.map((c) => (
                   <option key={c.slug} value={c.slug}>
                     {c.name}
                   </option>

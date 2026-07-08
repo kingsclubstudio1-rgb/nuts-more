@@ -7,8 +7,8 @@ import { Heading } from "@/components/ui/heading";
 import { BuyBox } from "@/components/products/buy-box";
 import { ProductCard } from "@/components/products/product-card";
 import { ProductGallery } from "@/components/products/product-gallery";
-import { getCategory, galleryImages } from "@/lib/catalog";
-import { getProductBySlug, listProducts } from "@/lib/inventory";
+import { galleryImages } from "@/lib/catalog";
+import { getCategory, getProductBySlug, getProducts } from "@/lib/cms";
 
 export const dynamic = "force-dynamic";
 
@@ -16,18 +16,18 @@ type Params = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await getProductBySlug(slug);
   if (!product) return { title: "Not found" };
   return { title: product.name, description: product.blurb };
 }
 
 export default async function ProductPage({ params }: Params) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await getProductBySlug(slug);
   if (!product || product.hidden) notFound();
 
-  const cat = getCategory(product.category);
-  const related = listProducts({ category: product.category })
+  const cat = await getCategory(product.category);
+  const related = (await getProducts({ category: product.category }))
     .filter((p) => p.id !== product.id)
     .slice(0, 4);
 

@@ -10,18 +10,23 @@ import { AvailableOn } from "@/components/home/available-on";
 import { ClosingCta } from "@/components/home/closing-cta";
 import { Container } from "@/components/ui/section";
 import { Heading } from "@/components/ui/heading";
-import { featuredProducts } from "@/lib/inventory";
+import { getFeatured, getHeroSlides, getHomeCircles } from "@/lib/cms";
 import { BRANDS } from "@/lib/content";
 
 // Reflect admin inventory edits immediately (no static caching).
 export const dynamic = "force-dynamic";
 
-export default function HomePage() {
-  const bestsellers = featuredProducts().slice(0, 8);
+export default async function HomePage() {
+  const [featured, slides, circles] = await Promise.all([
+    getFeatured(),
+    getHeroSlides(),
+    getHomeCircles(),
+  ]);
+  const bestsellers = featured.slice(0, 8);
 
   return (
     <>
-      <Hero />
+      <Hero slides={slides} />
       <TrustStrip />
 
       {/* Showcase: categories + bestsellers on the left, promo rail on the right */}
@@ -32,7 +37,7 @@ export default function HomePage() {
             <div className="lg:col-span-8">
               <Heading align="left" eyebrow="Shop by category" title="Find your favourite" />
               <div className="mt-8">
-                <CategoryCircles />
+                <CategoryCircles circles={circles} />
               </div>
             </div>
             <div className="lg:col-span-4">

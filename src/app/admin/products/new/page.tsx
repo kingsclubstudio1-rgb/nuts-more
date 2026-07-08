@@ -1,7 +1,9 @@
 import { ProductForm } from "@/components/admin/product-form";
+import { getCategories } from "@/lib/cms";
 
 export const dynamic = "force-dynamic";
 
-export default function NewProductPage() {
-  return <ProductForm />;
+export default async function NewProductPage() {
+  const categories = await getCategories();
+  return <ProductForm categories={categories} />;
 }

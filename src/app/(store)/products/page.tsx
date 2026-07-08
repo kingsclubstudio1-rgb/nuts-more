@@ -3,7 +3,7 @@ import { PageHeader } from "@/components/layout/page-header";
 import { Container } from "@/components/ui/section";
 import { ProductBrowser } from "@/components/products/product-browser";
 import { ClosingCta } from "@/components/home/closing-cta";
-import { listProducts } from "@/lib/inventory";
+import { getProducts, getCategories } from "@/lib/cms";
 
 export const dynamic = "force-dynamic";
 
@@ -19,7 +19,7 @@ export default async function ProductsPage({
   searchParams: Promise<{ q?: string; category?: string }>;
 }) {
   const { q, category } = await searchParams;
-  const products = listProducts();
+  const [products, categories] = await Promise.all([getProducts(), getCategories()]);
 
   return (
     <>
@@ -35,6 +35,7 @@ export default async function ProductsPage({
         <Container>
           <ProductBrowser
             products={products}
+            categories={categories}
             initialQuery={q ?? ""}
             initialCategory={category ?? "all"}
           />

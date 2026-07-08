@@ -43,15 +43,17 @@ const REASONS = [
 export function WhyChooseUs() {
   return (
     <div className="relative flex h-full flex-col justify-center overflow-hidden rounded-2xl bg-espresso p-6 text-on-dark ring-1 ring-gold/15 sm:p-8">
-      <Image
-        src="/brand/logo.png"
-        alt="Nuts & More"
-        width={128}
-        height={126}
-        className="mb-5 h-16 w-auto"
-      />
-      <h3 className="font-heading text-2xl font-bold">Why Choose Us?</h3>
-      <ul className="mt-5 space-y-3.5">
+      <div className="mb-5 flex items-start justify-between gap-4">
+        <h3 className="font-heading text-2xl font-bold">Why Choose Us?</h3>
+        <Image
+          src="/brand/logo.png"
+          alt="Nuts & More"
+          width={128}
+          height={126}
+          className="h-14 w-auto shrink-0 object-contain"
+        />
+      </div>
+      <ul className="space-y-3.5">
         {REASONS.map((r) => (
           <li key={r} className="flex items-center gap-3 text-sm text-on-dark/90">
             <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gold/20">

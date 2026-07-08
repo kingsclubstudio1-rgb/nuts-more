@@ -6,53 +6,38 @@ import { useEffect, useState } from "react";
 import { ArrowRight, Crown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const SLIDES = [
-  {
-    image: "/img/hero-1.jpg",
-    fallback: "/img/140.jpg",
-    eyebrow: "Premium Quality",
-    title: ["Nourishing Lives", "Naturally."],
-    sub: "Handpicked Dates, Dry Fruits & Nuts for a healthier you and your family.",
-  },
-  {
-    image: "/img/hero-2.jpg",
-    fallback: "/img/104.jpg",
-    eyebrow: "Since 2019",
-    title: ["The Finest Nuts,", "Hand-picked."],
-    sub: "California almonds, jumbo cashews, pistachios & walnuts — sorted for perfection.",
-  },
-  {
-    image: "/img/hero-3.jpg",
-    fallback: "/img/111.jpg",
-    eyebrow: "Naturally Sweet",
-    title: ["Dates & Dry Fruits,", "Sun-ripened."],
-    sub: "Soft Medjool & Mabroom dates and golden raisins — nature's candy, zero added sugar.",
-  },
-  {
-    image: "/img/hero-4.jpg",
-    fallback: "/img/136.jpg",
-    eyebrow: "Gifting, Perfected",
-    title: ["Gourmet Hampers,", "Beautifully Boxed."],
-    sub: "Bespoke gift hampers for festivals, weddings and the people who matter most.",
-  },
+export type Slide = {
+  image: string;
+  eyebrow: string;
+  titleTop: string;
+  titleBottom: string;
+  sub: string;
+};
+
+const FALLBACK_IMG = "/img/140.jpg";
+
+const DEFAULTS: Slide[] = [
+  { image: "/img/hero-1.jpg", eyebrow: "Premium Quality", titleTop: "Nourishing Lives", titleBottom: "Naturally.", sub: "Handpicked Dates, Dry Fruits & Nuts for a healthier you and your family." },
 ];
 
-export function Hero() {
+export function Hero({ slides }: { slides?: Slide[] }) {
+  const SLIDES = slides && slides.length ? slides : DEFAULTS;
   const [i, setI] = useState(0);
 
   useEffect(() => {
+    if (SLIDES.length < 2) return;
     const t = setInterval(() => setI((v) => (v + 1) % SLIDES.length), 5500);
     return () => clearInterval(t);
-  }, []);
+  }, [SLIDES.length]);
 
-  const slide = SLIDES[i];
+  const slide = SLIDES[Math.min(i, SLIDES.length - 1)];
 
   return (
     <section className="relative isolate overflow-hidden bg-espresso text-on-dark">
       {/* full-bleed background images (cross-fade) */}
       {SLIDES.map((s, idx) => (
         <div
-          key={s.image}
+          key={s.image + idx}
           className={cn(
             "absolute inset-0 transition-opacity duration-1000",
             idx === i ? "opacity-100" : "opacity-0",
@@ -66,10 +51,9 @@ export function Hero() {
             priority={idx === 0}
             sizes="100vw"
             className="object-cover"
-            // if the generated hero image isn't present yet, show the stock fallback
             onError={(e) => {
               const t = e.currentTarget as HTMLImageElement;
-              if (!t.src.includes(s.fallback)) t.src = s.fallback;
+              if (!t.src.includes(FALLBACK_IMG)) t.src = FALLBACK_IMG;
             }}
           />
         </div>
@@ -87,8 +71,8 @@ export function Hero() {
             {slide.eyebrow}
           </p>
           <h1 className="font-heading text-4xl font-bold leading-[1.05] text-on-dark drop-shadow-sm sm:text-5xl lg:text-6xl">
-            <span className="block">{slide.title[0]}</span>
-            <span className="block text-gold-grad italic">{slide.title[1]}</span>
+            <span className="block">{slide.titleTop}</span>
+            <span className="block text-gold-grad italic">{slide.titleBottom}</span>
           </h1>
           <p className="mt-5 max-w-md text-base leading-relaxed text-on-dark/85">{slide.sub}</p>
 
@@ -108,22 +92,23 @@ export function Hero() {
             </Link>
           </div>
 
-          {/* dots */}
-          <div className="mt-10 flex items-center gap-2.5" role="tablist" aria-label="Hero slides">
-            {SLIDES.map((_, idx) => (
-              <button
-                key={idx}
-                role="tab"
-                aria-selected={idx === i}
-                aria-label={`Go to slide ${idx + 1}`}
-                onClick={() => setI(idx)}
-                className={cn(
-                  "h-2 rounded-full transition-all duration-300",
-                  idx === i ? "w-7 bg-gold" : "w-2 bg-on-dark/40 hover:bg-on-dark/60",
-                )}
-              />
-            ))}
-          </div>
+          {SLIDES.length > 1 && (
+            <div className="mt-10 flex items-center gap-2.5" role="tablist" aria-label="Hero slides">
+              {SLIDES.map((_, idx) => (
+                <button
+                  key={idx}
+                  role="tab"
+                  aria-selected={idx === i}
+                  aria-label={`Go to slide ${idx + 1}`}
+                  onClick={() => setI(idx)}
+                  className={cn(
+                    "h-2 rounded-full transition-all duration-300",
+                    idx === i ? "w-7 bg-gold" : "w-2 bg-on-dark/40 hover:bg-on-dark/60",
+                  )}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
 

@@ -8,8 +8,8 @@ import { Container } from "@/components/ui/section";
 import { Heading } from "@/components/ui/heading";
 import { ProductCard } from "@/components/products/product-card";
 import { ClosingCta } from "@/components/home/closing-cta";
-import { CATEGORIES, getCategory } from "@/lib/catalog";
-import { productsByCategory } from "@/lib/inventory";
+import { CATEGORIES } from "@/lib/catalog";
+import { getCategory, getCategories, getProducts } from "@/lib/cms";
 
 export const dynamic = "force-dynamic";
 
@@ -21,7 +21,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { category } = await params;
-  const cat = getCategory(category);
+  const cat = await getCategory(category);
   if (!cat) return { title: "Not found" };
   return { title: cat.name, description: cat.description };
 }
@@ -34,11 +34,14 @@ const PROMISES = [
 
 export default async function CategoryPage({ params }: Params) {
   const { category } = await params;
-  const cat = getCategory(category);
+  const cat = await getCategory(category);
   if (!cat) notFound();
 
-  const products = productsByCategory(cat.slug);
-  const related = CATEGORIES.filter((c) => c.slug !== cat.slug).slice(0, 4);
+  const [products, allCats] = await Promise.all([
+    getProducts({ category: cat.slug }),
+    getCategories(),
+  ]);
+  const related = allCats.filter((c) => c.slug !== cat.slug).slice(0, 4);
 
   return (
     <>

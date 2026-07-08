@@ -91,3 +91,30 @@ alter table public.products enable row level security;
 drop policy if exists "products: public read" on public.products;
 create policy "products: public read" on public.products
   for select using (hidden = false);
+
+-- ------------------------------------------------------------------
+-- Categories (admin can add / edit / remove)
+-- ------------------------------------------------------------------
+create table if not exists public.categories (
+  slug        text primary key,
+  name        text not null,
+  tagline     text default '',
+  description text default '',
+  image       text,
+  sort        integer default 99
+);
+alter table public.categories enable row level security;
+drop policy if exists "categories: public read" on public.categories;
+create policy "categories: public read" on public.categories for select using (true);
+
+-- ------------------------------------------------------------------
+-- Editable site content (hero slides, landing images, etc.)  key -> json
+-- ------------------------------------------------------------------
+create table if not exists public.site_settings (
+  key         text primary key,
+  value       jsonb,
+  updated_at  timestamptz default now()
+);
+alter table public.site_settings enable row level security;
+drop policy if exists "settings: public read" on public.site_settings;
+create policy "settings: public read" on public.site_settings for select using (true);

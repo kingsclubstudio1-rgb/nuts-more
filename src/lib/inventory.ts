@@ -19,7 +19,7 @@ import seed from "../data/seed.json";
 
 type State = { updatedAt: string; products: Product[] };
 
-const DATA_DIR = path.join(process.cwd(), "data");
+const DATA_DIR = process.env.NM_DATA_DIR || path.join(process.cwd(), "data");
 const DATA_FILE = path.join(DATA_DIR, "inventory.json");
 const FALLBACK_FILE = path.join(os.tmpdir(), "nm-inventory.json");
 
