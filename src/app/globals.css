@@ -1,92 +1,111 @@
 @import "tailwindcss";
 
 /* ------------------------------------------------------------------ *
- * Nuts&More — playful, pastel, hand-drawn brand system
- * Anchored on the brand brown (squirrel logo) with soft candy pastels
- * for fun, light section colour-blocking.
+ * Nuts & More — Premium dark-brown & gold brand system
+ * Palette sampled from the brand's hero art direction:
+ *   near-black brown, espresso darks, warm gold, and soft cream.
  * ------------------------------------------------------------------ */
 
 :root {
-  --cream: #fff9ef; /* page background */
-  --cream-deep: #fdf1df; /* alt panels */
-  --surface: #fffdf9; /* cards */
+  /* darks */
+  --ink: #140f0a;        /* deepest — top utility bar */
+  --espresso: #201610;   /* hero + dark sections */
+  --espresso-2: #2a1c11; /* dark cards / panels */
+  --coffee: #3a2817;     /* raised dark surface / hairlines on dark */
 
-  --brown: #4a3526; /* brand brown — primary / buttons */
-  --brown-ink: #2f2118; /* headings / darkest text */
-  --brown-soft: #efe4d6; /* tan wash */
-  --muted: #806f60; /* secondary text (>=4.5:1 on cream) */
+  /* golds */
+  --gold: #c9a24a;       /* primary accent */
+  --gold-soft: #dcbd7a;  /* light gold text / highlights */
+  --gold-deep: #a97d2c;  /* pressed / deep gold */
 
-  --accent: #e26d8a; /* candy pink — script + highlights */
-  --accent-ink: #b14e69;
+  /* lights */
+  --cream: #f6f0e5;      /* page background */
+  --cream-2: #efe6d5;    /* alt cream panel */
+  --card: #fcf8f0;       /* light card surface */
+  --line: #e7dcc7;       /* light borders */
 
-  /* pastel section tints + readable ink on each */
-  --blush: #fcdde4;
-  --peach: #fbe0cf;
-  --butter: #fcecae;
-  --mint: #d3edd9;
-  --sky: #cde8f2;
-  --lavender: #e7dcf6;
-  --sage: #e6eccf;
+  /* text */
+  --ink-text: #2a1f14;   /* headings on cream */
+  --body-text: #50412f;  /* body on cream (>=4.5:1) */
+  --muted: #7c6b53;      /* secondary on cream */
+  --on-dark: #efe3d0;    /* text on dark */
+  --muted-on-dark: #c4b399; /* secondary on dark */
 
-  --border: #efe2cf;
-  --ring: #e26d8a;
-  --destructive: #c2483a;
-
-  --radius: 1.5rem;
+  --destructive: #b4442f;
+  --radius: 1rem;
 }
 
 @theme inline {
+  /* new premium tokens */
+  --color-ink: var(--ink);
+  --color-espresso: var(--espresso);
+  --color-espresso-2: var(--espresso-2);
+  --color-coffee: var(--coffee);
+
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-gold-deep: var(--gold-deep);
+
   --color-cream: var(--cream);
-  --color-cream-deep: var(--cream-deep);
-  --color-surface: var(--surface);
+  --color-cream-2: var(--cream-2);
+  --color-card: var(--card);
+  --color-line: var(--line);
 
   --color-background: var(--cream);
-  --color-foreground: var(--brown-ink);
-
-  --color-brown: var(--brown);
-  --color-brown-ink: var(--brown-ink);
-  --color-brown-soft: var(--brown-soft);
+  --color-foreground: var(--ink-text);
+  --color-body: var(--body-text);
+  --color-on-dark: var(--on-dark);
   --color-muted-foreground: var(--muted);
+  --color-muted-on-dark: var(--muted-on-dark);
 
-  --color-primary: var(--brown);
-  --color-primary-foreground: #fff7ec;
-  --color-accent: var(--accent);
-  --color-accent-ink: var(--accent-ink);
-  --color-accent-foreground: #ffffff;
+  --color-primary: var(--gold);
+  --color-primary-foreground: #1a1108;
+  --color-accent: var(--gold);
+  --color-accent-soft: var(--gold-soft);
+  --color-accent-foreground: #1a1108;
 
-  --color-blush: var(--blush);
-  --color-peach: var(--peach);
-  --color-butter: var(--butter);
-  --color-mint: var(--mint);
-  --color-sky: var(--sky);
-  --color-lavender: var(--lavender);
-  --color-sage: var(--sage);
-
-  --color-border: var(--border);
-  --color-ring: var(--ring);
+  --color-border: var(--line);
+  --color-ring: var(--gold);
   --color-destructive: var(--destructive);
 
-  --font-heading: var(--font-fredoka);
-  --font-body: var(--font-nunito);
-  --font-script: var(--font-pacifico);
+  /* ---- legacy aliases (keep pre-rebuild pages coherent) ---- */
+  --color-cream-deep: var(--cream-2);
+  --color-surface: var(--card);
+  --color-brown: var(--espresso);
+  --color-brown-ink: var(--ink-text);
+  --color-brown-soft: var(--cream-2);
+  --color-accent-ink: var(--gold-deep);
+  --color-blush: var(--cream-2);
+  --color-peach: var(--cream-2);
+  --color-butter: var(--cream-2);
+  --color-mint: var(--cream-2);
+  --color-sky: var(--cream-2);
+  --color-lavender: var(--cream-2);
+  --color-sage: var(--cream-2);
 
-  --radius-sm: 0.625rem;
-  --radius-md: 1rem;
-  --radius-lg: 1.5rem;
-  --radius-xl: 2rem;
-  --radius-2xl: 2.5rem;
+  --font-heading: var(--font-playfair);
+  --font-body: var(--font-poppins);
+  --font-script: var(--font-playfair);
 
-  --shadow-soft: 0 2px 4px rgba(74, 53, 38, 0.05),
-    0 12px 28px -14px rgba(74, 53, 38, 0.22);
-  --shadow-lift: 0 4px 8px rgba(74, 53, 38, 0.06),
-    0 26px 48px -18px rgba(74, 53, 38, 0.32);
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
 
-  --animate-marquee: marquee 30s linear infinite;
+  --shadow-soft: 0 2px 6px rgba(20, 15, 10, 0.06),
+    0 16px 40px -22px rgba(20, 15, 10, 0.4);
+  --shadow-lift: 0 6px 14px rgba(20, 15, 10, 0.1),
+    0 30px 60px -24px rgba(20, 15, 10, 0.5);
+  --shadow-gold: 0 8px 24px -8px rgba(201, 162, 74, 0.5);
+
+  --animate-marquee: marquee 34s linear infinite;
+  --animate-marquee-slow: marquee 60s linear infinite;
   --animate-float: float 6s ease-in-out infinite;
   --animate-float-slow: float 9s ease-in-out infinite;
   --animate-sway: sway 7s ease-in-out infinite;
-  --animate-bob: bob 3s ease-in-out infinite;
-  --animate-spin-slow: spin 26s linear infinite;
+  --animate-spin-slow: spin 40s linear infinite;
+  --animate-fade-up: fade-up 0.6s ease both;
 }
 
 @keyframes marquee {
@@ -94,15 +113,15 @@
 }
 @keyframes float {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-14px); }
-}
-@keyframes bob {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-7px) rotate(-3deg); }
+  50% { transform: translateY(-12px); }
 }
 @keyframes sway {
   0%, 100% { transform: rotate(-5deg); }
   50% { transform: rotate(5deg); }
+}
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 * {
@@ -115,29 +134,63 @@ html {
 
 body {
   background-color: var(--cream);
-  color: var(--brown-ink);
+  color: var(--body-text);
   font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
-h1, h2, h3, h4, .font-heading {
-  font-family: var(--font-heading), ui-sans-serif, system-ui, sans-serif;
+h1, h2, h3, h4 {
+  font-family: var(--font-heading), ui-serif, Georgia, serif;
+  /* No forced color — headings inherit their section's text colour so they
+     stay light on dark sections and dark on light sections. */
+  color: inherit;
   letter-spacing: -0.01em;
+}
+.font-heading {
+  font-family: var(--font-heading), ui-serif, Georgia, serif;
+  letter-spacing: -0.01em;
+}
+/* default heading colour on the (light) page body */
+body {
+  color: var(--body-text);
 }
 
 .font-script {
-  font-family: var(--font-script), ui-serif, cursive;
-  letter-spacing: 0;
+  font-family: var(--font-heading), ui-serif, Georgia, serif;
+  font-style: italic;
+}
+
+/* gold gradient text for hero highlight */
+.text-gold-grad {
+  background: linear-gradient(100deg, var(--gold-soft), var(--gold) 55%, var(--gold-deep));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* thin gold rule with center diamond, echoing the hero dividers */
+.rule-gold {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--gold);
+}
+.rule-gold::before,
+.rule-gold::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(90deg, transparent, currentColor, transparent);
 }
 
 ::selection {
-  background: var(--accent);
-  color: #fff;
+  background: var(--gold);
+  color: #1a1108;
 }
 
 :focus-visible {
-  outline: 3px solid var(--ring);
+  outline: 2px solid var(--gold);
   outline-offset: 2px;
   border-radius: 6px;
 }

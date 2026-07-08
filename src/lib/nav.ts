@@ -10,11 +10,31 @@ export const PRODUCT_CATEGORIES: NavChild[] = [
   { label: "Gift Hampers", href: "/products/gift-hampers", desc: "Bespoke gourmet gifting" },
 ];
 
+const GIFTING: NavChild[] = [
+  { label: "Gift Hampers", href: "/products/gift-hampers", desc: "Ready-to-gift gourmet boxes" },
+  { label: "Corporate Gifting", href: "/corporate-gifting", desc: "Branded hampers for teams & clients" },
+  { label: "Bulk & Export", href: "/bulk", desc: "Wholesale, private label & export" },
+];
+
 export const NAV: NavItem[] = [
   { label: "Home", href: "/" },
-  { label: "Products", href: "/products", children: PRODUCT_CATEGORIES },
-  { label: "Corporate Gifting", href: "/corporate-gifting" },
-  { label: "Bulk & Export", href: "/bulk" },
+  { label: "Shop", href: "/products" },
+  { label: "Categories", href: "/products", children: PRODUCT_CATEGORIES },
+  { label: "Gifting", href: "/corporate-gifting", children: GIFTING },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
+];
+
+/** Slim utility-bar links (top-right in the header). */
+export const UTILITY_LINKS: NavChild[] = [
+  { label: "Track Order", href: "/account" },
+  { label: "Bulk Orders", href: "/bulk" },
+  { label: "Store Locator", href: "/contact#visit" },
+];
+
+export const UTILITY_BADGES = [
+  "100% Natural",
+  "Premium Quality",
+  "Hygienically Packed",
+  "No Artificial Additives",
 ];

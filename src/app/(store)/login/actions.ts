@@ -1,0 +1,77 @@
+"use server";
+
+import { redirect } from "next/navigation";
+import { isAdminLogin, setSession, clearSession } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
+
+type State = { error?: string; ok?: boolean; message?: string } | undefined;
+
+function safeNext(next: unknown, fallback: string): string {
+  const n = typeof next === "string" ? next : "";
+  // only allow same-site relative paths
+  return n.startsWith("/") && !n.startsWith("//") ? n : fallback;
+}
+
+export async function loginAction(_prev: State, formData: FormData): Promise<State> {
+  const email = String(formData.get("email") ?? "").trim();
+  const password = String(formData.get("password") ?? "");
+  const next = formData.get("next");
+
+  if (!email || !password) return { error: "Please enter your email and password." };
+
+  // 1) Admin credentials → admin panel
+  if (isAdminLogin(email, password)) {
+    await setSession();
+    redirect(safeNext(next, "/admin").startsWith("/admin") ? safeNext(next, "/admin") : "/admin");
+  }
+
+  // 2) Otherwise, sign in as a customer via Supabase
+  if (!isSupabaseConfigured()) {
+    return { error: "Customer accounts aren't set up yet. Please contact us to order." };
+  }
+  const supabase = await createClient();
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) return { error: "Incorrect email or password." };
+
+  redirect(safeNext(next, "/account"));
+}
+
+export async function signupAction(_prev: State, formData: FormData): Promise<State> {
+  const name = String(formData.get("name") ?? "").trim();
+  const email = String(formData.get("email") ?? "").trim();
+  const password = String(formData.get("password") ?? "");
+
+  if (!email || !password) return { error: "Please enter your email and a password." };
+  if (password.length < 6) return { error: "Password must be at least 6 characters." };
+  if (!isSupabaseConfigured()) {
+    return { error: "Sign-up isn't available yet — the store owner needs to finish setup." };
+  }
+
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: { data: { name } },
+  });
+  if (error) return { error: error.message };
+
+  // If email confirmation is enabled, there's no session yet.
+  if (!data.session) {
+    return { ok: true, message: "Almost there! Check your email to confirm your account." };
+  }
+  redirect("/account");
+}
+
+export async function logoutUserAction(): Promise<void> {
+  if (isSupabaseConfigured()) {
+    try {
+      const supabase = await createClient();
+      await supabase.auth.signOut();
+    } catch {
+      /* ignore */
+    }
+  }
+  await clearSession();
+  redirect("/");
+}

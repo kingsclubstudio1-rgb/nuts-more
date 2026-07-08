@@ -1,0 +1,2621 @@
+{
+  "updatedAt": "2026-07-08T00:00:00.000Z",
+  "products": [
+    {
+      "id": "p001",
+      "slug": "california-almond-regular",
+      "name": "California Almond Regular",
+      "category": "nuts",
+      "image": "/img/101.jpg",
+      "images": [
+        "/img/101.jpg"
+      ],
+      "blurb": "Crunchy, sweet, skin-on — sourced from California orchards.",
+      "variants": [
+        {
+          "weight": "1000g",
+          "price": 1350,
+          "stock": 12
+        },
+        {
+          "weight": "500g",
+          "price": 675,
+          "stock": 26
+        },
+        {
+          "weight": "250g",
+          "price": 338,
+          "stock": 40
+        },
+        {
+          "weight": "100g",
+          "price": 135,
+          "stock": 60
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "600 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "20 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "50 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "20 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "8 g"
+        }
+      ],
+      "storage": "Store in a cool, dry place away from direct sunlight. Keep in an airtight container after opening; refrigerate in humid weather to retain the crunch.",
+      "badge": "Bestseller",
+      "featured": true,
+      "hidden": false,
+      "rating": 4.8,
+      "reviews": 312,
+      "hindiName": "बादाम",
+      "description": "Our Premium California Almonds, famously known as Badam, are sourced from the sun-drenched orchards of California. Prized for their uniform size, smooth shell and sweet, crisp taste. Every kernel is carefully selected for 100% pure, unblemished nuts — perfect for family health, festive gifting and daily energy.",
+      "benefits": [
+        "Sharpens memory & brain power",
+        "Excellent for weight management — fibre + protein",
+        "Rich in Vitamin E for glowing skin & healthy hair",
+        "Helps maintain healthy blood sugar"
+      ]
+    },
+    {
+      "id": "p002",
+      "slug": "almonds-roasted-salted",
+      "name": "Almonds Roasted & Salted",
+      "category": "nuts",
+      "image": "/img/102.jpg",
+      "images": [
+        "/img/102.jpg"
+      ],
+      "blurb": "Dry-roasted oil-free with a whisper of sea salt.",
+      "variants": [
+        {
+          "weight": "1000g",
+          "price": 1590,
+          "stock": 12
+        },
+        {
+          "weight": "500g",
+          "price": 795,
+          "stock": 26
+        },
+        {
+          "weight": "250g",
+          "price": 398,
+          "stock": 40
+        },
+        {
+          "weight": "100g",
+          "price": 159,
+          "stock": 60
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "600 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "20 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "50 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "20 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "8 g"
+        }
+      ],
+      "storage": "Store in a cool, dry place away from direct sunlight. Keep in an airtight container after opening; refrigerate in humid weather to retain the crunch.",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.7,
+      "reviews": 142,
+      "hindiName": "नमकीन रोस्टेड बादाम",
+      "description": "Roasted & Salted Almonds, crafted from choice California almonds, slow-roasted oil-free to bring out a deep, nutty flavour and coated with just the right touch of fine salt. An ultra-crispy, gourmet snacking experience — the healthier way to beat junk-food cravings.",
+      "benefits": [
+        "Guilt-free chakhna — a heart-healthy alternative to chips",
+        "Rich in Vitamin E & antioxidants",
+        "High in fibre and protein — keeps you full",
+        "Quick energy boost during busy hours"
+      ]
+    },
+    {
+      "id": "p003",
+      "slug": "cashew-green-spicy-masala",
+      "name": "Cashew Green Spicy Masala",
+      "category": "nuts",
+      "image": "/img/105.jpg",
+      "images": [
+        "/img/105.jpg"
+      ],
+      "blurb": "Roasted cashews in a zingy green-chilli masala.",
+      "variants": [
+        {
+          "weight": "1000g",
+          "price": 1720,
+          "stock": 12
+        },
+        {
+          "weight": "500g",
+          "price": 860,
+          "stock": 26
+        },
+        {
+          "weight": "250g",
+          "price": 430,
+          "stock": 40
+        },
+        {
+          "weight": "100g",
+          "price": 172,
+          "stock": 60
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "600 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "20 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "50 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "20 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "8 g"
+        }
+      ],
+      "storage": "Store in a cool, dry place away from direct sunlight. Keep in an airtight container after opening; refrigerate in humid weather to retain the crunch.",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.6,
+      "reviews": 119
+    },
+    {
+      "id": "p004",
+      "slug": "cashew-peri-peri",
+      "name": "Cashew Peri Peri",
+      "category": "nuts",
+      "image": "/img/104.jpg",
+      "images": [
+        "/img/104.jpg"
+      ],
+      "blurb": "Fiery, tangy peri-peri — impossible to put down.",
+      "variants": [
+        {
+          "weight": "1000g",
+          "price": 1720,
+          "stock": 12
+        },
+        {
+          "weight": "500g",
+          "price": 860,
+          "stock": 26
+        },
+        {
+          "weight": "250g",
+          "price": 430,
+          "stock": 40
+        },
+        {
+          "weight": "100g",
+          "price": 172,
+          "stock": 60
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "600 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "20 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "50 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "20 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "8 g"
+        }
+      ],
+      "storage": "Store in a cool, dry place away from direct sunlight. Keep in an airtight container after opening; refrigerate in humid weather to retain the crunch.",
+      "badge": "New",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.7,
+      "reviews": 168
+    },
+    {
+      "id": "p005",
+      "slug": "cashew-red-spicy-masala",
+      "name": "Cashew Red Spicy Masala",
+      "category": "nuts",
+      "image": "/img/105.jpg",
+      "images": [
+        "/img/105.jpg"
+      ],
+      "blurb": "Warm red masala over premium whole cashews.",
+      "variants": [
+        {
+          "weight": "1000g",
+          "price": 1720,
+          "stock": 12
+        },
+        {
+          "weight": "500g",
+          "price": 860,
+          "stock": 26
+        },
+        {
+          "weight": "250g",
+          "price": 430,
+          "stock": 40
+        },
+        {
+          "weight": "100g",
+          "price": 172,
+          "stock": 60
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "600 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "20 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "50 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "20 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "8 g"
+        }
+      ],
+      "storage": "Store in a cool, dry place away from direct sunlight. Keep in an airtight container after opening; refrigerate in humid weather to retain the crunch.",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.6,
+      "reviews": 96
+    },
+    {
+      "id": "p006",
+      "slug": "cashew-roasted-salted",
+      "name": "Cashew Roasted & Salted",
+      "category": "nuts",
+      "image": "/img/103.jpg",
+      "images": [
+        "/img/103.jpg"
+      ],
+      "blurb": "Whole W320 kernels, oil-free roasted & lightly salted.",
+      "variants": [
+        {
+          "weight": "1000g",
+          "price": 1700,
+          "stock": 12
+        },
+        {
+          "weight": "500g",
+          "price": 850,
+          "stock": 26
+        },
+        {
+          "weight": "250g",
+          "price": 425,
+          "stock": 40
+        },
+        {
+          "weight": "100g",
+          "price": 170,
+          "stock": 60
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "600 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "20 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "50 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "20 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "8 g"
+        }
+      ],
+      "storage": "Store in a cool, dry place away from direct sunlight. Keep in an airtight container after opening; refrigerate in humid weather to retain the crunch.",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.8,
+      "reviews": 174,
+      "hindiName": "नमकीन रोस्टेड काजू",
+      "description": "Roasted & Salted Cashews made from premium whole W320 kernels, dry-roasted oil-free to a light golden colour and lightly tossed with fine sea salt. Incredibly deep, rich and creamy with an extra-crispy texture — the ultimate premium hospitality snack.",
+      "benefits": [
+        "A healthy, whole-food alternative to chips",
+        "Good fats for steady, clean energy",
+        "Magnesium & zinc for strong bones",
+        "High protein — a small handful fills you up"
+      ]
+    },
+    {
+      "id": "p007",
+      "slug": "cashew-jumbo-w180",
+      "name": "Cashew Jumbo (W180)",
+      "category": "nuts",
+      "image": "/img/103.jpg",
+      "images": [
+        "/img/103.jpg"
+      ],
+      "blurb": "The largest, most premium whole cashew grade.",
+      "variants": [
+        {
+          "weight": "1000g",
+          "price": 2100,
+          "stock": 12
+        },
+        {
+          "weight": "500g",
+          "price": 1050,
+          "stock": 26
+        },
+        {
+          "weight": "250g",
+          "price": 525,
+          "stock": 40
+        },
+        {
+          "weight": "100g",
+          "price": 210,
+          "stock": 60
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "600 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "20 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "50 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "20 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "8 g"
+        }
+      ],
+      "storage": "Store in a cool, dry place away from direct sunlight. Keep in an airtight container after opening; refrigerate in humid weather to retain the crunch.",
+      "badge": "Limited",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.9,
+      "reviews": 88
+    },
+    {
+      "id": "p008",
+      "slug": "cashew-premium-w210",
+      "name": "Cashew Premium (W210)",
+      "category": "nuts",
+      "image": "/img/103.jpg",
+      "images": [
+        "/img/103.jpg"
+      ],
+      "blurb": "Big, buttery kernels for gifting & indulgence.",
+      "variants": [
+        {
+          "weight": "1000g",
+          "price": 1875,
+          "stock": 12
+        },
+        {
+          "weight": "500g",
+          "price": 938,
+          "stock": 26
+        },
+        {
+          "weight": "250g",
+          "price": 469,
+          "stock": 40
+        },
+        {
+          "weight": "100g",
+          "price": 188,
+          "stock": 60
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "600 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "20 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "50 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "20 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "8 g"
+        }
+      ],
+      "storage": "Store in a cool, dry place away from direct sunlight. Keep in an airtight container after opening; refrigerate in humid weather to retain the crunch.",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.8,
+      "reviews": 76
+    },
+    {
+      "id": "p009",
+      "slug": "cashew-classic-w240",
+      "name": "Cashew Classic (W240)",
+      "category": "nuts",
+      "image": "/img/103.jpg",
+      "images": [
+        "/img/103.jpg"
+      ],
+      "blurb": "Buttery, jumbo, lightly roasted classic kernels.",
+      "variants": [
+        {
+          "weight": "1000g",
+          "price": 1550,
+          "stock": 12
+        },
+        {
+          "weight": "500g",
+          "price": 775,
+          "stock": 26
+        },
+        {
+          "weight": "250g",
+          "price": 388,
+          "stock": 40
+        },
+        {
+          "weight": "100g",
+          "price": 155,
+          "stock": 60
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "600 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "20 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "50 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "20 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "8 g"
+        }
+      ],
+      "storage": "Store in a cool, dry place away from direct sunlight. Keep in an airtight container after opening; refrigerate in humid weather to retain the crunch.",
+      "badge": "Bestseller",
+      "featured": true,
+      "hidden": false,
+      "rating": 4.8,
+      "reviews": 221
+    },
+    {
+      "id": "p010",
+      "slug": "cashew-w320",
+      "name": "Cashew Regular (W320)",
+      "category": "nuts",
+      "image": "/img/103.jpg",
+      "images": [
+        "/img/103.jpg"
+      ],
+      "blurb": "The popular value-for-money whole cashew grade.",
+      "variants": [
+        {
+          "weight": "1000g",
+          "price": 1200,
+          "stock": 12
+        },
+        {
+          "weight": "500g",
+          "price": 600,
+          "stock": 26
+        },
+        {
+          "weight": "250g",
+          "price": 300,
+          "stock": 40
+        },
+        {
+          "weight": "100g",
+          "price": 120,
+          "stock": 60
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "600 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "20 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "50 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "20 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "8 g"
+        }
+      ],
+      "storage": "Store in a cool, dry place away from direct sunlight. Keep in an airtight container after opening; refrigerate in humid weather to retain the crunch.",
+      "badge": "Bestseller",
+      "featured": true,
+      "hidden": false,
+      "rating": 4.8,
+      "reviews": 264,
+      "hindiName": "काजू",
+      "description": "Our Cashew Regular (W320), widely known as Kaju in India, is the perfect everyday choice for your home. The W320 grade means medium-sized, fully whole, clean white kernels with a naturally mild sweetness and a rich, buttery taste. The most popular, value-for-money whole grade — the ideal balance of size, taste and premium quality.",
+      "benefits": [
+        "Good for heart health — rich in healthy fats",
+        "Clean plant protein for all-day energy",
+        "Loaded with magnesium & zinc for bones and immunity",
+        "A guilt-free substitute for fried evening snacks"
+      ]
+    },
+    {
+      "id": "p011",
+      "slug": "cashew-value-w400",
+      "name": "Cashew Value (W400)",
+      "category": "nuts",
+      "image": "/img/103.jpg",
+      "images": [
+        "/img/103.jpg"
+      ],
+      "blurb": "Smaller whole kernels — great everyday value.",
+      "variants": [
+        {
+          "weight": "1000g",
+          "price": 1150,
+          "stock": 12
+        },
+        {
+          "weight": "500g",
+          "price": 575,
+          "stock": 26
+        },
+        {
+          "weight": "250g",
+          "price": 288,
+          "stock": 40
+        },
+        {
+          "weight": "100g",
+          "price": 115,
+          "stock": 60
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "600 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "20 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "50 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "20 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "8 g"
+        }
+      ],
+      "storage": "Store in a cool, dry place away from direct sunlight. Keep in an airtight container after opening; refrigerate in humid weather to retain the crunch.",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.5,
+      "reviews": 63
+    },
+    {
+      "id": "p012",
+      "slug": "hazel-nuts",
+      "name": "Hazelnuts",
+      "category": "nuts",
+      "image": "/img/108.jpg",
+      "images": [
+        "/img/108.jpg"
+      ],
+      "blurb": "Sweet, aromatic, chocolatey — gloriously crunchy.",
+      "variants": [
+        {
+          "weight": "1000g",
+          "price": 3900,
+          "stock": 12
+        },
+        {
+          "weight": "500g",
+          "price": 1950,
+          "stock": 26
+        },
+        {
+          "weight": "250g",
+          "price": 975,
+          "stock": 40
+        },
+        {
+          "weight": "100g",
+          "price": 390,
+          "stock": 60
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "600 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "20 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "50 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "20 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "8 g"
+        }
+      ],
+      "storage": "Store in a cool, dry place away from direct sunlight. Keep in an airtight container after opening; refrigerate in humid weather to retain the crunch.",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.6,
+      "reviews": 64,
+      "hindiName": "फ़िंदुक",
+      "description": "Premium Hazelnuts — select, round, beautifully roasted whole kernels with a distinct earthy flavour and sweet, buttery undertone. Gently shelled and roasted to remove the bitter skin, leaving a smooth, cream-coloured nut with a spectacular crunch. The rich, chocolatey nut loved across European cafés.",
+      "benefits": [
+        "Massive dose of antioxidants",
+        "Excellent for heart care — rich in oleic acid",
+        "Supports healthy digestion — high in fibre",
+        "Rich in Vitamin E & folate"
+      ]
+    },
+    {
+      "id": "p013",
+      "slug": "macadamia-nuts",
+      "name": "Macadamia Nuts",
+      "category": "nuts",
+      "image": "/img/110.jpg",
+      "images": [
+        "/img/110.jpg"
+      ],
+      "blurb": "Creamy, indulgent and oh-so-luxurious.",
+      "variants": [
+        {
+          "weight": "1000g",
+          "price": 3850,
+          "stock": 0
+        },
+        {
+          "weight": "500g",
+          "price": 1925,
+          "stock": 26
+        },
+        {
+          "weight": "250g",
+          "price": 963,
+          "stock": 40
+        },
+        {
+          "weight": "100g",
+          "price": 385,
+          "stock": 60
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "600 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "20 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "50 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "20 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "8 g"
+        }
+      ],
+      "storage": "Store in a cool, dry place away from direct sunlight. Keep in an airtight container after opening; refrigerate in humid weather to retain the crunch.",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.8,
+      "reviews": 47
+    },
+    {
+      "id": "p014",
+      "slug": "pecan-nuts",
+      "name": "Pecan Nuts",
+      "category": "nuts",
+      "image": "/img/109.jpg",
+      "images": [
+        "/img/109.jpg"
+      ],
+      "blurb": "Rich, buttery halves for baking & snacking.",
+      "variants": [
+        {
+          "weight": "1000g",
+          "price": 3400,
+          "stock": 12
+        },
+        {
+          "weight": "500g",
+          "price": 1700,
+          "stock": 26
+        },
+        {
+          "weight": "250g",
+          "price": 850,
+          "stock": 40
+        },
+        {
+          "weight": "100g",
+          "price": 340,
+          "stock": 60
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "600 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "20 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "50 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "20 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "8 g"
+        }
+      ],
+      "storage": "Store in a cool, dry place away from direct sunlight. Keep in an airtight container after opening; refrigerate in humid weather to retain the crunch.",
+      "badge": "New",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.7,
+      "reviews": 51,
+      "hindiName": "पेकान",
+      "description": "Premium Pecan Nuts — elite, high-quality halves with a rich, sweet, mild buttery flavour and a soft-yet-crisp bite, free from any bitter aftertaste. One of the highest fat-to-protein ratios among tree nuts gives them a delicate, melt-in-your-mouth texture.",
+      "benefits": [
+        "Among the highest-antioxidant foods",
+        "Heart-friendly monounsaturated fats",
+        "Maintains steady, long-lasting energy",
+        "Abundant in manganese, zinc & thiamine"
+      ]
+    },
+    {
+      "id": "p015",
+      "slug": "pistachios-roasted-salted",
+      "name": "Pistachios Roasted & Salted",
+      "category": "nuts",
+      "image": "/img/106.jpg",
+      "images": [
+        "/img/106.jpg"
+      ],
+      "blurb": "Plump, jade-green Californian kernels, lightly salted.",
+      "variants": [
+        {
+          "weight": "1000g",
+          "price": 2220,
+          "stock": 12
+        },
+        {
+          "weight": "500g",
+          "price": 1110,
+          "stock": 26
+        },
+        {
+          "weight": "250g",
+          "price": 555,
+          "stock": 40
+        },
+        {
+          "weight": "100g",
+          "price": 222,
+          "stock": 60
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "600 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "20 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "50 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "20 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "8 g"
+        }
+      ],
+      "storage": "Store in a cool, dry place away from direct sunlight. Keep in an airtight container after opening; refrigerate in humid weather to retain the crunch.",
+      "badge": "Bestseller",
+      "featured": true,
+      "hidden": false,
+      "rating": 4.9,
+      "reviews": 254,
+      "hindiName": "नमकीन पिस्ता",
+      "description": "Premium Roasted & Salted Pistachios, the famous Namkeen Pista, selected from naturally opened in-shell varieties. Beautiful green kernels, uniformly dry-roasted in-shell and lightly salted — an unbeatable combination of extra-crisp crunch and rich, savoury taste.",
+      "benefits": [
+        "Low calorie, high fibre — a champion snack",
+        "Complete plant protein — all 9 amino acids",
+        "Excellent for eye health — lutein & zeaxanthin",
+        "Heart-friendly — rich in potassium"
+      ]
+    },
+    {
+      "id": "p016",
+      "slug": "walnuts-california",
+      "name": "Walnuts California",
+      "category": "nuts",
+      "image": "/img/107.jpg",
+      "images": [
+        "/img/107.jpg"
+      ],
+      "blurb": "Light halves, full of omega-3 goodness.",
+      "variants": [
+        {
+          "weight": "1000g",
+          "price": 2100,
+          "stock": 12
+        },
+        {
+          "weight": "500g",
+          "price": 1050,
+          "stock": 26
+        },
+        {
+          "weight": "250g",
+          "price": 525,
+          "stock": 40
+        },
+        {
+          "weight": "100g",
+          "price": 210,
+          "stock": 60
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "600 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "20 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "50 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "20 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "8 g"
+        }
+      ],
+      "storage": "Store in a cool, dry place away from direct sunlight. Keep in an airtight container after opening; refrigerate in humid weather to retain the crunch.",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.6,
+      "reviews": 121
+    },
+    {
+      "id": "p017",
+      "slug": "dry-blueberry",
+      "name": "Dry Blueberry",
+      "category": "dry-fruits",
+      "image": "/img/115.jpg",
+      "images": [
+        "/img/115.jpg"
+      ],
+      "blurb": "Antioxidant-rich bursts of berry.",
+      "variants": [
+        {
+          "weight": "1000g",
+          "price": 2200,
+          "stock": 0
+        },
+        {
+          "weight": "500g",
+          "price": 1100,
+          "stock": 26
+        },
+        {
+          "weight": "250g",
+          "price": 550,
+          "stock": 40
+        },
+        {
+          "weight": "100g",
+          "price": 220,
+          "stock": 60
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "310 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "3 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "0.5 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "75 g"
+        },
+        {
+          "label": "of which Sugars",
+          "value": "60 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "7 g"
+        }
+      ],
+      "storage": "Store in a cool, dry place in an airtight container. Refrigerate during warm or humid weather to preserve softness, colour and moisture.",
+      "badge": "New",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.7,
+      "reviews": 73
+    },
+    {
+      "id": "p018",
+      "slug": "dry-cranberry",
+      "name": "Dry Cranberry",
+      "category": "dry-fruits",
+      "image": "/img/116.jpg",
+      "images": [
+        "/img/116.jpg"
+      ],
+      "blurb": "Sweet-tart ruby gems for bowls and bakes.",
+      "variants": [
+        {
+          "weight": "1000g",
+          "price": 1150,
+          "stock": 12
+        },
+        {
+          "weight": "500g",
+          "price": 575,
+          "stock": 26
+        },
+        {
+          "weight": "250g",
+          "price": 288,
+          "stock": 40
+        },
+        {
+          "weight": "100g",
+          "price": 115,
+          "stock": 60
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "310 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "3 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "0.5 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "75 g"
+        },
+        {
+          "label": "of which Sugars",
+          "value": "60 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "7 g"
+        }
+      ],
+      "storage": "Store in a cool, dry place in an airtight container. Refrigerate during warm or humid weather to preserve softness, colour and moisture.",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.6,
+      "reviews": 112
+    },
+    {
+      "id": "p019",
+      "slug": "dry-dates",
+      "name": "Dry Dates",
+      "category": "dry-fruits",
+      "image": "/img/112.jpg",
+      "images": [
+        "/img/112.jpg"
+      ],
+      "blurb": "Naturally sweet, soft and full of fibre.",
+      "variants": [
+        {
+          "weight": "1000g",
+          "price": 580,
+          "stock": 12
+        },
+        {
+          "weight": "500g",
+          "price": 290,
+          "stock": 26
+        },
+        {
+          "weight": "250g",
+          "price": 145,
+          "stock": 40
+        },
+        {
+          "weight": "100g",
+          "price": 58,
+          "stock": 60
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "310 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "3 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "0.5 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "75 g"
+        },
+        {
+          "label": "of which Sugars",
+          "value": "60 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "7 g"
+        }
+      ],
+      "storage": "Store in a cool, dry place in an airtight container. Refrigerate during warm or humid weather to preserve softness, colour and moisture.",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.6,
+      "reviews": 95
+    },
+    {
+      "id": "p020",
+      "slug": "raisins-indian-round",
+      "name": "Raisins Indian Round",
+      "category": "dry-fruits",
+      "image": "/img/113.jpg",
+      "images": [
+        "/img/113.jpg"
+      ],
+      "blurb": "Golden Gol Kishmish — nature's candy, zero added sugar.",
+      "variants": [
+        {
+          "weight": "1000g",
+          "price": 880,
+          "stock": 12
+        },
+        {
+          "weight": "500g",
+          "price": 440,
+          "stock": 26
+        },
+        {
+          "weight": "250g",
+          "price": 220,
+          "stock": 40
+        },
+        {
+          "weight": "100g",
+          "price": 88,
+          "stock": 60
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "310 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "3 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "0.5 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "75 g"
+        },
+        {
+          "label": "of which Sugars",
+          "value": "60 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "7 g"
+        }
+      ],
+      "storage": "Store in a cool, dry place in an airtight container. Refrigerate during warm or humid weather to preserve softness, colour and moisture.",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.6,
+      "reviews": 134,
+      "hindiName": "गोल किशमिश",
+      "description": "Golden Indian Raisins (Round), the beloved Gol Kishmish — plump, round green grapes shadow-dried to a beautiful golden hue. Naturally sweet with zero added sugar, soft to chew and bursting with juicy flavour. Cleaned and sorted for clean, stalk-free premium pieces.",
+      "benefits": [
+        "Natural digestion helper — rich in fibre",
+        "Plant-based iron & B-complex vitamins",
+        "Instant natural energy without a sugar crash",
+        "Calcium & boron for bone and dental health"
+      ]
+    },
+    {
+      "id": "p021",
+      "slug": "raisins-long",
+      "name": "Raisins Long",
+      "category": "dry-fruits",
+      "image": "/img/113.jpg",
+      "images": [
+        "/img/113.jpg"
+      ],
+      "blurb": "Tart, seedless and sun-kissed long raisins.",
+      "variants": [
+        {
+          "weight": "1000g",
+          "price": 860,
+          "stock": 12
+        },
+        {
+          "weight": "500g",
+          "price": 430,
+          "stock": 26
+        },
+        {
+          "weight": "250g",
+          "price": 215,
+          "stock": 40
+        },
+        {
+          "weight": "100g",
+          "price": 86,
+          "stock": 60
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "310 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "3 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "0.5 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "75 g"
+        },
+        {
+          "label": "of which Sugars",
+          "value": "60 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "7 g"
+        }
+      ],
+      "storage": "Store in a cool, dry place in an airtight container. Refrigerate during warm or humid weather to preserve softness, colour and moisture.",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.5,
+      "reviews": 88
+    },
+    {
+      "id": "p022",
+      "slug": "raisins-green",
+      "name": "Raisins Green",
+      "category": "dry-fruits",
+      "image": "/img/113.jpg",
+      "images": [
+        "/img/113.jpg"
+      ],
+      "blurb": "Bright green, seedless and delicately sweet.",
+      "variants": [
+        {
+          "weight": "1000g",
+          "price": 950,
+          "stock": 12
+        },
+        {
+          "weight": "500g",
+          "price": 475,
+          "stock": 26
+        },
+        {
+          "weight": "250g",
+          "price": 238,
+          "stock": 40
+        },
+        {
+          "weight": "100g",
+          "price": 95,
+          "stock": 60
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "310 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "3 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "0.5 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "75 g"
+        },
+        {
+          "label": "of which Sugars",
+          "value": "60 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "7 g"
+        }
+      ],
+      "storage": "Store in a cool, dry place in an airtight container. Refrigerate during warm or humid weather to preserve softness, colour and moisture.",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.6,
+      "reviews": 77
+    },
+    {
+      "id": "p023",
+      "slug": "raisins-munakka",
+      "name": "Raisins Munakka",
+      "category": "dry-fruits",
+      "image": "/img/114.jpg",
+      "images": [
+        "/img/114.jpg"
+      ],
+      "blurb": "Large, juicy raisins with a deep sweetness.",
+      "variants": [
+        {
+          "weight": "1000g",
+          "price": 1600,
+          "stock": 12
+        },
+        {
+          "weight": "500g",
+          "price": 800,
+          "stock": 26
+        },
+        {
+          "weight": "250g",
+          "price": 400,
+          "stock": 40
+        },
+        {
+          "weight": "100g",
+          "price": 160,
+          "stock": 60
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "310 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "3 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "0.5 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "75 g"
+        },
+        {
+          "label": "of which Sugars",
+          "value": "60 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "7 g"
+        }
+      ],
+      "storage": "Store in a cool, dry place in an airtight container. Refrigerate during warm or humid weather to preserve softness, colour and moisture.",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.5,
+      "reviews": 66
+    },
+    {
+      "id": "p024",
+      "slug": "dry-kiwi",
+      "name": "Dry Kiwi",
+      "category": "dry-fruits",
+      "image": "/img/117.jpg",
+      "images": [
+        "/img/117.jpg"
+      ],
+      "blurb": "Tangy, chewy and irresistibly green.",
+      "variants": [
+        {
+          "weight": "1000g",
+          "price": 680,
+          "stock": 12
+        },
+        {
+          "weight": "500g",
+          "price": 340,
+          "stock": 26
+        },
+        {
+          "weight": "250g",
+          "price": 170,
+          "stock": 40
+        },
+        {
+          "weight": "100g",
+          "price": 68,
+          "stock": 60
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "310 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "3 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "0.5 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "75 g"
+        },
+        {
+          "label": "of which Sugars",
+          "value": "60 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "7 g"
+        }
+      ],
+      "storage": "Store in a cool, dry place in an airtight container. Refrigerate during warm or humid weather to preserve softness, colour and moisture.",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.5,
+      "reviews": 41
+    },
+    {
+      "id": "p025",
+      "slug": "dry-pineapple",
+      "name": "Dry Pineapple",
+      "category": "dry-fruits",
+      "image": "/img/118.jpg",
+      "images": [
+        "/img/118.jpg"
+      ],
+      "blurb": "Tropical sunshine in every bite.",
+      "variants": [
+        {
+          "weight": "1000g",
+          "price": 880,
+          "stock": 12
+        },
+        {
+          "weight": "500g",
+          "price": 440,
+          "stock": 26
+        },
+        {
+          "weight": "250g",
+          "price": 220,
+          "stock": 40
+        },
+        {
+          "weight": "100g",
+          "price": 88,
+          "stock": 60
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "310 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "3 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "0.5 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "75 g"
+        },
+        {
+          "label": "of which Sugars",
+          "value": "60 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "7 g"
+        }
+      ],
+      "storage": "Store in a cool, dry place in an airtight container. Refrigerate during warm or humid weather to preserve softness, colour and moisture.",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.5,
+      "reviews": 38
+    },
+    {
+      "id": "p026",
+      "slug": "mabroom-dates",
+      "name": "Mabroom Dates",
+      "category": "dry-fruits",
+      "image": "/img/112.jpg",
+      "images": [
+        "/img/112.jpg"
+      ],
+      "blurb": "Chewy, mildly sweet and full of fibre.",
+      "variants": [
+        {
+          "weight": "400g",
+          "price": 690,
+          "stock": 18
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "310 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "3 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "0.5 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "75 g"
+        },
+        {
+          "label": "of which Sugars",
+          "value": "60 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "7 g"
+        }
+      ],
+      "storage": "Store in a cool, dry place in an airtight container. Refrigerate during warm or humid weather to preserve softness, colour and moisture.",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.7,
+      "reviews": 96
+    },
+    {
+      "id": "p027",
+      "slug": "medjool-dates",
+      "name": "Medjool Dates",
+      "category": "dry-fruits",
+      "image": "/img/111.jpg",
+      "images": [
+        "/img/111.jpg"
+      ],
+      "blurb": "Soft, caramel-rich and naturally sweet — the king of dates.",
+      "variants": [
+        {
+          "weight": "500g",
+          "price": 1200,
+          "stock": 26
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "310 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "3 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "0.5 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "75 g"
+        },
+        {
+          "label": "of which Sugars",
+          "value": "60 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "7 g"
+        }
+      ],
+      "storage": "Store in a cool, dry place in an airtight container. Refrigerate during warm or humid weather to preserve softness, colour and moisture.",
+      "badge": "Bestseller",
+      "featured": true,
+      "hidden": false,
+      "rating": 4.9,
+      "reviews": 408
+    },
+    {
+      "id": "p028",
+      "slug": "basil-seeds",
+      "name": "Basil (Sabja) Seeds",
+      "category": "seeds",
+      "image": "/img/123.jpg",
+      "images": [
+        "/img/123.jpg"
+      ],
+      "blurb": "Cooling sabja for sherbets and falooda.",
+      "variants": [
+        {
+          "weight": "1000g",
+          "price": 480,
+          "stock": 12
+        },
+        {
+          "weight": "500g",
+          "price": 240,
+          "stock": 26
+        },
+        {
+          "weight": "250g",
+          "price": 120,
+          "stock": 40
+        },
+        {
+          "weight": "100g",
+          "price": 48,
+          "stock": 60
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "520 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "20 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "40 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "20 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "25 g"
+        }
+      ],
+      "storage": "Keep in an airtight container in a cool, dry place away from sunlight. Refrigerate for extended freshness.",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.5,
+      "reviews": 62
+    },
+    {
+      "id": "p029",
+      "slug": "chia-seeds",
+      "name": "Chia Seeds",
+      "category": "seeds",
+      "image": "/img/119.jpg",
+      "images": [
+        "/img/119.jpg"
+      ],
+      "blurb": "Omega-rich — perfect for puddings & smoothies.",
+      "variants": [
+        {
+          "weight": "1000g",
+          "price": 550,
+          "stock": 12
+        },
+        {
+          "weight": "500g",
+          "price": 275,
+          "stock": 26
+        },
+        {
+          "weight": "250g",
+          "price": 138,
+          "stock": 40
+        },
+        {
+          "weight": "100g",
+          "price": 55,
+          "stock": 60
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "520 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "20 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "40 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "20 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "25 g"
+        }
+      ],
+      "storage": "Keep in an airtight container in a cool, dry place away from sunlight. Refrigerate for extended freshness.",
+      "badge": "Bestseller",
+      "featured": true,
+      "hidden": false,
+      "rating": 4.7,
+      "reviews": 211
+    },
+    {
+      "id": "p030",
+      "slug": "sunflower-seeds",
+      "name": "Sunflower Seeds",
+      "category": "seeds",
+      "image": "/img/121.jpg",
+      "images": [
+        "/img/121.jpg"
+      ],
+      "blurb": "Mild, nutty and endlessly snackable.",
+      "variants": [
+        {
+          "weight": "1000g",
+          "price": 390,
+          "stock": 12
+        },
+        {
+          "weight": "500g",
+          "price": 195,
+          "stock": 26
+        },
+        {
+          "weight": "250g",
+          "price": 98,
+          "stock": 40
+        },
+        {
+          "weight": "100g",
+          "price": 39,
+          "stock": 60
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "520 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "20 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "40 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "20 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "25 g"
+        }
+      ],
+      "storage": "Keep in an airtight container in a cool, dry place away from sunlight. Refrigerate for extended freshness.",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.5,
+      "reviews": 97
+    },
+    {
+      "id": "p031",
+      "slug": "pumpkin-seeds",
+      "name": "Pumpkin Seeds",
+      "category": "seeds",
+      "image": "/img/120.jpg",
+      "images": [
+        "/img/120.jpg"
+      ],
+      "blurb": "Crunchy, lightly roasted, packed with zinc.",
+      "variants": [
+        {
+          "weight": "1000g",
+          "price": 780,
+          "stock": 12
+        },
+        {
+          "weight": "500g",
+          "price": 390,
+          "stock": 26
+        },
+        {
+          "weight": "250g",
+          "price": 195,
+          "stock": 40
+        },
+        {
+          "weight": "100g",
+          "price": 78,
+          "stock": 60
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "520 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "20 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "40 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "20 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "25 g"
+        }
+      ],
+      "storage": "Keep in an airtight container in a cool, dry place away from sunlight. Refrigerate for extended freshness.",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.6,
+      "reviews": 143
+    },
+    {
+      "id": "p032",
+      "slug": "watermelon-seeds",
+      "name": "Watermelon Seeds",
+      "category": "seeds",
+      "image": "/img/124.jpg",
+      "images": [
+        "/img/124.jpg"
+      ],
+      "blurb": "Mild, protein-rich kernels to nibble on.",
+      "variants": [
+        {
+          "weight": "1000g",
+          "price": 1280,
+          "stock": 12
+        },
+        {
+          "weight": "500g",
+          "price": 640,
+          "stock": 26
+        },
+        {
+          "weight": "250g",
+          "price": 320,
+          "stock": 40
+        },
+        {
+          "weight": "100g",
+          "price": 128,
+          "stock": 0
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "520 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "20 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "40 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "20 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "25 g"
+        }
+      ],
+      "storage": "Keep in an airtight container in a cool, dry place away from sunlight. Refrigerate for extended freshness.",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.4,
+      "reviews": 39
+    },
+    {
+      "id": "p033",
+      "slug": "flax-seeds",
+      "name": "Flax Seeds",
+      "category": "seeds",
+      "image": "/img/122.jpg",
+      "images": [
+        "/img/122.jpg"
+      ],
+      "blurb": "Fibre-rich and fabulous over anything.",
+      "variants": [
+        {
+          "weight": "1000g",
+          "price": 280,
+          "stock": 12
+        },
+        {
+          "weight": "500g",
+          "price": 140,
+          "stock": 26
+        },
+        {
+          "weight": "250g",
+          "price": 70,
+          "stock": 40
+        },
+        {
+          "weight": "100g",
+          "price": 28,
+          "stock": 60
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "520 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "20 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "40 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "20 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "25 g"
+        }
+      ],
+      "storage": "Keep in an airtight container in a cool, dry place away from sunlight. Refrigerate for extended freshness.",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.6,
+      "reviews": 84
+    },
+    {
+      "id": "p034",
+      "slug": "panch-rathan",
+      "name": "Panch Rathan Mix",
+      "category": "trail-muesli",
+      "image": "/img/131.jpg",
+      "images": [
+        "/img/131.jpg"
+      ],
+      "blurb": "A royal five-jewel medley of nuts & fruit.",
+      "variants": [
+        {
+          "weight": "1000g",
+          "price": 1620,
+          "stock": 12
+        },
+        {
+          "weight": "500g",
+          "price": 810,
+          "stock": 26
+        },
+        {
+          "weight": "250g",
+          "price": 405,
+          "stock": 40
+        },
+        {
+          "weight": "100g",
+          "price": 162,
+          "stock": 60
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "420 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "12 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "15 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "60 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "8 g"
+        }
+      ],
+      "storage": "Store in an airtight container in a cool, dry place. Reseal after every use to retain the crunch.",
+      "badge": "Bestseller",
+      "featured": true,
+      "hidden": false,
+      "rating": 4.8,
+      "reviews": 176
+    },
+    {
+      "id": "p035",
+      "slug": "fruit-nut-muesli",
+      "name": "Fruit & Nut Muesli",
+      "category": "trail-muesli",
+      "image": "/img/133.jpg",
+      "images": [
+        "/img/133.jpg"
+      ],
+      "blurb": "Wholegrain oats, nuts and fruit for breakfast.",
+      "variants": [
+        {
+          "weight": "1000g",
+          "price": 850,
+          "stock": 12
+        },
+        {
+          "weight": "500g",
+          "price": 425,
+          "stock": 26
+        },
+        {
+          "weight": "250g",
+          "price": 213,
+          "stock": 40
+        },
+        {
+          "weight": "100g",
+          "price": 85,
+          "stock": 60
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "420 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "12 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "15 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "60 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "8 g"
+        }
+      ],
+      "storage": "Store in an airtight container in a cool, dry place. Reseal after every use to retain the crunch.",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.6,
+      "reviews": 94
+    },
+    {
+      "id": "p036",
+      "slug": "chocolate-muesli",
+      "name": "Chocolate Muesli",
+      "category": "trail-muesli",
+      "image": "/img/134.jpg",
+      "images": [
+        "/img/134.jpg"
+      ],
+      "blurb": "Crunchy oats with a chocolatey swirl.",
+      "variants": [
+        {
+          "weight": "1000g",
+          "price": 850,
+          "stock": 12
+        },
+        {
+          "weight": "500g",
+          "price": 425,
+          "stock": 26
+        },
+        {
+          "weight": "250g",
+          "price": 213,
+          "stock": 40
+        },
+        {
+          "weight": "100g",
+          "price": 85,
+          "stock": 60
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "420 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "12 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "15 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "60 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "8 g"
+        }
+      ],
+      "storage": "Store in an airtight container in a cool, dry place. Reseal after every use to retain the crunch.",
+      "badge": "New",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.7,
+      "reviews": 86
+    },
+    {
+      "id": "p037",
+      "slug": "trail-mix-eat-fit",
+      "name": "Trail Mix — Eat & Fit",
+      "category": "trail-muesli",
+      "image": "/img/132.jpg",
+      "images": [
+        "/img/132.jpg"
+      ],
+      "blurb": "Nuts, seeds & dried fruit for life on the go.",
+      "variants": [
+        {
+          "weight": "250g",
+          "price": 350,
+          "stock": 40
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "420 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "12 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "15 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "60 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "8 g"
+        }
+      ],
+      "storage": "Store in an airtight container in a cool, dry place. Reseal after every use to retain the crunch.",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.7,
+      "reviews": 188
+    },
+    {
+      "id": "p038",
+      "slug": "makhana-peri-peri",
+      "name": "Peri Peri Makhana",
+      "category": "makhana",
+      "image": "/img/130.jpg",
+      "images": [
+        "/img/130.jpg"
+      ],
+      "blurb": "Roasted foxnuts with a fiery peri-peri kick.",
+      "variants": [
+        {
+          "weight": "50g",
+          "price": 185,
+          "stock": 90
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "350 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "10 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "1.5 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "77 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "7 g"
+        }
+      ],
+      "storage": "Reseal the pack tightly after opening and store in a cool, dry place to keep them light and crisp.",
+      "badge": "Bestseller",
+      "featured": true,
+      "hidden": false,
+      "rating": 4.8,
+      "reviews": 276
+    },
+    {
+      "id": "p039",
+      "slug": "makhana-cheese",
+      "name": "Cheese Makhana",
+      "category": "makhana",
+      "image": "/img/130.jpg",
+      "images": [
+        "/img/130.jpg"
+      ],
+      "blurb": "Cheesy, crunchy and totally guilt-free.",
+      "variants": [
+        {
+          "weight": "50g",
+          "price": 185,
+          "stock": 90
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "350 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "10 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "1.5 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "77 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "7 g"
+        }
+      ],
+      "storage": "Reseal the pack tightly after opening and store in a cool, dry place to keep them light and crisp.",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.7,
+      "reviews": 158
+    },
+    {
+      "id": "p040",
+      "slug": "makhana-salt-pepper",
+      "name": "Salt & Pepper Makhana",
+      "category": "makhana",
+      "image": "/img/130.jpg",
+      "images": [
+        "/img/130.jpg"
+      ],
+      "blurb": "Himalayan salt & cracked black pepper foxnuts.",
+      "variants": [
+        {
+          "weight": "50g",
+          "price": 185,
+          "stock": 90
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "350 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "10 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "1.5 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "77 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "7 g"
+        }
+      ],
+      "storage": "Reseal the pack tightly after opening and store in a cool, dry place to keep them light and crisp.",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.7,
+      "reviews": 142
+    },
+    {
+      "id": "p041",
+      "slug": "makhana-bbq",
+      "name": "Barbeque Makhana",
+      "category": "makhana",
+      "image": "/img/130.jpg",
+      "images": [
+        "/img/130.jpg"
+      ],
+      "blurb": "Smoky barbeque popped foxnuts.",
+      "variants": [
+        {
+          "weight": "50g",
+          "price": 185,
+          "stock": 90
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "350 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "10 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "1.5 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "77 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "7 g"
+        }
+      ],
+      "storage": "Reseal the pack tightly after opening and store in a cool, dry place to keep them light and crisp.",
+      "badge": "New",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.6,
+      "reviews": 113
+    },
+    {
+      "id": "p042",
+      "slug": "makhana-tomato",
+      "name": "Tangy Tomato Makhana",
+      "category": "makhana",
+      "image": "/img/130.jpg",
+      "images": [
+        "/img/130.jpg"
+      ],
+      "blurb": "Zesty tomato tang in every crunch.",
+      "variants": [
+        {
+          "weight": "50g",
+          "price": 185,
+          "stock": 90
+        }
+      ],
+      "nutrition": [
+        {
+          "label": "Energy",
+          "value": "350 kcal"
+        },
+        {
+          "label": "Protein",
+          "value": "10 g"
+        },
+        {
+          "label": "Total Fat",
+          "value": "1.5 g"
+        },
+        {
+          "label": "Carbohydrate",
+          "value": "77 g"
+        },
+        {
+          "label": "Dietary Fibre",
+          "value": "7 g"
+        }
+      ],
+      "storage": "Reseal the pack tightly after opening and store in a cool, dry place to keep them light and crisp.",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.6,
+      "reviews": 121
+    },
+    {
+      "id": "p043",
+      "slug": "premium-dry-fruit-gift",
+      "name": "Premium Dry Fruit Gift Pack",
+      "category": "gift-hampers",
+      "image": "/img/135.jpg",
+      "images": [
+        "/img/135.jpg"
+      ],
+      "blurb": "An elegant box of our finest dry fruits & nuts.",
+      "variants": [
+        {
+          "weight": "Assorted",
+          "price": 1499,
+          "stock": 15
+        }
+      ],
+      "storage": "Store components in a cool, dry place away from direct sunlight; refrigerate any perishable items. Best enjoyed fresh.",
+      "badge": "Bestseller",
+      "featured": true,
+      "hidden": false,
+      "rating": 4.9,
+      "reviews": 88
+    },
+    {
+      "id": "p044",
+      "slug": "festive-hamper",
+      "name": "Grand Festive Hamper",
+      "category": "gift-hampers",
+      "image": "/img/136.jpg",
+      "images": [
+        "/img/136.jpg"
+      ],
+      "blurb": "Our most generous hamper, ribbon-tied.",
+      "variants": [
+        {
+          "weight": "Assorted",
+          "price": 2999,
+          "stock": 15
+        }
+      ],
+      "storage": "Store components in a cool, dry place away from direct sunlight; refrigerate any perishable items. Best enjoyed fresh.",
+      "badge": "Limited",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.9,
+      "reviews": 51
+    },
+    {
+      "id": "p045",
+      "slug": "wellness-box",
+      "name": "Wellness Gift Box",
+      "category": "gift-hampers",
+      "image": "/img/137.jpg",
+      "images": [
+        "/img/137.jpg"
+      ],
+      "blurb": "A curated box of seeds, nuts & superfoods.",
+      "variants": [
+        {
+          "weight": "Assorted",
+          "price": 1799,
+          "stock": 15
+        }
+      ],
+      "storage": "Store components in a cool, dry place away from direct sunlight; refrigerate any perishable items. Best enjoyed fresh.",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.8,
+      "reviews": 64
+    },
+    {
+      "id": "p046",
+      "slug": "corporate-hamper",
+      "name": "Corporate Signature Hamper",
+      "category": "gift-hampers",
+      "image": "/img/138.jpg",
+      "images": [
+        "/img/138.jpg"
+      ],
+      "blurb": "Custom-branded gifting for clients & teams.",
+      "variants": [
+        {
+          "weight": "Assorted",
+          "price": 2499,
+          "stock": 15
+        }
+      ],
+      "storage": "Store components in a cool, dry place away from direct sunlight; refrigerate any perishable items. Best enjoyed fresh.",
+      "featured": false,
+      "hidden": false,
+      "rating": 4.9,
+      "reviews": 73
+    }
+  ]
+}
