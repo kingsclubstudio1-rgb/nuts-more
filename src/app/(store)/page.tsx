@@ -6,7 +6,6 @@ import { CategoryCircles } from "@/components/home/category-circles";
 import { GiftHamperCard, WhyChooseUs } from "@/components/home/promos";
 import { ProductCard } from "@/components/products/product-card";
 import { Voices } from "@/components/home/voices";
-import { AvailableOn } from "@/components/home/available-on";
 import { ClosingCta } from "@/components/home/closing-cta";
 import { Container } from "@/components/ui/section";
 import { Heading } from "@/components/ui/heading";
@@ -103,7 +102,6 @@ export default async function HomePage() {
       </section>
 
       <Voices />
-      <AvailableOn />
       <ClosingCta />
     </>
   );
