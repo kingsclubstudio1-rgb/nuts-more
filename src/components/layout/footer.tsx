@@ -1,9 +1,17 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Mail, MapPin, Phone, Globe, AtSign, MessageCircle, Share2 } from "lucide-react";
+import { Mail, MapPin, Phone, Globe } from "lucide-react";
 import { Container } from "@/components/ui/section";
 import { PRODUCT_CATEGORIES } from "@/lib/nav";
 import { SITE, CERTIFICATIONS, PLATFORMS } from "@/lib/site";
+import { POLICY_LINKS } from "@/lib/policies";
+import { InstagramIcon, FacebookIcon, LinkedInIcon } from "@/components/ui/social-icons";
+
+const SOCIALS = [
+  { name: "Instagram", href: SITE.socials.instagram, Icon: InstagramIcon },
+  { name: "Facebook", href: SITE.socials.facebook, Icon: FacebookIcon },
+  { name: "LinkedIn", href: SITE.socials.linkedin, Icon: LinkedInIcon },
+];
 
 export function Footer() {
   return (
@@ -56,14 +64,16 @@ export function Footer() {
               {SITE.since}.
             </p>
             <div className="mt-5 flex gap-3">
-              {[AtSign, MessageCircle, Share2].map((Icon, i) => (
+              {SOCIALS.map(({ name, href, Icon }) => (
                 <a
-                  key={i}
-                  href="#"
-                  aria-label="Social link"
+                  key={name}
+                  href={href}
+                  target={href && href !== "#" ? "_blank" : undefined}
+                  rel="noreferrer"
+                  aria-label={name}
                   className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition-colors hover:bg-gold hover:text-primary-foreground"
                 >
-                  <Icon className="h-4.5 w-4.5" />
+                  <Icon className="h-5 w-5" />
                 </a>
               ))}
             </div>
@@ -90,7 +100,7 @@ export function Footer() {
                 ["Corporate Gifting", "/corporate-gifting"],
                 ["Case Studies", "/case-studies"],
                 ["Bulk & Export", "/bulk"],
-                ["Contact", "/contact"],
+                ["Contact Us", "/contact"],
               ].map(([label, href]) => (
                 <li key={href}>
                   <Link href={href} className="text-muted-on-dark hover:text-gold">
@@ -160,18 +170,11 @@ export function Footer() {
             © {new Date().getFullYear()} {SITE.legal}. All rights reserved.
           </p>
           <div className="flex flex-wrap justify-center gap-x-5 gap-y-2">
-            <a href="#" className="hover:text-gold">
-              Privacy Policy
-            </a>
-            <a href="#" className="hover:text-gold">
-              Return &amp; Refund
-            </a>
-            <a href="#" className="hover:text-gold">
-              Terms
-            </a>
-            <a href="#" className="hover:text-gold">
-              Shipping
-            </a>
+            {POLICY_LINKS.map((p) => (
+              <Link key={p.href} href={p.href} className="hover:text-gold">
+                {p.label}
+              </Link>
+            ))}
           </div>
         </div>
       </Container>

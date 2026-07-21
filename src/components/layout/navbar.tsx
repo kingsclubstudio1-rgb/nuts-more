@@ -4,30 +4,22 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import {
-  ChevronDown,
-  Menu,
-  Search,
-  ShoppingBag,
-  User,
-  X,
-  Check,
-} from "lucide-react";
-import { NAV, PRODUCT_CATEGORIES, UTILITY_LINKS, UTILITY_BADGES } from "@/lib/nav";
+import { ChevronDown, Menu, Search, ShoppingBag, User, X, Check } from "lucide-react";
+import { NAV, UTILITY_LINKS, UTILITY_BADGES } from "@/lib/nav";
 import { Container } from "@/components/ui/section";
 import { useCart } from "@/components/cart/cart-context";
 import { cn } from "@/lib/utils";
 
 function Logo() {
   return (
-    <Link href="/" className="group flex shrink-0 items-center gap-2.5" aria-label="Nuts & More home">
+    <Link href="/" className="group flex shrink-0 items-center" aria-label="Nuts & More home">
       <Image
         src="/brand/logo.png"
         alt="Nuts & More"
-        width={120}
-        height={118}
+        width={140}
+        height={138}
         priority
-        className="h-12 w-auto transition-transform duration-300 group-hover:scale-105 sm:h-[3.4rem]"
+        className="h-14 w-auto transition-transform duration-300 group-hover:scale-105 sm:h-[4.25rem]"
       />
     </Link>
   );
@@ -70,6 +62,33 @@ export function Navbar() {
     setSearchOpen(false);
   };
 
+  const SearchBar = ({ className }: { className?: string }) => (
+    <form
+      onSubmit={submitSearch}
+      className={cn(
+        "flex items-center overflow-hidden rounded-full border border-white/15 bg-white/[0.06] focus-within:border-gold",
+        className,
+      )}
+      role="search"
+    >
+      <Search className="ml-4 h-5 w-5 shrink-0 text-gold" />
+      <input
+        ref={searchRef}
+        value={q}
+        onChange={(e) => setQ(e.target.value)}
+        placeholder="Search for Products"
+        aria-label="Search for products"
+        className="h-11 min-w-0 flex-1 bg-transparent px-3 text-[0.95rem] text-on-dark placeholder:text-muted-on-dark focus:outline-none"
+      />
+      <button
+        type="submit"
+        className="m-1 rounded-full bg-gold px-5 py-2 text-sm font-bold text-primary-foreground transition-colors hover:bg-gold-soft"
+      >
+        Search
+      </button>
+    </form>
+  );
+
   return (
     <header className="sticky top-0 z-50">
       {/* Utility bar */}
@@ -95,13 +114,81 @@ export function Navbar() {
         </Container>
       </div>
 
-      {/* Main bar */}
+      {/* Main bar: logo + search + account/cart */}
       <div className="border-b border-white/10 bg-espresso/95 backdrop-blur-md">
-        <Container className="flex h-[4.5rem] items-center justify-between gap-4">
+        <Container className="flex h-[4.75rem] items-center gap-4 sm:h-[5.5rem]">
           <Logo />
 
-          {/* Desktop nav */}
-          <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
+          {/* prominent search (tablet/desktop) */}
+          <SearchBar className="mx-2 hidden max-w-2xl flex-1 md:flex" />
+
+          <div className="ml-auto flex items-center gap-1 sm:gap-2">
+            {/* mobile search toggle */}
+            <button
+              onClick={() => setSearchOpen((v) => !v)}
+              className="flex h-11 w-11 items-center justify-center rounded-full text-on-dark/85 hover:bg-white/10 hover:text-gold md:hidden"
+              aria-label="Search products"
+            >
+              <Search className="h-[1.3rem] w-[1.3rem]" />
+            </button>
+
+            {/* Login */}
+            <Link
+              href="/account"
+              className="flex items-center gap-2 rounded-full px-2.5 py-1.5 text-on-dark/85 transition-colors hover:bg-white/10 hover:text-gold sm:px-3"
+              aria-label="Login to your account"
+            >
+              <User className="h-[1.3rem] w-[1.3rem]" />
+              <span className="hidden text-sm font-semibold sm:inline">Login</span>
+            </Link>
+
+            {/* Cart */}
+            <button
+              onClick={open}
+              className="relative flex items-center gap-2 rounded-full px-2.5 py-1.5 text-on-dark/85 transition-colors hover:bg-white/10 hover:text-gold sm:px-3"
+              aria-label={`Cart, ${count} items`}
+            >
+              <span className="relative">
+                <ShoppingBag className="h-[1.3rem] w-[1.3rem]" />
+                {count > 0 && (
+                  <span className="absolute -right-2 -top-2 flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-gold px-1 text-[0.65rem] font-bold text-primary-foreground">
+                    {count}
+                  </span>
+                )}
+              </span>
+              <span className="hidden text-sm font-semibold sm:inline">Cart</span>
+            </button>
+
+            {/* hamburger */}
+            <button
+              type="button"
+              onClick={() => setMobileOpen((v) => !v)}
+              className="flex h-11 w-11 items-center justify-center rounded-full text-on-dark hover:bg-white/10 lg:hidden"
+              aria-label={mobileOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileOpen}
+            >
+              {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+          </div>
+        </Container>
+
+        {/* mobile search bar (toggle) */}
+        <div
+          className={cn(
+            "overflow-hidden border-t border-white/10 bg-espresso transition-[max-height] duration-300 md:hidden",
+            searchOpen ? "max-h-24" : "max-h-0",
+          )}
+        >
+          <Container className="py-3">
+            <SearchBar />
+          </Container>
+        </div>
+      </div>
+
+      {/* Nav row (desktop) */}
+      <div className="hidden border-b border-white/10 bg-espresso/95 backdrop-blur-md lg:block">
+        <Container>
+          <nav className="flex items-center justify-center gap-1" aria-label="Primary">
             {NAV.map((item) =>
               item.children ? (
                 <div
@@ -113,7 +200,7 @@ export function Navbar() {
                   <Link
                     href={item.href}
                     className={cn(
-                      "flex items-center gap-1 px-3 py-2 text-[0.8rem] font-semibold uppercase tracking-[0.1em] transition-colors",
+                      "flex items-center gap-1 px-4 py-3 text-[0.8rem] font-semibold uppercase tracking-[0.1em] transition-colors",
                       isActive(item.href) ? "text-gold" : "text-on-dark/85 hover:text-gold",
                     )}
                     aria-expanded={openMenu === item.label}
@@ -128,7 +215,7 @@ export function Navbar() {
                   </Link>
                   <div
                     className={cn(
-                      "absolute left-1/2 top-full w-[30rem] -translate-x-1/2 pt-2 transition-all duration-200",
+                      "absolute left-1/2 top-full z-10 w-[30rem] -translate-x-1/2 transition-all duration-200",
                       openMenu === item.label
                         ? "visible translate-y-0 opacity-100"
                         : "invisible -translate-y-1 opacity-0",
@@ -145,9 +232,7 @@ export function Navbar() {
                             {c.label}
                           </span>
                           {c.desc && (
-                            <span className="mt-0.5 block text-xs text-muted-foreground">
-                              {c.desc}
-                            </span>
+                            <span className="mt-0.5 block text-xs text-muted-foreground">{c.desc}</span>
                           )}
                         </Link>
                       ))}
@@ -159,12 +244,8 @@ export function Navbar() {
                   key={item.label}
                   href={item.href}
                   className={cn(
-                    "px-3 py-2 text-[0.8rem] font-semibold uppercase tracking-[0.1em] transition-colors",
-                    isActive(item.href) && item.href !== "/products"
-                      ? "text-gold"
-                      : isActive(item.href) && pathname === "/products"
-                        ? "text-gold"
-                        : "text-on-dark/85 hover:text-gold",
+                    "px-4 py-3 text-[0.8rem] font-semibold uppercase tracking-[0.1em] transition-colors",
+                    isActive(item.href) ? "text-gold" : "text-on-dark/85 hover:text-gold",
                   )}
                 >
                   {item.label}
@@ -172,73 +253,7 @@ export function Navbar() {
               ),
             )}
           </nav>
-
-          {/* Actions */}
-          <div className="flex items-center gap-1">
-            <button
-              onClick={() => setSearchOpen((v) => !v)}
-              className="flex h-11 w-11 items-center justify-center rounded-full text-on-dark/85 transition-colors hover:bg-white/10 hover:text-gold"
-              aria-label="Search products"
-            >
-              <Search className="h-[1.15rem] w-[1.15rem]" />
-            </button>
-            <Link
-              href="/account"
-              className="hidden h-11 w-11 items-center justify-center rounded-full text-on-dark/85 transition-colors hover:bg-white/10 hover:text-gold sm:flex"
-              aria-label="Your account"
-            >
-              <User className="h-[1.15rem] w-[1.15rem]" />
-            </Link>
-            <button
-              onClick={open}
-              className="relative flex h-11 w-11 items-center justify-center rounded-full text-on-dark/85 transition-colors hover:bg-white/10 hover:text-gold"
-              aria-label={`Cart, ${count} items`}
-            >
-              <ShoppingBag className="h-[1.15rem] w-[1.15rem]" />
-              {count > 0 && (
-                <span className="absolute -right-0.5 -top-0.5 flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-gold px-1 text-[0.65rem] font-bold text-primary-foreground">
-                  {count}
-                </span>
-              )}
-            </button>
-            <button
-              type="button"
-              onClick={() => setMobileOpen((v) => !v)}
-              className="flex h-11 w-11 items-center justify-center rounded-full text-on-dark hover:bg-white/10 lg:hidden"
-              aria-label={mobileOpen ? "Close menu" : "Open menu"}
-              aria-expanded={mobileOpen}
-            >
-              {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
-          </div>
         </Container>
-
-        {/* Search bar */}
-        <div
-          className={cn(
-            "overflow-hidden border-t border-white/10 bg-espresso transition-[max-height] duration-300",
-            searchOpen ? "max-h-24" : "max-h-0",
-          )}
-        >
-          <Container className="py-3">
-            <form onSubmit={submitSearch} className="flex items-center gap-2">
-              <Search className="h-4.5 w-4.5 text-gold" />
-              <input
-                ref={searchRef}
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-                placeholder="Search almonds, dates, makhana…"
-                className="h-10 min-w-0 flex-1 border-b border-white/15 bg-transparent text-on-dark placeholder:text-muted-on-dark focus:border-gold focus:outline-none"
-              />
-              <button
-                type="submit"
-                className="rounded-full bg-gold px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-gold-soft"
-              >
-                Search
-              </button>
-            </form>
-          </Container>
-        </div>
       </div>
 
       {/* Mobile menu */}
@@ -275,7 +290,7 @@ export function Navbar() {
               )}
             </div>
           ))}
-          <div className="mt-2 flex items-center gap-2 border-t border-white/10 pt-3">
+          <div className="mt-2 flex flex-wrap items-center gap-2 border-t border-white/10 pt-3">
             {UTILITY_LINKS.map((l) => (
               <Link
                 key={l.label}

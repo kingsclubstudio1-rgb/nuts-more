@@ -10,19 +10,25 @@ import { AvailableOn } from "@/components/home/available-on";
 import { ClosingCta } from "@/components/home/closing-cta";
 import { Container } from "@/components/ui/section";
 import { Heading } from "@/components/ui/heading";
-import { getFeatured, getHeroSlides, getHomeCircles } from "@/lib/cms";
+import { getFeatured, getHeroSlides, getCategories } from "@/lib/cms";
 import { BRANDS } from "@/lib/content";
 
 // Reflect admin inventory edits immediately (no static caching).
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const [featured, slides, circles] = await Promise.all([
+  const [featured, slides, categories] = await Promise.all([
     getFeatured(),
     getHeroSlides(),
-    getHomeCircles(),
+    getCategories(),
   ]);
   const bestsellers = featured.slice(0, 8);
+  // "Find your favourite" shows the product CATEGORIES → each links to its collection page.
+  const circles = categories.map((c) => ({
+    label: c.name,
+    href: `/products/${c.slug}`,
+    image: c.image,
+  }));
 
   return (
     <>

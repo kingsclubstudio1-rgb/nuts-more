@@ -1,7 +1,7 @@
 import { Leaf, Award, HeartPulse, PackageCheck, ShieldCheck } from "lucide-react";
 
 const ITEMS = [
-  { icon: Leaf, title: "100% Natural", sub: "No additives or preservatives" },
+  { icon: Leaf, title: "Hand-picked", sub: "Carefully sorted for quality" },
   { icon: Award, title: "Premium Quality", sub: "Carefully selected for the best taste" },
   { icon: HeartPulse, title: "Rich In Nutrition", sub: "A good source of energy & health" },
   { icon: PackageCheck, title: "Hygienically Packed", sub: "Packed with care & freshness" },

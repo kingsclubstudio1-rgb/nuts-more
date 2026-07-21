@@ -1,16 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { Minus, Plus, ShoppingBag, MessageCircle, Check } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Minus, Plus, ShoppingBag, Check } from "lucide-react";
 import type { Product } from "@/lib/catalog";
 import { sortVariants, defaultVariant, formatINR } from "@/lib/catalog";
 import { useCart } from "@/components/cart/cart-context";
-import { SITE } from "@/lib/site";
 import { cn } from "@/lib/utils";
-import { placeOrderAction } from "@/app/actions";
 
 export function BuyBox({ product }: { product: Product }) {
-  const { add, open } = useCart();
+  const router = useRouter();
+  const { add } = useCart();
   const variants = sortVariants(product.variants);
   const [weight, setWeight] = useState(defaultVariant(product)?.weight ?? variants[0]?.weight);
   const [qty, setQty] = useState(1);
@@ -37,25 +37,10 @@ export function BuyBox({ product }: { product: Product }) {
     setTimeout(() => setAdded(false), 1400);
   };
 
-  const orderWhatsApp = async () => {
+  const buyNow = () => {
     if (!variant || soldOut) return;
-    const msg = `Hello Nuts & More! I'd like to order ${qty} × ${product.name} (${variant.weight}) — ${formatINR(
-      variant.price * qty,
-    )}.`;
-    const phone = SITE.phoneHref.replace(/[^0-9]/g, "");
-    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, "_blank");
-    try {
-      await placeOrderAction({
-        items: [
-          { id: product.id, name: product.name, weight: variant.weight, qty, price: variant.price },
-        ],
-        subtotal: variant.price * qty,
-        discount: 0,
-        total: variant.price * qty,
-      });
-    } catch {
-      /* non-blocking */
-    }
+    handleAdd();
+    router.push("/checkout");
   };
 
   return (
@@ -142,26 +127,13 @@ export function BuyBox({ product }: { product: Product }) {
         </button>
       </div>
 
-      <div className="mt-3 flex gap-3">
-        <button
-          onClick={() => {
-            handleAdd();
-            open();
-          }}
-          disabled={soldOut}
-          className="flex-1 rounded-full border border-espresso/20 py-2.5 text-sm font-semibold text-foreground transition-colors hover:border-gold hover:text-gold-deep disabled:opacity-40"
-        >
-          Buy now
-        </button>
-        <button
-          onClick={orderWhatsApp}
-          disabled={soldOut}
-          className="flex flex-1 items-center justify-center gap-1.5 rounded-full border border-emerald-600/40 py-2.5 text-sm font-semibold text-emerald-700 transition-colors hover:bg-emerald-50 disabled:opacity-40"
-        >
-          <MessageCircle className="h-4 w-4" />
-          WhatsApp
-        </button>
-      </div>
+      <button
+        onClick={buyNow}
+        disabled={soldOut}
+        className="mt-3 w-full rounded-full border border-espresso/20 py-2.5 text-sm font-semibold text-foreground transition-colors hover:border-gold hover:text-gold-deep disabled:opacity-40"
+      >
+        Buy now
+      </button>
     </div>
   );
 }

@@ -7,7 +7,7 @@ const OFFERS = [
   "10% OFF on orders above ₹999",
   "15% OFF on orders above ₹2,499",
   "20% OFF on orders above ₹4,999",
-  "100% Natural · No Preservatives · Hygienically Packed",
+  "Hand-picked · No Added Preservatives · Hygienically Packed",
   "Hand-picked with care & love since 2019",
 ];
 

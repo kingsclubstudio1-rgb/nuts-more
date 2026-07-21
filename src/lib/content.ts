@@ -108,8 +108,8 @@ export const CASE_STUDIES: CaseStudy[] = [
     headline: "Guest experience, elevated",
     result:
       "A bespoke date-and-nut welcome amenity now greets premium guests, reinforcing a luxury promise.",
-    stat: "100%",
-    statLabel: "natural & pure",
+    stat: "Fresh",
+    statLabel: "roasted to order",
     imageId: "luxury gift hamper|159",
     tint: "peach",
     challenge:
@@ -146,7 +146,7 @@ export const CASE_STUDIES: CaseStudy[] = [
 ];
 
 export const STATS = [
-  { value: "100%", label: "Pure & natural" },
+  { value: "Fresh", label: "Roasted to order" },
   { value: "Premium", label: "Global sourcing" },
   { value: "50+", label: "Corporate partners" },
   { value: "2019", label: "Trusted since" },

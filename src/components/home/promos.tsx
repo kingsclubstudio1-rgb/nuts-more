@@ -36,7 +36,7 @@ const REASONS = [
   "Handpicked & Sorted",
   "Rich in Taste & Nutrition",
   "Perfect for Gifting",
-  "100% Customer Satisfaction",
+  "Loved by our customers",
 ];
 
 /** Dark "Why Choose Us" card (right rail of the showcase). */

@@ -21,8 +21,8 @@ create policy "profiles: self" on public.profiles
 create or replace function public.handle_new_user()
 returns trigger language plpgsql security definer set search_path = public as $$
 begin
-  insert into public.profiles (id, name)
-  values (new.id, new.raw_user_meta_data->>'name')
+  insert into public.profiles (id, name, phone)
+  values (new.id, new.raw_user_meta_data->>'name', new.raw_user_meta_data->>'phone')
   on conflict (id) do nothing;
   return new;
 end; $$;
@@ -41,9 +41,12 @@ create table if not exists public.orders (
   items       jsonb not null,           -- [{ id, name, weight, qty, price }]
   subtotal    integer not null,
   discount    integer not null default 0,
+  shipping    integer not null default 0,
   total       integer not null,
-  status      text not null default 'placed',  -- placed|confirmed|packed|shipped|delivered|cancelled
-  channel     text default 'whatsapp',
+  address     jsonb,                    -- { name, phone, line1, city, pincode, state }
+  payment_id  text,
+  status      text not null default 'placed',  -- placed|paid|confirmed|packed|shipped|delivered|cancelled
+  channel     text default 'razorpay',
   created_at  timestamptz default now()
 );
 

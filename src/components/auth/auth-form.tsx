@@ -2,7 +2,7 @@
 
 import { useActionState, useState } from "react";
 import Image from "next/image";
-import { Mail, Lock, User, Loader2, ShieldCheck } from "lucide-react";
+import { Mail, Lock, User, Loader2, ShieldCheck, Phone } from "lucide-react";
 import { loginAction, signupAction } from "@/app/(store)/login/actions";
 
 export function AuthForm({
@@ -86,7 +86,19 @@ export function AuthForm({
         <form action={signupAct} className="mt-6 space-y-3">
           <div className={inputWrap}>
             <User className={icon} />
-            <input name="name" type="text" autoComplete="name" placeholder="Full name" className={input} />
+            <input name="name" type="text" required autoComplete="name" placeholder="Full name" className={input} />
+          </div>
+          <div className={inputWrap}>
+            <Phone className={icon} />
+            <input
+              name="phone"
+              type="tel"
+              required
+              autoComplete="tel"
+              inputMode="tel"
+              placeholder="Mobile number"
+              className={input}
+            />
           </div>
           <div className={inputWrap}>
             <Mail className={icon} />

@@ -132,10 +132,11 @@ export function sortVariants(variants: Variant[]): Variant[] {
   );
 }
 
-/** Default variant shown on cards: prefer 500g, else the first (largest) one. */
+/** Default variant shown on cards/listings: the 100g price where available
+ * (most affordable first impression), else the smallest available pack. */
 export function defaultVariant(product: Product): Variant | undefined {
   const sorted = sortVariants(product.variants);
-  return sorted.find((v) => v.weight === "500g") ?? sorted[0];
+  return sorted.find((v) => v.weight === "100g") ?? sorted[sorted.length - 1];
 }
 
 export function lowestPrice(product: Product): number {

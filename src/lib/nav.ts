@@ -21,8 +21,8 @@ export const NAV: NavItem[] = [
   { label: "Shop", href: "/products" },
   { label: "Categories", href: "/products", children: PRODUCT_CATEGORIES },
   { label: "Gifting", href: "/corporate-gifting", children: GIFTING },
-  { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
+  { label: "About Us", href: "/about" },
+  { label: "Contact Us", href: "/contact" },
 ];
 
 /** Slim utility-bar links (top-right in the header). */
@@ -33,7 +33,7 @@ export const UTILITY_LINKS: NavChild[] = [
 ];
 
 export const UTILITY_BADGES = [
-  "100% Natural",
+  "Hand-picked",
   "Premium Quality",
   "Hygienically Packed",
   "No Artificial Additives",

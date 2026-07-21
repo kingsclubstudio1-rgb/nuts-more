@@ -2,15 +2,15 @@
 
 import Image from "next/image";
 import { useEffect } from "react";
-import { Minus, Plus, Trash2, X, ShoppingBag, MessageCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Minus, Plus, Trash2, X, ShoppingBag, ArrowRight } from "lucide-react";
 import { useCart, itemKey, discountFor } from "./cart-context";
 import { formatINR } from "@/lib/catalog";
-import { SITE } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import { PlaceholderTile } from "@/components/products/placeholder-tile";
-import { placeOrderAction } from "@/app/actions";
 
 export function CartDrawer() {
+  const router = useRouter();
   const { items, isOpen, close, setQty, remove, subtotal, count, clear } = useCart();
   const discount = discountFor(subtotal);
   const total = Math.round(subtotal * (1 - discount.rate));
@@ -28,43 +28,13 @@ export function CartDrawer() {
     return () => window.removeEventListener("keydown", onKey);
   }, [close]);
 
-  const checkout = async () => {
-    const lines = items.map(
-      (i) => `• ${i.name} (${i.weight}) ×${i.qty} — ${formatINR(i.price * i.qty)}`,
-    );
-    const msg = [
-      "Hello Nuts & More! I'd like to order:",
-      "",
-      ...lines,
-      "",
-      `Subtotal: ${formatINR(subtotal)}`,
-      discount.rate ? `Discount (${discount.label}): -${formatINR(subtotal - total)}` : "",
-      `Total: ${formatINR(total)}`,
-    ]
-      .filter(Boolean)
-      .join("\n");
-    const phone = SITE.phoneHref.replace(/[^0-9]/g, "");
-    // open WhatsApp first (must be inside the user gesture to avoid pop-up blocking)
-    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, "_blank");
-    // then deplete inventory, save to purchase history (if signed in), and clear the cart
-    try {
-      await placeOrderAction({
-        items: items.map((i) => ({
-          id: i.id,
-          name: i.name,
-          weight: i.weight,
-          qty: i.qty,
-          price: i.price,
-        })),
-        subtotal,
-        discount: subtotal - total,
-        total,
-      });
-    } catch {
-      /* non-blocking */
-    }
-    clear();
+  const proceedToCheckout = () => {
     close();
+    router.push("/checkout");
+  };
+  const continueShopping = () => {
+    close();
+    router.push("/products");
   };
 
   return (
@@ -211,14 +181,20 @@ export function CartDrawer() {
                 )}
               </div>
               <button
-                onClick={checkout}
-                className="mt-4 flex w-full items-center justify-center gap-2 rounded-full bg-gold px-5 py-3 text-sm font-bold text-primary-foreground shadow-[var(--shadow-gold)] transition-colors hover:bg-gold-soft"
+                onClick={proceedToCheckout}
+                className="mt-4 flex w-full items-center justify-center gap-2 rounded-full bg-gold px-5 py-3 text-sm font-bold uppercase tracking-wider text-primary-foreground shadow-[var(--shadow-gold)] transition-colors hover:bg-gold-soft"
               >
-                <MessageCircle className="h-4.5 w-4.5" />
-                Checkout on WhatsApp
+                Proceed to Checkout
+                <ArrowRight className="h-4.5 w-4.5" />
+              </button>
+              <button
+                onClick={continueShopping}
+                className="mt-2 w-full rounded-full border border-white/20 px-5 py-2.5 text-sm font-semibold text-on-dark transition-colors hover:border-gold hover:text-gold"
+              >
+                Continue Shopping
               </button>
               <p className="mt-2 text-center text-[0.7rem] text-muted-on-dark">
-                We&apos;ll confirm stock, packing & delivery on WhatsApp.
+                Shipping is calculated at checkout. Secure online payment.
               </p>
             </footer>
           </>

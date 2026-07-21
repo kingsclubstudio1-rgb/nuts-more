@@ -50,7 +50,7 @@ export function Hero({ slides }: { slides?: Slide[] }) {
             fill
             priority={idx === 0}
             sizes="100vw"
-            className="object-cover"
+            className="object-cover brightness-110 contrast-105 saturate-[1.15]"
             onError={(e) => {
               const t = e.currentTarget as HTMLImageElement;
               if (!t.src.includes(FALLBACK_IMG)) t.src = FALLBACK_IMG;
@@ -59,9 +59,9 @@ export function Hero({ slides }: { slides?: Slide[] }) {
         </div>
       ))}
 
-      {/* legibility scrims */}
-      <div className="absolute inset-0 bg-gradient-to-r from-ink/92 via-ink/70 to-ink/25" />
-      <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-transparent to-ink/20" />
+      {/* legibility scrims — strong on the left for text, clear on the right so the image pops */}
+      <div className="absolute inset-0 bg-gradient-to-r from-ink/88 via-ink/45 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-ink/50 via-transparent to-ink/10" />
 
       {/* content */}
       <div className="relative mx-auto flex min-h-[34rem] max-w-7xl items-center px-4 py-16 sm:px-6 lg:min-h-[42rem] lg:px-8">

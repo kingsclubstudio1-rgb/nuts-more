@@ -10,10 +10,11 @@ export const SITE = {
   web: "www.nuts-and-more.store",
   address:
     "173/1, 4th Floor, SC Road, Hotel Samrat Residency, Seshadripuram, Bengaluru, Karnataka 560020",
+  // TODO: replace with the official profile URLs
   socials: {
     instagram: "#",
     facebook: "#",
-    youtube: "#",
+    linkedin: "#",
   },
 };
 

@@ -39,9 +39,13 @@ export async function loginAction(_prev: State, formData: FormData): Promise<Sta
 
 export async function signupAction(_prev: State, formData: FormData): Promise<State> {
   const name = String(formData.get("name") ?? "").trim();
+  const phone = String(formData.get("phone") ?? "").trim();
   const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "");
 
+  if (!name) return { error: "Please enter your full name." };
+  if (!phone || phone.replace(/\D/g, "").length < 10)
+    return { error: "Please enter a valid 10-digit mobile number." };
   if (!email || !password) return { error: "Please enter your email and a password." };
   if (password.length < 6) return { error: "Password must be at least 6 characters." };
   if (!isSupabaseConfigured()) {
@@ -52,13 +56,16 @@ export async function signupAction(_prev: State, formData: FormData): Promise<St
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
-    options: { data: { name } },
+    options: { data: { name, phone } },
   });
   if (error) return { error: error.message };
 
-  // If email confirmation is enabled, there's no session yet.
+  // With email verification enabled, no session is returned until the user confirms.
   if (!data.session) {
-    return { ok: true, message: "Almost there! Check your email to confirm your account." };
+    return {
+      ok: true,
+      message: `Account created! We've sent a confirmation link to ${email}. Please verify your email to activate your account, then sign in.`,
+    };
   }
   redirect("/account");
 }
