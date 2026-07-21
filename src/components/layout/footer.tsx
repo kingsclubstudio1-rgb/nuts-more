@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Mail, MapPin, Phone, Globe } from "lucide-react";
 import { Container } from "@/components/ui/section";
 import { PRODUCT_CATEGORIES } from "@/lib/nav";
-import { SITE, CERTIFICATIONS, PLATFORMS } from "@/lib/site";
+import { SITE } from "@/lib/site";
 import { POLICY_LINKS } from "@/lib/policies";
 import { InstagramIcon, FacebookIcon, LinkedInIcon } from "@/components/ui/social-icons";
 
@@ -138,34 +138,7 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Platforms + certifications */}
-        <div className="mt-12 grid gap-6 border-t border-white/10 pt-8 sm:grid-cols-2">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-wider text-gold">Also find us on</p>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {PLATFORMS.map((p) => (
-                <span key={p} className="rounded-full bg-white/10 px-3.5 py-1.5 text-sm font-semibold">
-                  {p}
-                </span>
-              ))}
-            </div>
-          </div>
-          <div className="sm:text-right">
-            <p className="text-xs font-bold uppercase tracking-wider text-gold">Certified by</p>
-            <div className="mt-3 flex flex-wrap gap-2 sm:justify-end">
-              {CERTIFICATIONS.map((c) => (
-                <span
-                  key={c}
-                  className="rounded-lg border border-white/15 px-2.5 py-1 text-xs font-semibold text-muted-on-dark"
-                >
-                  {c}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 text-sm text-muted-on-dark sm:flex-row">
+        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 text-sm text-muted-on-dark sm:flex-row">
           <p>
             © {new Date().getFullYear()} {SITE.legal}. All rights reserved.
           </p>

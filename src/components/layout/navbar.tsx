@@ -119,8 +119,8 @@ export function Navbar() {
         <Container className="flex h-[4.75rem] items-center gap-4 sm:h-[5.5rem]">
           <Logo />
 
-          {/* prominent search (tablet/desktop) */}
-          <SearchBar className="mx-2 hidden max-w-2xl flex-1 md:flex" />
+          {/* prominent search (tablet/desktop) — spans logo → login, centered */}
+          <SearchBar className="mx-4 hidden flex-1 md:flex" />
 
           <div className="ml-auto flex items-center gap-1 sm:gap-2">
             {/* mobile search toggle */}
