@@ -7,7 +7,7 @@ export const SITE = {
   phone: "+91 95357 78855",
   phoneHref: "tel:+919535778855",
   email: "contact@nutsandmore.biz",
-  web: "www.nutsandmore.store",
+  web: "www.nuts-and-more.store",
   address:
     "173/1, 4th Floor, SC Road, Hotel Samrat Residency, Seshadripuram, Bengaluru, Karnataka 560020",
   socials: {

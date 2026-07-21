@@ -16,7 +16,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://nutsandmore.store"),
+  metadataBase: new URL("https://nuts-and-more.store"),
   title: {
     default: "Nuts & More — Premium Gourmet Dates, Dry Fruits & Nuts",
     template: "%s · Nuts & More",
