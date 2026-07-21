@@ -4,6 +4,7 @@ import { useActionState, useState } from "react";
 import Image from "next/image";
 import { Mail, Lock, User, Loader2, ShieldCheck, Phone } from "lucide-react";
 import { loginAction, signupAction } from "@/app/(store)/login/actions";
+import { GoogleButton } from "@/components/auth/google-button";
 
 export function AuthForm({
   next,
@@ -59,6 +60,8 @@ export function AuthForm({
           </button>
         ))}
       </div>
+
+      <GoogleButton next={next} />
 
       {mode === "signin" ? (
         <form action={loginAct} className="mt-6 space-y-3">

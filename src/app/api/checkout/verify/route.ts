@@ -5,6 +5,7 @@ import { decrementStock, getProductById } from "@/lib/cms";
 import { discountRate } from "@/lib/pricing";
 import { shippingCharge } from "@/lib/shipping";
 import { verifyRazorpaySignature } from "@/lib/razorpay";
+import { sendOrderConfirmation } from "@/lib/mailer";
 
 export const runtime = "nodejs";
 
@@ -55,6 +56,21 @@ export async function POST(req: Request) {
     if (error) throw new Error(error.message);
 
     await decrementStock(lineItems.map((i) => ({ id: i.id, weight: i.weight, qty: i.qty })));
+
+    // Order confirmation email (no-op until SMTP is configured; never fails the order).
+    if (user.email) {
+      await sendOrderConfirmation({
+        to: user.email,
+        name: address?.name ?? (user.user_metadata?.name as string | undefined),
+        orderId: data?.id,
+        items: lineItems,
+        subtotal,
+        discount,
+        shipping,
+        total,
+        address: address ?? null,
+      });
+    }
 
     return NextResponse.json({ ok: true, orderId: data?.id });
   } catch (e) {
