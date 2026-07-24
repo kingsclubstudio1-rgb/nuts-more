@@ -8,7 +8,10 @@ import { ChevronDown, Menu, Search, ShoppingBag, User, X, Check } from "lucide-r
 import { NAV, UTILITY_LINKS, UTILITY_BADGES } from "@/lib/nav";
 import { Container } from "@/components/ui/section";
 import { useCart } from "@/components/cart/cart-context";
+import { formatINR } from "@/lib/catalog";
 import { cn } from "@/lib/utils";
+
+type SearchResult = { slug: string; name: string; image: string | null; category: string; price: number };
 
 function Logo() {
   return (
@@ -33,13 +36,40 @@ export function Navbar() {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [q, setQ] = useState("");
+  const [suggest, setSuggest] = useState<SearchResult[]>([]);
+  const [showSuggest, setShowSuggest] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setMobileOpen(false);
     setOpenMenu(null);
     setSearchOpen(false);
+    setShowSuggest(false);
+    setQ("");
   }, [pathname]);
+
+  // Debounced live product suggestions.
+  useEffect(() => {
+    const term = q.trim();
+    if (term.length < 2) {
+      setSuggest([]);
+      return;
+    }
+    const ctrl = new AbortController();
+    const t = setTimeout(async () => {
+      try {
+        const r = await fetch(`/api/search?q=${encodeURIComponent(term)}`, { signal: ctrl.signal });
+        const d = await r.json();
+        setSuggest(Array.isArray(d.results) ? d.results : []);
+      } catch {
+        /* ignore aborted / failed */
+      }
+    }, 200);
+    return () => {
+      clearTimeout(t);
+      ctrl.abort();
+    };
+  }, [q]);
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
@@ -55,38 +85,94 @@ export function Navbar() {
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
+  const runSearch = (term: string) => {
+    const t = term.trim();
+    if (t) router.push(`/products?q=${encodeURIComponent(t)}`);
+    setSearchOpen(false);
+    setShowSuggest(false);
+  };
   const submitSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    const term = q.trim();
-    if (term) router.push(`/products?q=${encodeURIComponent(term)}`);
+    runSearch(q);
+  };
+  const goToProduct = (slug: string) => {
+    setShowSuggest(false);
     setSearchOpen(false);
+    setQ("");
+    router.push(`/product/${slug}`);
   };
 
-  const SearchBar = ({ className }: { className?: string }) => (
-    <form
-      onSubmit={submitSearch}
-      className={cn(
-        "flex items-center overflow-hidden rounded-full border border-white/15 bg-white/[0.06] focus-within:border-gold",
-        className,
-      )}
-      role="search"
-    >
-      <Search className="ml-4 h-5 w-5 shrink-0 text-gold" />
-      <input
-        ref={searchRef}
-        value={q}
-        onChange={(e) => setQ(e.target.value)}
-        placeholder="Search for Products"
-        aria-label="Search for products"
-        className="h-11 min-w-0 flex-1 bg-transparent px-3 text-[0.95rem] text-on-dark placeholder:text-muted-on-dark focus:outline-none"
-      />
-      <button
-        type="submit"
-        className="m-1 rounded-full bg-gold px-5 py-2 text-sm font-bold text-primary-foreground transition-colors hover:bg-gold-soft"
+  const searchBar = (className?: string) => (
+    <div className={cn("relative", className)}>
+      <form
+        onSubmit={submitSearch}
+        className="flex w-full items-center overflow-hidden rounded-full border border-white/15 bg-white/[0.06] focus-within:border-gold"
+        role="search"
       >
-        Search
-      </button>
-    </form>
+        <Search className="ml-4 h-5 w-5 shrink-0 text-gold" />
+        <input
+          ref={searchRef}
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          onFocus={() => setShowSuggest(true)}
+          onBlur={() => setTimeout(() => setShowSuggest(false), 150)}
+          placeholder="Search for Products"
+          aria-label="Search for products"
+          autoComplete="off"
+          className="h-11 min-w-0 flex-1 bg-transparent px-3 text-[0.95rem] text-on-dark placeholder:text-muted-on-dark focus:outline-none"
+        />
+        <button
+          type="submit"
+          className="m-1 rounded-full bg-gold px-5 py-2 text-sm font-bold text-primary-foreground transition-colors hover:bg-gold-soft"
+        >
+          Search
+        </button>
+      </form>
+
+      {showSuggest && q.trim().length >= 2 && (
+        <div className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-2xl border border-line bg-card text-foreground shadow-[var(--shadow-lift)]">
+          {suggest.length === 0 ? (
+            <p className="px-4 py-3 text-sm text-muted-foreground">No products match “{q.trim()}”.</p>
+          ) : (
+            <ul className="max-h-[70vh] overflow-y-auto py-1">
+              {suggest.map((s) => (
+                <li key={s.slug}>
+                  <button
+                    type="button"
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => goToProduct(s.slug)}
+                    className="flex w-full items-center gap-3 px-3 py-2 text-left hover:bg-cream-2"
+                  >
+                    <span className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg bg-cream-2">
+                      {s.image ? (
+                        <Image src={s.image} alt="" fill sizes="40px" className="object-cover" />
+                      ) : null}
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-sm font-semibold">{s.name}</span>
+                      <span className="block text-xs capitalize text-muted-foreground">
+                        {s.category.replace(/-/g, " ")}
+                      </span>
+                    </span>
+                    <span className="shrink-0 text-sm font-bold text-gold-deep">{formatINR(s.price)}</span>
+                  </button>
+                </li>
+              ))}
+              <li className="border-t border-line">
+                <button
+                  type="button"
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => runSearch(q)}
+                  className="w-full px-4 py-2.5 text-left text-sm font-semibold text-gold-deep hover:bg-cream-2"
+                >
+                  See all results for “{q.trim()}”
+                </button>
+              </li>
+            </ul>
+          )}
+        </div>
+      )}
+    </div>
   );
 
   return (
@@ -131,7 +217,7 @@ export function Navbar() {
           <Logo />
 
           {/* prominent search (tablet/desktop) — spans logo → login, centered */}
-          <SearchBar className="mx-4 hidden flex-1 md:flex" />
+          {searchBar("mx-4 hidden flex-1 md:flex")}
 
           <div className="ml-auto flex items-center gap-1 sm:gap-2">
             {/* mobile search toggle */}
@@ -190,9 +276,7 @@ export function Navbar() {
             searchOpen ? "max-h-24" : "max-h-0",
           )}
         >
-          <Container className="py-3">
-            <SearchBar />
-          </Container>
+          <Container className="py-3">{searchBar()}</Container>
         </div>
       </div>
 
