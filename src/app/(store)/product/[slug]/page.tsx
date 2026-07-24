@@ -123,7 +123,7 @@ export default async function ProductPage({ params }: Params) {
           {product.description && (
             <div className="mt-14 max-w-3xl">
               <h2 className="font-heading text-2xl font-bold text-foreground">About this product</h2>
-              <p className="mt-4 leading-relaxed text-body">{product.description}</p>
+              <p className="mt-4 whitespace-pre-line leading-relaxed text-body">{product.description}</p>
             </div>
           )}
 
