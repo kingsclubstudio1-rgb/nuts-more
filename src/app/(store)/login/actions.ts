@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import { isAdminLogin, setSession, clearSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
@@ -52,11 +53,19 @@ export async function signupAction(_prev: State, formData: FormData): Promise<St
     return { error: "Sign-up isn't available yet — the store owner needs to finish setup." };
   }
 
+  // Where the email-confirmation link should land: our callback route exchanges
+  // the code for a session and logs the user in (previously it hit the homepage
+  // and the confirmation "did nothing").
+  const h = await headers();
+  const host = h.get("host") || "www.nuts-and-more.store";
+  const proto = host.startsWith("localhost") ? "http" : "https";
+  const emailRedirectTo = `${proto}://${host}/auth/callback?next=/account`;
+
   const supabase = await createClient();
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
-    options: { data: { name, phone } },
+    options: { data: { name, phone }, emailRedirectTo },
   });
   if (error) return { error: error.message };
 
