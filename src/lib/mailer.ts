@@ -117,3 +117,37 @@ export async function sendOrderConfirmation(o: OrderEmail): Promise<{ sent: bool
     return { sent: false };
   }
 }
+
+const ADMIN_INBOX = NOTIFY || process.env.ADMIN_EMAIL || USER || "";
+
+/** Notify the store team of a new contact / bulk enquiry. */
+export async function sendEnquiryNotification(e: {
+  type: "contact" | "bulk";
+  fields: Record<string, string | undefined>;
+}): Promise<{ sent: boolean }> {
+  if (!isMailerConfigured() || !ADMIN_INBOX) return { sent: false };
+  const rows = Object.entries(e.fields)
+    .filter(([, v]) => v && String(v).trim())
+    .map(
+      ([k, v]) =>
+        `<tr><td style="padding:5px 12px 5px 0;color:#8a7a68;font-size:13px;text-transform:capitalize;white-space:nowrap;vertical-align:top;">${k.replace(/_/g, " ")}</td><td style="padding:5px 0;color:#3b2f24;font-size:13px;">${String(v).replace(/</g, "&lt;")}</td></tr>`,
+    )
+    .join("");
+  const title = e.type === "bulk" ? "New Bulk Order Enquiry" : "New Contact Enquiry";
+  try {
+    await getTransport().sendMail({
+      from: FROM,
+      to: ADMIN_INBOX,
+      replyTo: e.fields.email || undefined,
+      subject: `${title}${e.fields.name ? ` — ${e.fields.name}` : ""}`,
+      html: `<div style="font-family:Arial,Helvetica,sans-serif;max-width:600px;margin:0 auto;padding:24px;background:#fbf7f0;border-radius:14px;">
+        <h2 style="color:#3b2f24;margin:0 0 4px;">${title}</h2>
+        <p style="color:#8a7a68;font-size:12px;margin:0 0 16px;">Nuts &amp; More — website enquiry</p>
+        <table style="border-collapse:collapse;width:100%;">${rows}</table>
+      </div>`,
+    });
+    return { sent: true };
+  } catch {
+    return { sent: false };
+  }
+}

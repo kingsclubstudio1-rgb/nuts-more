@@ -14,7 +14,7 @@ export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;
     const data = new FormData(form);
@@ -34,8 +34,26 @@ export function ContactForm() {
     }
 
     setStatus("submitting");
-    // Demo: simulate a network request (no backend wired up yet)
-    setTimeout(() => setStatus("done"), 1100);
+    try {
+      const res = await fetch("/api/enquiry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "contact",
+          name: data.get("name"),
+          email: data.get("email"),
+          phone: data.get("phone"),
+          subject: data.get("subject"),
+          message: data.get("message"),
+        }),
+      });
+      if (!res.ok) throw new Error();
+      form.reset();
+      setStatus("done");
+    } catch {
+      setStatus("idle");
+      setErrors({ message: "Something went wrong sending your message. Please try again." });
+    }
   }
 
   if (status === "done") {

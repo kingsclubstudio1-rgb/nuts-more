@@ -1,5 +1,6 @@
 import { createClient } from "./supabase/server";
-import { isSupabaseConfigured } from "./supabase/config";
+import { createAdminClient } from "./supabase/admin";
+import { isSupabaseConfigured, isSupabaseAdminConfigured } from "./supabase/config";
 
 export type OrderItem = {
   id: string;
@@ -61,6 +62,195 @@ export async function getMyOrders(): Promise<Order[]> {
       .eq("user_id", user.id)
       .order("created_at", { ascending: false });
     return (data as Order[]) ?? [];
+  } catch {
+    return [];
+  }
+}
+
+/* ==================================================================== *
+ * Admin + public order operations (service-role) + enquiries
+ * ==================================================================== */
+
+export type OrderStatus =
+  | "placed"
+  | "paid"
+  | "in_progress"
+  | "ready_to_dispatch"
+  | "out_for_delivery"
+  | "delivered"
+  | "cancelled";
+
+/** The client's order-status flow (in order). "paid" is shown as "Order Placed". */
+export const STATUS_STEPS: { key: OrderStatus; label: string }[] = [
+  { key: "placed", label: "Order Placed" },
+  { key: "in_progress", label: "In Progress" },
+  { key: "ready_to_dispatch", label: "Ready to Dispatch" },
+  { key: "out_for_delivery", label: "Out for Delivery" },
+  { key: "delivered", label: "Delivered" },
+];
+
+export const STATUS_LABELS: Record<string, string> = {
+  placed: "Order Placed",
+  paid: "Order Placed",
+  in_progress: "In Progress",
+  ready_to_dispatch: "Ready to Dispatch",
+  out_for_delivery: "Out for Delivery",
+  delivered: "Delivered",
+  cancelled: "Cancelled",
+};
+
+export const ADMIN_STATUS_OPTIONS: { value: OrderStatus; label: string }[] = [
+  { value: "placed", label: "Order Placed" },
+  { value: "in_progress", label: "In Progress" },
+  { value: "ready_to_dispatch", label: "Ready to Dispatch" },
+  { value: "out_for_delivery", label: "Out for Delivery" },
+  { value: "delivered", label: "Delivered" },
+  { value: "cancelled", label: "Cancelled" },
+];
+
+export type OrderAddress = {
+  name?: string;
+  phone?: string;
+  line1?: string;
+  city?: string;
+  pincode?: string;
+  state?: string;
+};
+
+export type AdminOrder = {
+  id: string;
+  user_id: string;
+  items: OrderItem[];
+  subtotal: number;
+  discount: number;
+  shipping: number;
+  total: number;
+  address: OrderAddress | null;
+  payment_id: string | null;
+  status: string;
+  channel: string | null;
+  created_at: string;
+  updated_at: string | null;
+};
+
+export async function listOrders(): Promise<AdminOrder[]> {
+  if (!isSupabaseAdminConfigured()) return [];
+  try {
+    const sb = createAdminClient();
+    const { data, error } = await sb
+      .from("orders")
+      .select("*")
+      .order("created_at", { ascending: false });
+    if (error || !data) return [];
+    return data as AdminOrder[];
+  } catch {
+    return [];
+  }
+}
+
+export async function getAdminOrderById(id: string): Promise<AdminOrder | null> {
+  if (!isSupabaseAdminConfigured()) return null;
+  try {
+    const sb = createAdminClient();
+    const { data } = await sb.from("orders").select("*").eq("id", id).maybeSingle();
+    return (data as AdminOrder) ?? null;
+  } catch {
+    return null;
+  }
+}
+
+export async function updateOrderStatus(id: string, status: OrderStatus): Promise<boolean> {
+  if (!isSupabaseAdminConfigured()) return false;
+  try {
+    const sb = createAdminClient();
+    const { error } = await sb
+      .from("orders")
+      .update({ status, updated_at: new Date().toISOString() })
+      .eq("id", id);
+    return !error;
+  } catch {
+    return false;
+  }
+}
+
+/** Public track lookup (by full UUID only — unguessable). Limited fields. */
+export async function getPublicOrderStatus(id: string): Promise<{
+  id: string;
+  status: string;
+  created_at: string;
+  updated_at: string | null;
+  total: number;
+  itemCount: number;
+} | null> {
+  if (!isSupabaseAdminConfigured()) return null;
+  if (!/^[0-9a-f-]{10,}$/i.test(id.trim())) return null;
+  try {
+    const sb = createAdminClient();
+    const { data } = await sb
+      .from("orders")
+      .select("id,status,created_at,updated_at,total,items")
+      .eq("id", id.trim())
+      .maybeSingle();
+    if (!data) return null;
+    const items = (data.items as OrderItem[]) ?? [];
+    return {
+      id: String(data.id),
+      status: String(data.status),
+      created_at: String(data.created_at),
+      updated_at: data.updated_at ? String(data.updated_at) : null,
+      total: Number(data.total ?? 0),
+      itemCount: items.reduce((n, i) => n + (i.qty || 0), 0),
+    };
+  } catch {
+    return null;
+  }
+}
+
+/* ------------------------------ Enquiries ----------------------------- */
+
+export type EnquiryInput = {
+  type: "contact" | "bulk";
+  name?: string;
+  email?: string;
+  phone?: string;
+  company?: string;
+  city?: string;
+  subject?: string;
+  business_type?: string;
+  products?: string;
+  quantity?: string;
+  packaging?: string;
+  delivery_location?: string;
+  expected_date?: string;
+  message?: string;
+};
+
+export type Enquiry = EnquiryInput & { id: string; status: string; created_at: string };
+
+export async function saveEnquiry(
+  input: EnquiryInput,
+): Promise<{ ok: boolean; id?: string; error?: string }> {
+  if (!isSupabaseAdminConfigured()) return { ok: false, error: "storage not configured" };
+  try {
+    const sb = createAdminClient();
+    const { data, error } = await sb.from("enquiries").insert(input).select("id").single();
+    if (error) return { ok: false, error: error.message };
+    return { ok: true, id: data?.id };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : "save failed" };
+  }
+}
+
+export async function listEnquiries(): Promise<Enquiry[]> {
+  if (!isSupabaseAdminConfigured()) return [];
+  try {
+    const sb = createAdminClient();
+    const { data, error } = await sb
+      .from("enquiries")
+      .select("*")
+      .order("created_at", { ascending: false });
+    if (error || !data) return [];
+    return data as Enquiry[];
   } catch {
     return [];
   }
