@@ -228,7 +228,7 @@ const ADMIN_INBOX = NOTIFY || process.env.ADMIN_EMAIL || USER || "";
 
 /** Notify the store team of a new contact / bulk enquiry. */
 export async function sendEnquiryNotification(e: {
-  type: "contact" | "bulk";
+  type: "contact" | "bulk" | "return";
   fields: Record<string, string | undefined>;
 }): Promise<{ sent: boolean }> {
   if (!isMailerConfigured() || !ADMIN_INBOX) return { sent: false };
@@ -239,7 +239,12 @@ export async function sendEnquiryNotification(e: {
         `<tr><td style="padding:5px 12px 5px 0;color:#8a7a68;font-size:13px;text-transform:capitalize;white-space:nowrap;vertical-align:top;">${k.replace(/_/g, " ")}</td><td style="padding:5px 0;color:#3b2f24;font-size:13px;">${String(v).replace(/</g, "&lt;")}</td></tr>`,
     )
     .join("");
-  const title = e.type === "bulk" ? "New Bulk Order Enquiry" : "New Contact Enquiry";
+  const title =
+    e.type === "bulk"
+      ? "New Bulk Order Enquiry"
+      : e.type === "return"
+        ? "New Return Request"
+        : "New Contact Enquiry";
   try {
     await getTransport().sendMail({
       from: FROM,

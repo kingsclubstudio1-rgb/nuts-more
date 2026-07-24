@@ -70,14 +70,25 @@ function EnquiryCard({ e }: { e: Enquiry }) {
     <div className="rounded-2xl border border-line bg-white p-5 shadow-[var(--shadow-soft)]">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <span
-            className={
-              "rounded-full px-2.5 py-1 text-xs font-bold uppercase tracking-wider " +
-              (e.type === "bulk" ? "bg-gold/15 text-gold-deep" : "bg-cream-2 text-foreground")
-            }
-          >
-            {e.type === "bulk" ? "Bulk order" : "Contact"}
-          </span>
+          <div className="flex flex-wrap items-center gap-2">
+            <span
+              className={
+                "rounded-full px-2.5 py-1 text-xs font-bold uppercase tracking-wider " +
+                (e.type === "bulk"
+                  ? "bg-gold/15 text-gold-deep"
+                  : e.type === "return"
+                    ? "bg-red-100 text-red-700"
+                    : "bg-cream-2 text-foreground")
+              }
+            >
+              {e.type === "bulk" ? "Bulk order" : e.type === "return" ? "Return request" : "Contact"}
+            </span>
+            {e.status === "new" && (
+              <span className="rounded-full bg-emerald-500 px-2 py-0.5 text-[0.65rem] font-bold uppercase tracking-wider text-white">
+                New
+              </span>
+            )}
+          </div>
           <p className="mt-2 font-heading text-lg font-bold text-foreground">{e.name || "—"}</p>
           <p className="text-sm text-muted-foreground">
             {e.email ? (

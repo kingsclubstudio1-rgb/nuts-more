@@ -42,6 +42,33 @@ export function statusLabel(s: string): string {
   return STATUS_LABELS[s] ?? s;
 }
 
+/** Completed orders (delivered or cancelled) sort to the bottom of lists. */
+export function isTerminal(status: string): boolean {
+  return status === "delivered" || status === "cancelled";
+}
+
+/** Badge colours per status (shared by the account page + admin). */
+export const STATUS_STYLE: Record<string, string> = {
+  placed: "bg-amber-100 text-amber-700",
+  paid: "bg-amber-100 text-amber-700",
+  in_progress: "bg-sky-100 text-sky-700",
+  ready_to_dispatch: "bg-indigo-100 text-indigo-700",
+  out_for_delivery: "bg-violet-100 text-violet-700",
+  delivered: "bg-emerald-100 text-emerald-700",
+  cancelled: "bg-red-100 text-red-700",
+};
+
+/** Sort comparator: active orders first (newest first), completed/cancelled last. */
+export function orderSort(
+  a: { status: string; created_at: string },
+  b: { status: string; created_at: string },
+): number {
+  const ta = isTerminal(a.status) ? 1 : 0;
+  const tb = isTerminal(b.status) ? 1 : 0;
+  if (ta !== tb) return ta - tb;
+  return +new Date(b.created_at) - +new Date(a.created_at);
+}
+
 /** Index of a status within STATUS_STEPS (paid → placed). -1 for cancelled/unknown. */
 export function stepIndex(s: string): number {
   const key = s === "paid" ? "placed" : s;

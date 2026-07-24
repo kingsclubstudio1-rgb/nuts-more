@@ -1,25 +1,18 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { Package, LogOut, User as UserIcon, ShoppingBag } from "lucide-react";
+import { Package, LogOut, User as UserIcon, ShoppingBag, Truck } from "lucide-react";
 import { Container } from "@/components/ui/section";
 import { getCurrentUser, getProfile } from "@/lib/user";
 import { getMyOrders } from "@/lib/orders";
+import { statusLabel, STATUS_STYLE } from "@/lib/order-status";
 import { logoutUserAction } from "@/app/(store)/login/actions";
+import { ReturnRequest } from "@/components/account/return-request";
 import { formatINR } from "@/lib/catalog";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = { title: "My Account" };
-
-const STATUS_STYLES: Record<string, string> = {
-  placed: "bg-amber-100 text-amber-700",
-  confirmed: "bg-sky-100 text-sky-700",
-  packed: "bg-sky-100 text-sky-700",
-  shipped: "bg-indigo-100 text-indigo-700",
-  delivered: "bg-emerald-100 text-emerald-700",
-  cancelled: "bg-red-100 text-red-700",
-};
 
 export default async function AccountPage() {
   const user = await getCurrentUser();
@@ -99,10 +92,10 @@ export default async function AccountPage() {
                     <span
                       className={
                         "rounded-full px-3 py-1 text-xs font-bold uppercase " +
-                        (STATUS_STYLES[o.status] ?? "bg-cream-2 text-muted-foreground")
+                        (STATUS_STYLE[o.status] ?? "bg-cream-2 text-muted-foreground")
                       }
                     >
-                      {o.status}
+                      {statusLabel(o.status)}
                     </span>
                   </div>
                   <ul className="mt-3 space-y-1.5 text-sm">
@@ -118,8 +111,19 @@ export default async function AccountPage() {
                       </li>
                     ))}
                   </ul>
-                  <div className="mt-3 flex justify-end border-t border-line pt-3 text-sm font-bold text-foreground">
-                    Total:&nbsp;<span className="tabular-nums">{formatINR(o.total)}</span>
+                  <div className="mt-3 flex flex-wrap items-start justify-between gap-3 border-t border-line pt-3">
+                    <div className="flex flex-col gap-1.5">
+                      <Link
+                        href={`/track?id=${o.id}`}
+                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-gold-deep hover:text-gold"
+                      >
+                        <Truck className="h-3.5 w-3.5" /> Track order
+                      </Link>
+                      {o.status === "delivered" && <ReturnRequest orderId={o.id} />}
+                    </div>
+                    <p className="text-sm font-bold text-foreground">
+                      Total:&nbsp;<span className="tabular-nums">{formatINR(o.total)}</span>
+                    </p>
                   </div>
                 </div>
               ))}

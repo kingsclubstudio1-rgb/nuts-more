@@ -1,7 +1,7 @@
 import { createClient } from "./supabase/server";
 import { createAdminClient } from "./supabase/admin";
 import { isSupabaseConfigured, isSupabaseAdminConfigured } from "./supabase/config";
-import type { OrderStatus } from "./order-status";
+import { orderSort, type OrderStatus } from "./order-status";
 
 export type OrderItem = {
   id: string;
@@ -62,7 +62,8 @@ export async function getMyOrders(): Promise<Order[]> {
       .select("id, items, subtotal, discount, total, status, created_at")
       .eq("user_id", user.id)
       .order("created_at", { ascending: false });
-    return (data as Order[]) ?? [];
+    // Active orders first (newest), delivered/cancelled at the bottom.
+    return ((data as Order[]) ?? []).sort(orderSort);
   } catch {
     return [];
   }
@@ -106,7 +107,8 @@ export async function listOrders(): Promise<AdminOrder[]> {
       .select("*")
       .order("created_at", { ascending: false });
     if (error || !data) return [];
-    return data as AdminOrder[];
+    // Active orders first (newest), completed/cancelled at the bottom.
+    return (data as AdminOrder[]).sort(orderSort);
   } catch {
     return [];
   }
@@ -185,7 +187,7 @@ export async function getUserEmail(userId: string): Promise<string | null> {
 /* ------------------------------ Enquiries ----------------------------- */
 
 export type EnquiryInput = {
-  type: "contact" | "bulk";
+  type: "contact" | "bulk" | "return";
   name?: string;
   email?: string;
   phone?: string;
@@ -227,6 +229,52 @@ export async function listEnquiries(): Promise<Enquiry[]> {
       .order("created_at", { ascending: false });
     if (error || !data) return [];
     return data as Enquiry[];
+  } catch {
+    return [];
+  }
+}
+
+/* ------------------------------ Customers ----------------------------- */
+
+export type Customer = {
+  id: string;
+  email: string | null;
+  name: string | null;
+  phone: string | null;
+  created_at: string;
+  confirmed: boolean;
+  orders: number;
+};
+
+/** Every registered customer (Supabase Auth) + their profile + order count. */
+export async function listCustomers(): Promise<Customer[]> {
+  if (!isSupabaseAdminConfigured()) return [];
+  try {
+    const sb = createAdminClient();
+    const { data: list } = await sb.auth.admin.listUsers({ page: 1, perPage: 1000 });
+    const users = list?.users ?? [];
+
+    const { data: profs } = await sb.from("profiles").select("id,name,phone");
+    const pmap = new Map((profs ?? []).map((p: Record<string, unknown>) => [p.id, p]));
+
+    const { data: ords } = await sb.from("orders").select("user_id");
+    const counts = new Map<string, number>();
+    for (const o of ords ?? []) counts.set(o.user_id, (counts.get(o.user_id) ?? 0) + 1);
+
+    return users
+      .map((u) => {
+        const p = pmap.get(u.id) as { name?: string; phone?: string } | undefined;
+        return {
+          id: u.id,
+          email: u.email ?? null,
+          name: p?.name ?? (u.user_metadata?.name as string) ?? null,
+          phone: p?.phone ?? (u.user_metadata?.phone as string) ?? null,
+          created_at: u.created_at,
+          confirmed: !!u.email_confirmed_at,
+          orders: counts.get(u.id) ?? 0,
+        };
+      })
+      .sort((a, b) => +new Date(b.created_at) - +new Date(a.created_at));
   } catch {
     return [];
   }
