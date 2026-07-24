@@ -1,68 +1,71 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Leaf, Sparkles, Gift, HeartHandshake } from "lucide-react";
+import { Container } from "@/components/ui/section";
 
-/** Dark "Premium Gift Hampers" promo card (right rail of the showcase). */
-export function GiftHamperCard() {
+const REASONS = [
+  { icon: Leaf, title: "Handpicked & Sorted", desc: "Every batch is cleaned and sorted for premium quality." },
+  { icon: Sparkles, title: "Rich in Taste & Nutrition", desc: "Premium grades bursting with natural goodness." },
+  { icon: Gift, title: "Perfect for Gifting", desc: "Elegant gourmet hampers for every occasion." },
+  { icon: HeartHandshake, title: "Loved by Customers", desc: "Trusted by families and businesses across India." },
+];
+
+/** Horizontal "Why Choose Us" band — icons + short descriptions. */
+export function WhyChooseUs() {
   return (
-    <Link
-      href="/products/gift-hampers"
-      className="group relative flex h-full min-h-[15rem] flex-col justify-between overflow-hidden rounded-2xl bg-espresso p-6 text-on-dark ring-1 ring-gold/15"
-    >
-      <Image
-        src="/img/hero-1.jpg"
-        alt=""
-        fill
-        sizes="(max-width:1024px) 100vw, 33vw"
-        className="object-cover opacity-30 transition-transform duration-700 group-hover:scale-105"
-      />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-espresso via-espresso/80 to-transparent" />
-      <div className="relative">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold">Premium</p>
-        <h3 className="mt-1 font-heading text-2xl font-bold leading-tight">Gift Hampers</h3>
-        <p className="mt-2 max-w-[16rem] text-sm text-muted-on-dark">
-          Perfect for every occasion — festivals, weddings & corporate gifting.
-        </p>
-      </div>
-      <span className="relative mt-4 inline-flex w-fit items-center gap-2 rounded-full bg-gold px-4 py-2 text-xs font-bold uppercase tracking-wider text-primary-foreground transition-colors group-hover:bg-gold-soft">
-        Explore Hampers
-        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-      </span>
-    </Link>
+    <section className="bg-espresso text-on-dark">
+      <Container className="py-12 sm:py-16">
+        <div className="text-center">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-gold">Why choose us</p>
+          <h2 className="mt-2 font-heading text-2xl font-bold sm:text-3xl">Why Choose Us?</h2>
+        </div>
+        <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          {REASONS.map((r) => (
+            <div key={r.title} className="flex flex-col items-center gap-3 text-center">
+              <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gold/15 text-gold">
+                <r.icon className="h-7 w-7" strokeWidth={1.5} />
+              </span>
+              <h3 className="font-heading text-lg font-bold text-on-dark">{r.title}</h3>
+              <p className="max-w-[15rem] text-sm text-muted-on-dark">{r.desc}</p>
+            </div>
+          ))}
+        </div>
+      </Container>
+    </section>
   );
 }
 
-const REASONS = [
-  "Handpicked & Sorted",
-  "Rich in Taste & Nutrition",
-  "Perfect for Gifting",
-  "Loved by our customers",
-];
-
-/** Dark "Why Choose Us" card (right rail of the showcase). */
-export function WhyChooseUs() {
+/** Full-width "Premium Gift Hampers" promo band (lower on the homepage). */
+export function GiftHamperBand() {
   return (
-    <div className="relative flex h-full flex-col justify-center overflow-hidden rounded-2xl bg-espresso p-6 text-on-dark ring-1 ring-gold/15 sm:p-8">
-      <div className="mb-5 flex items-start justify-between gap-4">
-        <h3 className="font-heading text-2xl font-bold">Why Choose Us?</h3>
-        <Image
-          src="/brand/logo.png"
-          alt="Nuts & More"
-          width={128}
-          height={126}
-          className="h-14 w-auto shrink-0 object-contain"
-        />
-      </div>
-      <ul className="space-y-3.5">
-        {REASONS.map((r) => (
-          <li key={r} className="flex items-center gap-3 text-sm text-on-dark/90">
-            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gold/20">
-              <Check className="h-3.5 w-3.5 text-gold" />
+    <section className="bg-cream">
+      <Container className="pb-14 sm:pb-20">
+        <Link
+          href="/products/gift-hampers"
+          className="group relative flex min-h-[16rem] items-center overflow-hidden rounded-3xl bg-espresso text-on-dark ring-1 ring-gold/15 sm:min-h-[20rem]"
+        >
+          <Image
+            src="/img/hero-1.jpg"
+            alt=""
+            fill
+            sizes="100vw"
+            className="object-cover opacity-25 transition-transform duration-700 group-hover:scale-105"
+          />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-espresso via-espresso/85 to-espresso/40" />
+          <div className="relative max-w-xl p-8 sm:p-12">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold">Premium</p>
+            <h3 className="mt-1 font-heading text-3xl font-bold leading-tight sm:text-4xl">Gift Hampers</h3>
+            <p className="mt-3 max-w-md text-muted-on-dark">
+              Perfect for festivals, weddings and corporate gifting — beautifully boxed gourmet hampers,
+              made to impress.
+            </p>
+            <span className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-gold px-6 py-3 text-sm font-bold uppercase tracking-wider text-primary-foreground transition-colors group-hover:bg-gold-soft">
+              Explore Hampers
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </span>
-            {r}
-          </li>
-        ))}
-      </ul>
-    </div>
+          </div>
+        </Link>
+      </Container>
+    </section>
   );
 }

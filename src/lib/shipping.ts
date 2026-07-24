@@ -1,6 +1,6 @@
 /** Shipping charge rules (client's spec). */
 
-export const FREE_SHIPPING_THRESHOLD = 699;
+export const FREE_SHIPPING_THRESHOLD = 999; // free delivery on orders above ₹999 (within Bangalore Urban)
 export const LOCAL_SHIPPING = 100; // orders below threshold, within Bangalore Urban
 export const OUTSTATION_SHIPPING = 150; // outside Bangalore Urban, any order value
 
@@ -15,7 +15,7 @@ export function isBangaloreUrban(city: string, pincode: string): boolean {
 
 /**
  * - Outside Bangalore Urban District → ₹150 (irrespective of order value)
- * - Within Bangalore Urban: below ₹699 → ₹100, otherwise free
+ * - Within Bangalore Urban: below ₹999 → ₹100, otherwise free
  */
 export function shippingCharge(subtotal: number, city: string, pincode: string): number {
   if (!isBangaloreUrban(city, pincode)) return OUTSTATION_SHIPPING;

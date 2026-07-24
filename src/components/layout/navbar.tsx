@@ -105,9 +105,20 @@ export function Navbar() {
           <ul className="flex items-center gap-5">
             {UTILITY_LINKS.map((l) => (
               <li key={l.label}>
-                <Link href={l.href} className="transition-colors hover:text-gold">
-                  {l.label}
-                </Link>
+                {l.external ? (
+                  <a
+                    href={l.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="transition-colors hover:text-gold"
+                  >
+                    {l.label}
+                  </a>
+                ) : (
+                  <Link href={l.href} className="transition-colors hover:text-gold">
+                    {l.label}
+                  </Link>
+                )}
               </li>
             ))}
           </ul>
@@ -291,15 +302,27 @@ export function Navbar() {
             </div>
           ))}
           <div className="mt-2 flex flex-wrap items-center gap-2 border-t border-white/10 pt-3">
-            {UTILITY_LINKS.map((l) => (
-              <Link
-                key={l.label}
-                href={l.href}
-                className="rounded-full bg-white/5 px-3 py-1.5 text-xs font-medium text-on-dark/80"
-              >
-                {l.label}
-              </Link>
-            ))}
+            {UTILITY_LINKS.map((l) =>
+              l.external ? (
+                <a
+                  key={l.label}
+                  href={l.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-full bg-white/5 px-3 py-1.5 text-xs font-medium text-on-dark/80"
+                >
+                  {l.label}
+                </a>
+              ) : (
+                <Link
+                  key={l.label}
+                  href={l.href}
+                  className="rounded-full bg-white/5 px-3 py-1.5 text-xs font-medium text-on-dark/80"
+                >
+                  {l.label}
+                </Link>
+              ),
+            )}
           </div>
         </Container>
       </div>

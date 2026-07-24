@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Loader2, Lock, ShoppingBag } from "lucide-react";
+import { Loader2, Lock, ShoppingBag, Truck } from "lucide-react";
 import { Container } from "@/components/ui/section";
 import { useCart, discountFor } from "@/components/cart/cart-context";
 import { formatINR } from "@/lib/catalog";
@@ -162,6 +162,9 @@ export function CheckoutClient({
     <section className="bg-cream py-12 sm:py-16">
       <Container>
         <h1 className="font-heading text-3xl font-bold text-foreground">Checkout</h1>
+        <p className="mt-2 inline-flex items-center gap-2 rounded-full bg-gold/10 px-3.5 py-1.5 text-sm font-semibold text-gold-deep">
+          <Truck className="h-4 w-4" /> Free Delivery on Orders Above ₹999
+        </p>
 
         {!razorpayReady && (
           <p className="mt-4 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-800">
@@ -217,6 +220,11 @@ export function CheckoutClient({
                 <span>Shipping</span>
                 <span className="tabular-nums">{shipping === 0 ? "FREE" : formatINR(shipping)}</span>
               </div>
+              {isBangaloreUrban(form.city, form.pincode) && subtotal > 0 && subtotal < 999 && (
+                <p className="text-xs font-medium text-gold-deep">
+                  Add {formatINR(999 - subtotal)} more to get FREE delivery.
+                </p>
+              )}
               <div className="flex justify-between border-t border-line pt-2 text-base font-bold text-foreground">
                 <span>Total</span>
                 <span className="tabular-nums">{formatINR(total)}</span>

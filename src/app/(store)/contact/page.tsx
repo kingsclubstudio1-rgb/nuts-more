@@ -54,14 +54,24 @@ export default function ContactPage() {
                 ))}
               </div>
 
-              <div className="mt-6 overflow-hidden rounded-3xl border border-border">
+              <div id="visit" className="mt-6 scroll-mt-28 overflow-hidden rounded-3xl border border-border">
                 <iframe
                   title="Nuts & More store location, Seshadripuram, Bengaluru"
-                  src="https://www.openstreetmap.org/export/embed.html?bbox=77.56%2C12.99%2C77.59%2C13.01&layer=mapnik&marker=12.9978%2C77.5760"
+                  src={SITE.mapsEmbed}
                   className="h-56 w-full"
                   loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
                 />
               </div>
+              <a
+                href={SITE.maps}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
+              >
+                Get directions on Google Maps
+                <span aria-hidden>→</span>
+              </a>
             </div>
 
             {/* Form column */}

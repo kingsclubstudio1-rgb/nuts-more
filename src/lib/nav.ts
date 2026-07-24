@@ -1,4 +1,6 @@
-export type NavChild = { label: string; href: string; desc?: string };
+import { SITE } from "./site";
+
+export type NavChild = { label: string; href: string; desc?: string; external?: boolean };
 export type NavItem = { label: string; href: string; children?: NavChild[] };
 
 export const PRODUCT_CATEGORIES: NavChild[] = [
@@ -29,12 +31,12 @@ export const NAV: NavItem[] = [
 export const UTILITY_LINKS: NavChild[] = [
   { label: "Track Order", href: "/account" },
   { label: "Bulk Orders", href: "/bulk" },
-  { label: "Store Locator", href: "/contact#visit" },
+  { label: "Store Locator", href: SITE.maps, external: true },
 ];
 
+// Kept distinct from the trust strip + marquee so no phrase is duplicated.
 export const UTILITY_BADGES = [
-  "Hand-picked",
-  "Premium Quality",
-  "Hygienically Packed",
-  "No Artificial Additives",
+  "No Added Preservatives",
+  "Secure Online Payments",
+  "Pan-India Delivery",
 ];

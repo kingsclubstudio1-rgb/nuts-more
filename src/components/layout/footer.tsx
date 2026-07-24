@@ -5,12 +5,12 @@ import { Container } from "@/components/ui/section";
 import { PRODUCT_CATEGORIES } from "@/lib/nav";
 import { SITE } from "@/lib/site";
 import { POLICY_LINKS } from "@/lib/policies";
-import { InstagramIcon, FacebookIcon, LinkedInIcon } from "@/components/ui/social-icons";
+import { InstagramIcon, FacebookIcon, WhatsAppIcon } from "@/components/ui/social-icons";
 
 const SOCIALS = [
   { name: "Instagram", href: SITE.socials.instagram, Icon: InstagramIcon },
   { name: "Facebook", href: SITE.socials.facebook, Icon: FacebookIcon },
-  { name: "LinkedIn", href: SITE.socials.linkedin, Icon: LinkedInIcon },
+  { name: "WhatsApp", href: SITE.socials.whatsapp, Icon: WhatsAppIcon },
 ];
 
 export function Footer() {

@@ -4,11 +4,10 @@
  */
 
 const OFFERS = [
+  "Free Delivery on Orders Above ₹999",
   "10% OFF on orders above ₹999",
   "15% OFF on orders above ₹2,499",
   "20% OFF on orders above ₹4,999",
-  "Hand-picked · No Added Preservatives · Hygienically Packed",
-  "Hand-picked with care & love since 2019",
 ];
 
 function Diamond() {

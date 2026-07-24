@@ -53,27 +53,32 @@ export const POLICIES: Record<string, Policy> = {
     title: "Return & Refund Policy",
     updated: "July 2026",
     intro:
-      "Because our products are food items, we can only accept returns in specific cases below. We stand fully behind the quality of every order.",
+      "At Nuts and More, we are committed to delivering fresh, high-quality products. As our products are perishable food items, we generally do not accept returns or exchanges once an order has been delivered.",
     sections: [
       {
-        heading: "Eligible returns",
+        heading: "Damaged, defective, or incorrect products",
         body: [
-          "If your order arrives damaged, defective, or you receive the wrong item, contact us within 48 hours of delivery with your order number and clear photographs.",
-          "Once verified, we will arrange a free replacement or a full refund of the affected item(s).",
+          "If you receive a damaged, defective, or incorrect product, please contact us within 24 hours of delivery by sharing your order number along with clear photographs of the product and its packaging.",
+          "We will review the issue and, where applicable, arrange for a replacement or refund.",
         ],
       },
       {
-        heading: "Non-returnable items",
+        heading: "Return requests",
         body: [
-          "For hygiene and food-safety reasons, opened, used or partially consumed products cannot be returned unless they were damaged or defective on arrival.",
-          "Requests raised after 48 hours of delivery may not be eligible.",
+          "Return requests for reasons other than damaged, defective, or incorrect products will be considered only in exceptional circumstances and at our sole discretion.",
+          "Approval is subject to product condition, location, and feasibility of return pickup.",
         ],
       },
       {
-        heading: "Refunds",
+        heading: "Return pickup charges",
         body: [
-          "Approved refunds are processed to your original payment method within 5–7 business days.",
-          `For any return or refund request, reach us at ${contact}.`,
+          "If a return request is approved for reasons other than our error, a nominal return pickup and handling charge may apply. The applicable charges will be communicated to you before the return is processed.",
+        ],
+      },
+      {
+        heading: "Contact us",
+        body: [
+          `For any queries regarding your order, please contact our customer support at ${contact}.`,
         ],
       },
     ],
@@ -82,28 +87,66 @@ export const POLICIES: Record<string, Policy> = {
     slug: "shipping",
     title: "Shipping & Delivery Policy",
     updated: "July 2026",
-    intro: "We deliver premium dates, dry fruits and nuts across India, packed hygienically and dispatched fresh.",
+    intro:
+      "At Nuts and More, we are committed to delivering fresh, premium-quality dry fruits and healthy snacks safely and on time. Every order is carefully packed to maintain product quality throughout transit.",
     sections: [
       {
-        heading: "Dispatch & delivery time",
+        heading: "Order processing",
         body: [
-          "Orders are typically packed and dispatched within 1–2 business days.",
-          "Delivery usually takes 2–7 business days depending on your location. You will receive tracking details once your order ships.",
+          "Orders are processed within 1–2 business days after payment confirmation.",
+          "Orders placed on Sundays or public holidays will be processed on the next business day.",
+          "During festivals, promotional sales, or unforeseen circumstances, processing may take slightly longer.",
+        ],
+      },
+      {
+        heading: "Delivery timeline",
+        body: [
+          "Metro Cities: 2–5 business days.",
+          "Other Cities & Towns: 3–7 business days.",
+          "Remote Locations: 5–10 business days.",
+          "Delivery timelines are estimates and may vary depending on courier service availability, weather conditions, public holidays, or other unforeseen events.",
         ],
       },
       {
         heading: "Shipping charges",
         body: [
-          "Orders of ₹699 and above within Bangalore Urban District ship free.",
-          "Orders below ₹699 carry a shipping charge of ₹100.",
-          "For delivery addresses outside Bangalore Urban District, a shipping charge of ₹150 applies irrespective of order value.",
-          "The exact shipping charge is calculated and shown automatically at checkout.",
+          "Enjoy free delivery on all orders above ₹999 within Bangalore Urban District.",
+          "For orders below ₹999, a delivery charge of ₹100 applies.",
+          "For delivery addresses outside Bangalore Urban District, a charge of ₹150 applies. The exact shipping charge is always calculated and shown at checkout before payment.",
+          "We may also offer free shipping on eligible orders or during promotional campaigns.",
         ],
       },
       {
-        heading: "Order tracking & issues",
+        heading: "Order tracking",
         body: [
-          `If your order is delayed or you have any delivery question, contact us at ${contact}.`,
+          "Once your order has been shipped, you will receive the tracking details via SMS, WhatsApp, or Email (where applicable), allowing you to track your shipment until delivery.",
+        ],
+      },
+      {
+        heading: "Delivery",
+        body: [
+          "Our courier partners will make reasonable attempts to deliver your order to the address provided during checkout. To avoid delays, please ensure that your shipping address, contact number, and PIN code are accurate.",
+          "If delivery cannot be completed due to an incorrect address, recipient unavailability, or refusal to accept the shipment, the order may be returned to us. Additional shipping charges may apply for re-dispatch.",
+        ],
+      },
+      {
+        heading: "Damaged or tampered packages",
+        body: [
+          "Please inspect the package before accepting delivery. If the package is visibly damaged, you may refuse to accept it.",
+          "If the damage is noticed after delivery, please contact us within 24 hours and share clear photographs of the product and packaging. We will review the issue and provide an appropriate resolution.",
+        ],
+      },
+      {
+        heading: "Order cancellation",
+        body: [
+          "Orders can be cancelled only before they are dispatched. Once an order has been shipped, it cannot be cancelled. Please refer to our Return & Refund Policy for more information.",
+        ],
+      },
+      {
+        heading: "Shipping locations",
+        body: [
+          "We currently deliver across India through our trusted logistics partners.",
+          `For bulk orders, corporate gifting, or export enquiries, please contact our customer support at ${contact}.`,
         ],
       },
     ],

@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { Hero } from "@/components/home/hero";
 import { TrustStrip } from "@/components/home/trust-strip";
 import { CategoryCircles } from "@/components/home/category-circles";
-import { GiftHamperCard, WhyChooseUs } from "@/components/home/promos";
+import { GiftHamperBand, WhyChooseUs } from "@/components/home/promos";
 import { ProductCard } from "@/components/products/product-card";
 import { Voices } from "@/components/home/voices";
 import { ClosingCta } from "@/components/home/closing-cta";
@@ -34,56 +34,52 @@ export default async function HomePage() {
       <Hero slides={slides} />
       <TrustStrip />
 
-      {/* Showcase: categories + bestsellers on the left, promo rail on the right */}
+      {/* Shop by category + best sellers */}
       <section className="bg-cream py-14 sm:py-20">
-        <Container className="space-y-10 sm:space-y-14">
-          {/* Row 1 — Shop by category + Gift hamper */}
-          <div className="grid gap-6 lg:grid-cols-12 lg:gap-8">
-            <div className="lg:col-span-8">
-              <Heading align="left" eyebrow="Shop by category" title="Find your favourite" />
-              <div className="mt-8">
-                <CategoryCircles circles={circles} />
-              </div>
-            </div>
-            <div className="lg:col-span-4">
-              <GiftHamperCard />
+        <Container className="space-y-14 sm:space-y-16">
+          {/* Shop by category */}
+          <div>
+            <Heading align="left" eyebrow="Shop by category" title="Find your favourite" />
+            <div className="mt-8">
+              <CategoryCircles circles={circles} />
             </div>
           </div>
 
-          {/* Row 2 — Best sellers + Why choose us */}
-          <div className="grid gap-6 lg:grid-cols-12 lg:gap-8">
-            <div className="lg:col-span-8">
-              <div className="flex flex-wrap items-end justify-between gap-3">
-                <Heading align="left" eyebrow="Our best sellers" title="What everyone's snacking on" />
-                <Link
-                  href="/products"
-                  className="group hidden items-center gap-1.5 text-sm font-semibold text-gold-deep hover:text-gold sm:inline-flex"
-                >
-                  View all
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </Link>
-              </div>
-              <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3">
-                {bestsellers.map((p) => (
-                  <ProductCard key={p.id} product={p} />
-                ))}
-              </div>
-              <div className="mt-6 text-center sm:hidden">
-                <Link
-                  href="/products"
-                  className="inline-flex items-center gap-2 rounded-full border border-espresso/20 px-6 py-3 text-sm font-bold uppercase tracking-wider text-foreground hover:border-gold hover:text-gold-deep"
-                >
-                  View all products
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-              </div>
+          {/* Best sellers */}
+          <div>
+            <div className="flex flex-wrap items-end justify-between gap-3">
+              <Heading align="left" eyebrow="Our best sellers" title="What everyone's snacking on" />
+              <Link
+                href="/products"
+                className="group hidden items-center gap-1.5 text-sm font-semibold text-gold-deep hover:text-gold sm:inline-flex"
+              >
+                View all
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
             </div>
-            <div className="lg:col-span-4">
-              <WhyChooseUs />
+            <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+              {bestsellers.map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
+            </div>
+            <div className="mt-6 text-center sm:hidden">
+              <Link
+                href="/products"
+                className="inline-flex items-center gap-2 rounded-full border border-espresso/20 px-6 py-3 text-sm font-bold uppercase tracking-wider text-foreground hover:border-gold hover:text-gold-deep"
+              >
+                View all products
+                <ArrowRight className="h-4 w-4" />
+              </Link>
             </div>
           </div>
         </Container>
       </section>
+
+      {/* Why choose us — horizontal band, right after best sellers */}
+      <WhyChooseUs />
+
+      {/* Gift hampers — full-width band, lower down */}
+      <GiftHamperBand />
 
       {/* Trusted by */}
       <section className="border-y border-line bg-cream-2 py-10">
