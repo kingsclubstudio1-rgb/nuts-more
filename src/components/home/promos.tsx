@@ -39,7 +39,7 @@ export function WhyChooseUs() {
 export function GiftHamperBand() {
   return (
     <section className="bg-cream">
-      <Container className="pb-14 sm:pb-20">
+      <Container className="py-14 sm:py-20">
         <Link
           href="/products/gift-hampers"
           className="group relative flex min-h-[16rem] items-center overflow-hidden rounded-3xl bg-espresso text-on-dark ring-1 ring-gold/15 sm:min-h-[20rem]"

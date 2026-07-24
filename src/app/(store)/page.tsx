@@ -78,9 +78,6 @@ export default async function HomePage() {
       {/* Why choose us — horizontal band, right after best sellers */}
       <WhyChooseUs />
 
-      {/* Gift hampers — full-width band, lower down */}
-      <GiftHamperBand />
-
       {/* Trusted by */}
       <section className="border-y border-line bg-cream-2 py-10">
         <Container className="text-center">
@@ -98,6 +95,9 @@ export default async function HomePage() {
       </section>
 
       <Voices />
+
+      {/* Gift hampers — full-width band, near the bottom (after featured sections) */}
+      <GiftHamperBand />
       <ClosingCta />
     </>
   );

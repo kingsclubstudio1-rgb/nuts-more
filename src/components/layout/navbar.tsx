@@ -211,8 +211,9 @@ export function Navbar() {
         </Container>
       </div>
 
-      {/* Main bar: logo + search + account/cart */}
-      <div className="border-b border-white/10 bg-espresso/95 backdrop-blur-md">
+      {/* Main bar: logo + search + account/cart. relative z-30 keeps the search
+          suggestions dropdown above the nav row below it. */}
+      <div className="relative z-30 border-b border-white/10 bg-espresso/95 backdrop-blur-md">
         <Container className="flex h-[4.75rem] items-center gap-4 sm:h-[5.5rem]">
           <Logo />
 
@@ -272,8 +273,8 @@ export function Navbar() {
         {/* mobile search bar (toggle) */}
         <div
           className={cn(
-            "overflow-hidden border-t border-white/10 bg-espresso transition-[max-height] duration-300 md:hidden",
-            searchOpen ? "max-h-24" : "max-h-0",
+            "border-t border-white/10 bg-espresso transition-[max-height] duration-300 md:hidden",
+            searchOpen ? "max-h-[80vh] overflow-visible" : "max-h-0 overflow-hidden",
           )}
         >
           <Container className="py-3">{searchBar()}</Container>
@@ -281,7 +282,7 @@ export function Navbar() {
       </div>
 
       {/* Nav row (desktop) */}
-      <div className="hidden border-b border-white/10 bg-espresso/95 backdrop-blur-md lg:block">
+      <div className="relative z-10 hidden border-b border-white/10 bg-espresso/95 backdrop-blur-md lg:block">
         <Container>
           <nav className="flex items-center justify-center gap-1" aria-label="Primary">
             {NAV.map((item) =>
