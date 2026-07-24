@@ -29,7 +29,7 @@ export const NAV: NavItem[] = [
 
 /** Slim utility-bar links (top-right in the header). */
 export const UTILITY_LINKS: NavChild[] = [
-  { label: "Track Order", href: "/account" },
+  { label: "Track Order", href: "/track" },
   { label: "Bulk Orders", href: "/bulk" },
   { label: "Store Locator", href: SITE.maps, external: true },
 ];

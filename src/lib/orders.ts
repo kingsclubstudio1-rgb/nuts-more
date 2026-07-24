@@ -1,6 +1,7 @@
 import { createClient } from "./supabase/server";
 import { createAdminClient } from "./supabase/admin";
 import { isSupabaseConfigured, isSupabaseAdminConfigured } from "./supabase/config";
+import type { OrderStatus } from "./order-status";
 
 export type OrderItem = {
   id: string;
@@ -70,43 +71,6 @@ export async function getMyOrders(): Promise<Order[]> {
 /* ==================================================================== *
  * Admin + public order operations (service-role) + enquiries
  * ==================================================================== */
-
-export type OrderStatus =
-  | "placed"
-  | "paid"
-  | "in_progress"
-  | "ready_to_dispatch"
-  | "out_for_delivery"
-  | "delivered"
-  | "cancelled";
-
-/** The client's order-status flow (in order). "paid" is shown as "Order Placed". */
-export const STATUS_STEPS: { key: OrderStatus; label: string }[] = [
-  { key: "placed", label: "Order Placed" },
-  { key: "in_progress", label: "In Progress" },
-  { key: "ready_to_dispatch", label: "Ready to Dispatch" },
-  { key: "out_for_delivery", label: "Out for Delivery" },
-  { key: "delivered", label: "Delivered" },
-];
-
-export const STATUS_LABELS: Record<string, string> = {
-  placed: "Order Placed",
-  paid: "Order Placed",
-  in_progress: "In Progress",
-  ready_to_dispatch: "Ready to Dispatch",
-  out_for_delivery: "Out for Delivery",
-  delivered: "Delivered",
-  cancelled: "Cancelled",
-};
-
-export const ADMIN_STATUS_OPTIONS: { value: OrderStatus; label: string }[] = [
-  { value: "placed", label: "Order Placed" },
-  { value: "in_progress", label: "In Progress" },
-  { value: "ready_to_dispatch", label: "Ready to Dispatch" },
-  { value: "out_for_delivery", label: "Out for Delivery" },
-  { value: "delivered", label: "Delivered" },
-  { value: "cancelled", label: "Cancelled" },
-];
 
 export type OrderAddress = {
   name?: string;
@@ -201,6 +165,18 @@ export async function getPublicOrderStatus(id: string): Promise<{
       total: Number(data.total ?? 0),
       itemCount: items.reduce((n, i) => n + (i.qty || 0), 0),
     };
+  } catch {
+    return null;
+  }
+}
+
+/** Look up a customer's email from their auth user id (admin only). */
+export async function getUserEmail(userId: string): Promise<string | null> {
+  if (!isSupabaseAdminConfigured() || !userId) return null;
+  try {
+    const sb = createAdminClient();
+    const { data } = await sb.auth.admin.getUserById(userId);
+    return data?.user?.email ?? null;
   } catch {
     return null;
   }

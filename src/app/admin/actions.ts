@@ -7,6 +7,9 @@ import type { ProductInput } from "@/lib/inventory";
 import type { Category, CategorySlug } from "@/lib/catalog";
 import type { HeroSlide } from "@/lib/cms";
 import * as cms from "@/lib/cms";
+import { updateOrderStatus, getAdminOrderById, getUserEmail } from "@/lib/orders";
+import { statusLabel, type OrderStatus } from "@/lib/order-status";
+import { sendInvoiceEmail, sendStatusUpdateEmail } from "@/lib/mailer";
 
 async function guard() {
   if (!(await isAuthed())) throw new Error("Unauthorized");
@@ -123,4 +126,52 @@ export async function saveSettingAction(
   if (!ok) return { ok: false, error: "Saving content needs the database connected." };
   revalidateStorefront();
   return { ok: true };
+}
+
+/* ------------------------------- orders ------------------------------ */
+
+export async function updateOrderStatusAction(
+  id: string,
+  status: string,
+): Promise<{ ok: boolean; error?: string }> {
+  await guard();
+  const ok = await updateOrderStatus(id, status as OrderStatus);
+  if (!ok) return { ok: false, error: "Could not update status (is the database connected?)." };
+  // Notify the customer of the new status (best-effort).
+  try {
+    const order = await getAdminOrderById(id);
+    if (order?.user_id) {
+      const email = await getUserEmail(order.user_id);
+      if (email) await sendStatusUpdateEmail(email, id, statusLabel(status));
+    }
+  } catch {
+    /* email is best-effort */
+  }
+  revalidatePath("/admin/orders");
+  revalidatePath(`/admin/orders/${id}`);
+  revalidatePath("/track");
+  return { ok: true };
+}
+
+export async function emailInvoiceAction(id: string): Promise<{ ok: boolean; error?: string }> {
+  await guard();
+  const order = await getAdminOrderById(id);
+  if (!order) return { ok: false, error: "Order not found." };
+  if (!order.user_id) return { ok: false, error: "No customer linked to this order." };
+  const email = await getUserEmail(order.user_id);
+  if (!email) return { ok: false, error: "Could not find the customer's email." };
+  const res = await sendInvoiceEmail(email, {
+    id: order.id,
+    items: order.items,
+    subtotal: order.subtotal,
+    discount: order.discount,
+    shipping: order.shipping,
+    total: order.total,
+    address: order.address,
+    created_at: order.created_at,
+    status: order.status,
+    payment_id: order.payment_id,
+  });
+  if (!res.sent) return { ok: false, error: "Email could not be sent (check SMTP settings)." };
+  return { ok: true, error: undefined };
 }

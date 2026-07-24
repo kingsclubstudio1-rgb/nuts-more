@@ -118,6 +118,112 @@ export async function sendOrderConfirmation(o: OrderEmail): Promise<{ sent: bool
   }
 }
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.nuts-and-more.store";
+
+type InvoiceOrder = {
+  id: string;
+  items: Line[];
+  subtotal: number;
+  discount: number;
+  shipping: number;
+  total: number;
+  address?: {
+    name?: string;
+    phone?: string;
+    line1?: string;
+    city?: string;
+    pincode?: string;
+    state?: string;
+  } | null;
+  created_at?: string;
+  status?: string;
+  payment_id?: string | null;
+};
+
+function invoiceHtml(o: InvoiceOrder): string {
+  const ship = o.shipping === 0 ? "FREE" : formatINR(o.shipping);
+  const addr = o.address
+    ? [o.address.line1, o.address.city, o.address.state, o.address.pincode].filter(Boolean).join(", ")
+    : "";
+  const date = o.created_at ? new Date(o.created_at).toLocaleDateString("en-IN") : "";
+  return `<div style="max-width:600px;margin:0 auto;font-family:Arial,Helvetica,sans-serif;background:#fff;border:1px solid #e7dcc9;border-radius:12px;overflow:hidden;">
+    <div style="background:#241606;color:#f6efe2;padding:22px 28px;display:flex;justify-content:space-between;">
+      <div>
+        <div style="font-size:20px;font-weight:bold;">Nuts &amp; More</div>
+        <div style="font-size:11px;color:#c9a24a;letter-spacing:.08em;text-transform:uppercase;">Tax Invoice</div>
+      </div>
+      <div style="text-align:right;font-size:12px;color:#d8c9a8;">
+        <div>Invoice #${o.id.slice(0, 8).toUpperCase()}</div>
+        <div>${date}</div>
+      </div>
+    </div>
+    <div style="padding:22px 28px;">
+      ${
+        o.address
+          ? `<p style="margin:0 0 14px;font-size:13px;color:#5c4f40;"><b style="color:#3b2f24;">Bill to:</b> ${o.address.name ?? ""}${o.address.phone ? " · " + o.address.phone : ""}<br>${addr}</p>`
+          : ""
+      }
+      <table style="width:100%;border-collapse:collapse;font-size:14px;">
+        <tr style="border-bottom:2px solid #e7dcc9;">
+          <td style="padding:6px 0;color:#8a7a68;font-size:12px;text-transform:uppercase;">Item</td>
+          <td style="padding:6px 0;color:#8a7a68;font-size:12px;text-transform:uppercase;text-align:right;">Amount</td>
+        </tr>
+        ${rows(o.items)}
+      </table>
+      <table style="width:100%;border-collapse:collapse;margin-top:8px;font-size:14px;">
+        <tr><td style="padding:5px 0;color:#5c4f40;">Subtotal</td><td style="text-align:right;color:#3b2f24;">${formatINR(o.subtotal)}</td></tr>
+        ${o.discount > 0 ? `<tr><td style="padding:5px 0;color:#b8912f;">Discount</td><td style="text-align:right;color:#b8912f;">-${formatINR(o.discount)}</td></tr>` : ""}
+        <tr><td style="padding:5px 0;color:#5c4f40;">Shipping</td><td style="text-align:right;color:#3b2f24;">${ship}</td></tr>
+        <tr><td style="padding:10px 0 0;font-weight:bold;font-size:16px;color:#3b2f24;border-top:1px solid #e7dcc9;">Total</td><td style="padding:10px 0 0;text-align:right;font-weight:bold;font-size:16px;color:#3b2f24;border-top:1px solid #e7dcc9;">${formatINR(o.total)}</td></tr>
+      </table>
+      <p style="margin:18px 0 0;font-size:12px;color:#8a7a68;">Payment: ${o.payment_id ? "Paid online (" + o.payment_id + ")" : "—"}</p>
+      <p style="margin:14px 0 0;font-size:12px;color:#8a7a68;text-align:center;">Thank you for shopping with Nuts &amp; More. Track your order at ${SITE_URL}/track</p>
+    </div>
+  </div>`;
+}
+
+/** Email the full invoice to the customer (admin-triggered or on confirmation). */
+export async function sendInvoiceEmail(to: string, o: InvoiceOrder): Promise<{ sent: boolean }> {
+  if (!isMailerConfigured() || !to) return { sent: false };
+  try {
+    await getTransport().sendMail({
+      from: FROM,
+      to,
+      bcc: NOTIFY || undefined,
+      subject: `Your Nuts & More invoice — #${o.id.slice(0, 8).toUpperCase()}`,
+      html: invoiceHtml(o),
+    });
+    return { sent: true };
+  } catch {
+    return { sent: false };
+  }
+}
+
+/** Short status-change notification to the customer. */
+export async function sendStatusUpdateEmail(
+  to: string,
+  orderId: string,
+  statusText: string,
+): Promise<{ sent: boolean }> {
+  if (!isMailerConfigured() || !to) return { sent: false };
+  try {
+    await getTransport().sendMail({
+      from: FROM,
+      to,
+      subject: `Order #${orderId.slice(0, 8).toUpperCase()} update: ${statusText}`,
+      html: `<div style="font-family:Arial,Helvetica,sans-serif;max-width:520px;margin:0 auto;padding:24px;background:#fbf7f0;border-radius:14px;">
+        <h2 style="color:#3b2f24;margin:0 0 6px;">Nuts &amp; More</h2>
+        <p style="color:#5c4f40;font-size:14px;margin:0 0 10px;">Your order <b>#${orderId.slice(0, 8).toUpperCase()}</b> status is now:</p>
+        <p style="font-size:22px;font-weight:bold;color:#b8912f;margin:0 0 14px;">${statusText}</p>
+        <p style="color:#8a7a68;font-size:13px;margin:0;">Track it anytime at <a href="${SITE_URL}/track" style="color:#b8912f;">${SITE_URL}/track</a></p>
+      </div>`,
+    });
+    return { sent: true };
+  } catch {
+    return { sent: false };
+  }
+}
+
 const ADMIN_INBOX = NOTIFY || process.env.ADMIN_EMAIL || USER || "";
 
 /** Notify the store team of a new contact / bulk enquiry. */
