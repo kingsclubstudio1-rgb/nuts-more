@@ -6,7 +6,10 @@ export function discountRate(subtotal: number): number {
   return 0;
 }
 
+/** Full label matching the marquee, e.g. "15% off (orders above ₹2,499)" — used on invoices. */
 export function discountLabel(subtotal: number): string {
-  const r = discountRate(subtotal);
-  return r ? `${Math.round(r * 100)}% off` : "";
+  if (subtotal >= 4999) return "20% off (orders above ₹4,999)";
+  if (subtotal >= 2499) return "15% off (orders above ₹2,499)";
+  if (subtotal >= 999) return "10% off (orders above ₹999)";
+  return "";
 }

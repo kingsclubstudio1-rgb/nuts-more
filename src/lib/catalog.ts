@@ -36,6 +36,7 @@ export type Product = {
   benefits?: string[];
   nutrition?: NutritionRow[]; // per 100g typical values
   storage?: string;
+  hsn?: string; // HSN code for GST invoices — optional, admin-editable
   badge?: Badge;
   featured?: boolean;
   hidden?: boolean;

@@ -11,14 +11,38 @@ export type OrderItem = {
   price: number;
 };
 
+export type OrderAddress = {
+  name?: string;
+  phone?: string;
+  line1?: string;
+  city?: string;
+  pincode?: string;
+  state?: string;
+};
+
+/** Full order row shape — customers see only their own (RLS-scoped); admin sees all. */
 export type Order = {
   id: string;
+  user_id: string;
   items: OrderItem[];
   subtotal: number;
   discount: number;
+  shipping: number;
   total: number;
+  address: OrderAddress | null;
+  payment_id: string | null;
   status: string;
+  channel: string | null;
+  invoice_number: string | null;
+  payment_method: string | null;
+  discount_label: string | null;
+  taxable_amount: number;
+  cgst: number;
+  sgst: number;
+  igst: number;
+  gst_rate: number;
   created_at: string;
+  updated_at: string | null;
 };
 
 /** Record an order for the signed-in customer. No-op for guests / unconfigured. */
@@ -59,7 +83,7 @@ export async function getMyOrders(): Promise<Order[]> {
     if (!user) return [];
     const { data } = await supabase
       .from("orders")
-      .select("id, items, subtotal, discount, total, status, created_at")
+      .select("*")
       .eq("user_id", user.id)
       .order("created_at", { ascending: false });
     // Active orders first (newest), delivered/cancelled at the bottom.
@@ -73,30 +97,8 @@ export async function getMyOrders(): Promise<Order[]> {
  * Admin + public order operations (service-role) + enquiries
  * ==================================================================== */
 
-export type OrderAddress = {
-  name?: string;
-  phone?: string;
-  line1?: string;
-  city?: string;
-  pincode?: string;
-  state?: string;
-};
-
-export type AdminOrder = {
-  id: string;
-  user_id: string;
-  items: OrderItem[];
-  subtotal: number;
-  discount: number;
-  shipping: number;
-  total: number;
-  address: OrderAddress | null;
-  payment_id: string | null;
-  status: string;
-  channel: string | null;
-  created_at: string;
-  updated_at: string | null;
-};
+/** Same row shape as `Order` — admin sees every customer's orders, not just their own. */
+export type AdminOrder = Order;
 
 export async function listOrders(): Promise<AdminOrder[]> {
   if (!isSupabaseAdminConfigured()) return [];

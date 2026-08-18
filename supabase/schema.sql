@@ -36,18 +36,27 @@ create trigger on_auth_user_created
 -- Orders (customer purchase history)
 -- ------------------------------------------------------------------
 create table if not exists public.orders (
-  id          uuid primary key default gen_random_uuid(),
-  user_id     uuid not null references auth.users on delete cascade,
-  items       jsonb not null,           -- [{ id, name, weight, qty, price }]
-  subtotal    integer not null,
-  discount    integer not null default 0,
-  shipping    integer not null default 0,
-  total       integer not null,
-  address     jsonb,                    -- { name, phone, line1, city, pincode, state }
-  payment_id  text,
-  status      text not null default 'placed',  -- placed|paid|confirmed|packed|shipped|delivered|cancelled
-  channel     text default 'razorpay',
-  created_at  timestamptz default now()
+  id               uuid primary key default gen_random_uuid(),
+  user_id          uuid not null references auth.users on delete cascade,
+  items            jsonb not null,           -- [{ id, name, weight, qty, price }]
+  subtotal         integer not null,
+  discount         integer not null default 0,
+  shipping         integer not null default 0,
+  total            integer not null,
+  address          jsonb,                    -- { name, phone, line1, city, pincode, state }
+  payment_id       text,
+  status           text not null default 'placed',  -- placed|paid|confirmed|packed|shipped|delivered|cancelled
+  channel          text default 'razorpay',
+  -- Invoicing (GST tax invoice)
+  invoice_number   text unique,              -- e.g. "NM/2526/0001", assigned once via next_invoice_seq()
+  payment_method   text,                     -- card|upi|netbanking|wallet|emi (from Razorpay payment lookup)
+  discount_label   text,                     -- e.g. "15% off (orders above ₹2,499)" — matches the offer marquee tier
+  taxable_amount   integer not null default 0,
+  cgst             integer not null default 0,
+  sgst             integer not null default 0,
+  igst             integer not null default 0,
+  gst_rate         numeric not null default 0,
+  created_at       timestamptz default now()
 );
 
 create index if not exists orders_user_idx on public.orders (user_id, created_at desc);
@@ -86,6 +95,7 @@ create table if not exists public.products (
   hidden      boolean default false,
   rating      numeric default 4.7,
   reviews     integer default 0,
+  hsn         text,                          -- HSN code for GST invoices (optional; fill in per product)
   updated_at  timestamptz default now()
 );
 
@@ -121,3 +131,29 @@ create table if not exists public.site_settings (
 alter table public.site_settings enable row level security;
 drop policy if exists "settings: public read" on public.site_settings;
 create policy "settings: public read" on public.site_settings for select using (true);
+-- Holds e.g. key="invoice_config" -> { gstin, gstRate, invoicePrefix } (admin-editable, no public write policy)
+
+-- ------------------------------------------------------------------
+-- Sequential, atomic invoice numbering per financial year (Apr-Mar)
+-- ------------------------------------------------------------------
+create table if not exists public.invoice_counters (
+  fy   text primary key,   -- e.g. "2526" for FY 2025-26
+  seq  integer not null default 0
+);
+alter table public.invoice_counters enable row level security;
+
+create or replace function public.next_invoice_seq(p_fy text)
+returns integer
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  next_val integer;
+begin
+  insert into public.invoice_counters (fy, seq) values (p_fy, 1)
+  on conflict (fy) do update set seq = invoice_counters.seq + 1
+  returning seq into next_val;
+  return next_val;
+end;
+$$;

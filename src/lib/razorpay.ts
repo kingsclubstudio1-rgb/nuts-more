@@ -40,6 +40,28 @@ export async function createRazorpayOrder(amountPaise: number, receipt: string) 
   return (await res.json()) as { id: string; amount: number; currency: string };
 }
 
+/**
+ * Look up a completed payment server-side (authoritative — never trust the
+ * client for which method was used). Returns null on any failure; the
+ * invoice falls back to a generic "Online" label rather than blocking
+ * the order.
+ */
+export async function fetchRazorpayPayment(
+  paymentId: string,
+): Promise<{ method: string } | null> {
+  try {
+    const auth = Buffer.from(`${RAZORPAY_KEY_ID}:${RAZORPAY_KEY_SECRET}`).toString("base64");
+    const res = await fetch(`https://api.razorpay.com/v1/payments/${paymentId}`, {
+      headers: { Authorization: `Basic ${auth}` },
+    });
+    if (!res.ok) return null;
+    const data = (await res.json()) as { method?: string };
+    return { method: data.method ?? "" };
+  } catch {
+    return null;
+  }
+}
+
 /** Verify the payment signature returned by Razorpay checkout. */
 export function verifyRazorpaySignature(
   orderId: string,

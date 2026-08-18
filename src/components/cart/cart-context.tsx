@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useMemo, useState, useCallback } from "react";
+import { discountRate, discountLabel } from "@/lib/pricing";
 
 export type CartItem = {
   id: string;
@@ -103,8 +104,5 @@ export function useCart() {
 
 /** Offer tiers matching the marquee. Returns the best applicable discount. */
 export function discountFor(subtotal: number): { rate: number; label: string } {
-  if (subtotal >= 4999) return { rate: 0.2, label: "20% off (orders above ₹4,999)" };
-  if (subtotal >= 2499) return { rate: 0.15, label: "15% off (orders above ₹2,499)" };
-  if (subtotal >= 999) return { rate: 0.1, label: "10% off (orders above ₹999)" };
-  return { rate: 0, label: "" };
+  return { rate: discountRate(subtotal), label: discountLabel(subtotal) };
 }

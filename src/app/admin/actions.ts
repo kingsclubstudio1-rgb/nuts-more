@@ -10,6 +10,8 @@ import * as cms from "@/lib/cms";
 import { updateOrderStatus, getAdminOrderById, getUserEmail } from "@/lib/orders";
 import { statusLabel, type OrderStatus } from "@/lib/order-status";
 import { sendInvoiceEmail, sendStatusUpdateEmail } from "@/lib/mailer";
+import { buildInvoiceData } from "@/lib/invoice";
+import { renderInvoicePdf } from "@/lib/invoice-pdf";
 
 async function guard() {
   if (!(await isAuthed())) throw new Error("Unauthorized");
@@ -160,18 +162,9 @@ export async function emailInvoiceAction(id: string): Promise<{ ok: boolean; err
   if (!order.user_id) return { ok: false, error: "No customer linked to this order." };
   const email = await getUserEmail(order.user_id);
   if (!email) return { ok: false, error: "Could not find the customer's email." };
-  const res = await sendInvoiceEmail(email, {
-    id: order.id,
-    items: order.items,
-    subtotal: order.subtotal,
-    discount: order.discount,
-    shipping: order.shipping,
-    total: order.total,
-    address: order.address,
-    created_at: order.created_at,
-    status: order.status,
-    payment_id: order.payment_id,
-  });
+  const invoiceData = await buildInvoiceData(order);
+  const pdf = await renderInvoicePdf(invoiceData);
+  const res = await sendInvoiceEmail(email, invoiceData, pdf);
   if (!res.sent) return { ok: false, error: "Email could not be sent (check SMTP settings)." };
   return { ok: true, error: undefined };
 }
