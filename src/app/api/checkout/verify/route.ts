@@ -16,6 +16,10 @@ export async function POST(req: Request) {
   const body = await req.json().catch(() => ({}));
   const { razorpay_order_id, razorpay_payment_id, razorpay_signature, items, address } = body;
 
+  if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+    return NextResponse.json({ error: "Missing payment details." }, { status: 400 });
+  }
+
   if (!verifyRazorpaySignature(razorpay_order_id, razorpay_payment_id, razorpay_signature)) {
     return NextResponse.json({ error: "Payment verification failed." }, { status: 400 });
   }

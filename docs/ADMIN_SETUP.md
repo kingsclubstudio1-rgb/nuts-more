@@ -98,9 +98,30 @@ The scrolling offer bar and the automatic cart discounts are defined in code:
 
 ## Checkout & auto stock depletion
 
-The cart checks out via **WhatsApp** to the number in `src/lib/site.ts` (`SITE.phone`). There's no online payment gateway — orders are confirmed on WhatsApp. (We can add Razorpay/Stripe later if you want real online payments.)
+Online checkout is powered by **Razorpay Standard Checkout**. A signed-in customer fills in
+their delivery address on `/checkout`, clicks **Pay**, and completes payment in Razorpay's
+hosted modal (UPI, cards, net banking, wallets).
 
-When a customer places an order (cart checkout **or** the product-page "WhatsApp"/"Buy now" buttons), the ordered variants' **stock is automatically decremented** in inventory (`placeOrderAction` → `decrementStock`). Stock never goes below zero, and sold-out variants show an "Out of stock" state and can't be ordered.
+- Set env vars (locally in `.env.local`; on Vercel in Project → Settings → Environment Variables):
+  ```
+  RAZORPAY_KEY_ID=rzp_test_...
+  RAZORPAY_KEY_SECRET=...
+  ```
+  Get these from the Razorpay Dashboard → **Settings → API Keys**. Until both are set,
+  `/checkout` shows "Payment coming soon" and the Pay button stays disabled
+  (`isRazorpayConfigured()` in `src/lib/razorpay.ts`).
+- **Flow:** `POST /api/checkout/create-order` recomputes the cart total server-side from the
+  live product prices (never trusts client-sent prices), creates a Razorpay order, and returns
+  the order id to the browser. After payment, `POST /api/checkout/verify` recomputes the total
+  again, verifies the HMAC-SHA256 signature Razorpay returns (`razorpay_signature`) against the
+  key secret, and **only then** inserts the order into Supabase (`orders` table, `status: "paid"`)
+  and decrements stock via `decrementStock`. A signature mismatch or tampering returns an error
+  and nothing is written.
+- An order confirmation email is sent best-effort via `src/lib/mailer.ts` (no-op until SMTP env
+  vars are set — never blocks the order).
+- Test cards/UPI for `rzp_test_` keys: see Razorpay's
+  [test mode documentation](https://razorpay.com/docs/payments/payment-gateway/test-integration/).
+  Switch to `rzp_live_` keys (and re-verify the webhook/keys on Vercel) before accepting real money.
 
 ## Product images (important)
 

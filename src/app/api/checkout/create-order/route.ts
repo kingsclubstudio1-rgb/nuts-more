@@ -3,7 +3,7 @@ import { getCurrentUser } from "@/lib/user";
 import { getProductById } from "@/lib/cms";
 import { discountRate } from "@/lib/pricing";
 import { shippingCharge } from "@/lib/shipping";
-import { createRazorpayOrder, isRazorpayConfigured, RAZORPAY_KEY_ID } from "@/lib/razorpay";
+import { createRazorpayOrder, isRazorpayConfigured, RazorpayApiError, RAZORPAY_KEY_ID } from "@/lib/razorpay";
 
 export const runtime = "nodejs";
 
@@ -51,9 +51,10 @@ export async function POST(req: Request) {
       breakdown: { subtotal, discount, shipping, total },
     });
   } catch (e) {
+    const status = e instanceof RazorpayApiError ? e.status : 500;
     return NextResponse.json(
       { error: e instanceof Error ? e.message : "Could not start payment." },
-      { status: 500 },
+      { status },
     );
   }
 }
