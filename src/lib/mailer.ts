@@ -229,3 +229,59 @@ export async function sendEnquiryNotification(e: {
     return { sent: false };
   }
 }
+
+/**
+ * Account emails (confirm your address / reset your password).
+ *
+ * Sent through the store's own SMTP rather than Supabase's built-in mailer,
+ * which is rate limited to a handful of messages an hour — a new customer who
+ * never receives their confirmation link simply cannot buy anything. The link
+ * itself is still minted by Supabase, so the token and its expiry are
+ * unchanged; only delivery moves.
+ */
+export async function sendAuthLinkEmail(
+  to: string,
+  kind: "confirm" | "reset",
+  link: string,
+  name?: string,
+): Promise<{ sent: boolean }> {
+  if (!isMailerConfigured()) return { sent: false };
+
+  const confirming = kind === "confirm";
+  const subject = confirming
+    ? "Confirm your email — Nuts & More"
+    : "Reset your password — Nuts & More";
+  const heading = confirming ? "Confirm your email" : "Reset your password";
+  const intro = confirming
+    ? "Thanks for creating an account. Tap the button below to confirm your email address and activate it."
+    : "We received a request to reset your password. Tap the button below to choose a new one.";
+  const cta = confirming ? "Confirm my email" : "Set a new password";
+  const note = confirming
+    ? "If you didn't create this account, you can safely ignore this email."
+    : "If you didn't request this, you can safely ignore this email — your password stays unchanged.";
+
+  try {
+    await getTransport().sendMail({
+      from: FROM,
+      to,
+      subject,
+      html: `<div style="max-width:600px;margin:0 auto;font-family:Arial,Helvetica,sans-serif;background:#fbf7f0;padding:28px;border-radius:16px;">
+        <div style="text-align:center;">
+          <h1 style="margin:0;color:#3b2f24;font-size:22px;">Nuts &amp; More</h1>
+          <p style="margin:6px 0 0;color:#b8912f;font-weight:bold;letter-spacing:.06em;text-transform:uppercase;font-size:12px;">${esc(heading)}</p>
+        </div>
+        <p style="color:#3b2f24;font-size:15px;margin:22px 0 4px;">Hi ${esc(name || "there")},</p>
+        <p style="color:#5c4f40;font-size:14px;margin:0 0 22px;">${esc(intro)}</p>
+        <div style="text-align:center;margin:0 0 22px;">
+          <a href="${esc(link)}" style="display:inline-block;background:#b8912f;color:#fff;text-decoration:none;font-weight:bold;font-size:14px;padding:13px 26px;border-radius:999px;">${esc(cta)}</a>
+        </div>
+        <p style="color:#8a7a68;font-size:12px;margin:0 0 6px;">Or paste this link into your browser:</p>
+        <p style="word-break:break-all;font-size:11px;color:#8a7a68;margin:0 0 20px;">${esc(link)}</p>
+        <p style="color:#8a7a68;font-size:12px;border-top:1px solid #e7dcc9;padding-top:14px;margin:0;">${esc(note)}</p>
+      </div>`,
+    });
+    return { sent: true };
+  } catch {
+    return { sent: false };
+  }
+}
