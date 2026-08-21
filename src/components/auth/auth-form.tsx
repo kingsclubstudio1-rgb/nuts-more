@@ -2,6 +2,7 @@
 
 import { useActionState, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Mail, Lock, User, Loader2, ShieldCheck, Phone } from "lucide-react";
 import { loginAction, signupAction } from "@/app/(store)/login/actions";
 import { GoogleButton } from "@/components/auth/google-button";
@@ -77,6 +78,11 @@ export function AuthForm({
           {loginState?.error && (
             <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{loginState.error}</p>
           )}
+          <div className="flex justify-end">
+            <Link href="/forgot-password" className="text-xs font-semibold text-gold-deep hover:text-gold">
+              Forgot password?
+            </Link>
+          </div>
           <button
             type="submit"
             disabled={loginPending}

@@ -69,6 +69,17 @@ export async function signupAction(_prev: State, formData: FormData): Promise<St
   });
   if (error) return { error: error.message };
 
+  // Supabase will not reveal that an email is already registered — it returns a
+  // success-shaped response with no error and no session, and sends no mail.
+  // The giveaway is an empty `identities` array. Without this check the page
+  // says "we've sent a confirmation link" and the customer waits forever for an
+  // email that was never sent.
+  if (data.user && (data.user.identities?.length ?? 0) === 0) {
+    return {
+      error: `An account already exists for ${email}. Please sign in instead — or use "Forgot password?" if you can't remember it.`,
+    };
+  }
+
   // With email verification enabled, no session is returned until the user confirms.
   if (!data.session) {
     return {
@@ -76,6 +87,56 @@ export async function signupAction(_prev: State, formData: FormData): Promise<St
       message: `Account created! We've sent a confirmation link to ${email}. Please verify your email to activate your account, then sign in.`,
     };
   }
+  redirect("/account");
+}
+
+/** Site origin for links we ask Supabase to email back to. */
+async function siteOrigin(): Promise<string> {
+  const h = await headers();
+  const host = h.get("host") || "www.nuts-and-more.store";
+  return `${host.startsWith("localhost") ? "http" : "https"}://${host}`;
+}
+
+/**
+ * Send a password-reset link. Always reports success: telling the visitor
+ * whether an address is registered would let anyone enumerate the customer
+ * list, and Supabase deliberately hides it for the same reason.
+ */
+export async function forgotPasswordAction(_prev: State, formData: FormData): Promise<State> {
+  const email = String(formData.get("email") ?? "").trim();
+  if (!email) return { error: "Please enter your email address." };
+  if (!isSupabaseConfigured()) {
+    return { error: "Password reset isn't available yet — the store owner needs to finish setup." };
+  }
+
+  const supabase = await createClient();
+  await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${await siteOrigin()}/auth/callback?next=/reset-password`,
+  });
+
+  return {
+    ok: true,
+    message: `If an account exists for ${email}, a password reset link is on its way. Check your inbox and spam folder.`,
+  };
+}
+
+/** Set a new password. Requires the recovery session from the emailed link. */
+export async function resetPasswordAction(_prev: State, formData: FormData): Promise<State> {
+  const password = String(formData.get("password") ?? "");
+  const confirm = String(formData.get("confirm") ?? "");
+
+  if (password.length < 6) return { error: "Password must be at least 6 characters." };
+  if (password !== confirm) return { error: "Both passwords must match." };
+
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    return { error: "This reset link has expired. Please request a new one." };
+  }
+
+  const { error } = await supabase.auth.updateUser({ password });
+  if (error) return { error: error.message };
+
   redirect("/account");
 }
 
