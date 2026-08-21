@@ -7,7 +7,7 @@ import type { ProductInput } from "@/lib/inventory";
 import type { Category, CategorySlug } from "@/lib/catalog";
 import type { HeroSlide } from "@/lib/cms";
 import * as cms from "@/lib/cms";
-import { updateOrderStatus, getAdminOrderById, getUserEmail } from "@/lib/orders";
+import { updateOrderStatus, getAdminOrderById, getUserEmail, setEnquiryStatus } from "@/lib/orders";
 import { statusLabel, type OrderStatus } from "@/lib/order-status";
 import { sendInvoiceEmail, sendStatusUpdateEmail } from "@/lib/mailer";
 import { buildInvoiceData } from "@/lib/invoice";
@@ -167,4 +167,15 @@ export async function emailInvoiceAction(id: string): Promise<{ ok: boolean; err
   const res = await sendInvoiceEmail(email, invoiceData, pdf);
   if (!res.sent) return { ok: false, error: "Email could not be sent (check SMTP settings)." };
   return { ok: true, error: undefined };
+}
+
+/** Toggle an enquiry between "new" and "handled" from the admin inbox. */
+export async function setEnquiryStatusAction(
+  id: string,
+  status: "new" | "handled",
+): Promise<{ ok: boolean; error?: string }> {
+  await guard();
+  const res = await setEnquiryStatus(id, status);
+  if (res.ok) revalidatePath("/admin/enquiries");
+  return res;
 }

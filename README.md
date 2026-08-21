@@ -59,8 +59,9 @@ shots are approximate (scarce in stock libraries) — replace these first.
 ## Notes
 
 - Prices are reasonable placeholders (the supplied product list had no pricing).
-- Forms (`contact`, `enquiry`) validate client-side and simulate submission — wire them to a
-  backend / email service before launch.
-- "Add to cart", auth and checkout are not implemented yet (scaffold only).
+- Forms (`contact`, `bulk`, `corporate gifting`) save to the `enquiries` table and email the
+  store inbox; they appear in the admin Enquiries page.
+- Cart, customer accounts (password + Google), Razorpay checkout, GST invoicing and sales
+  reports are all live. See `docs/ADMIN_SETUP.md`.
 - Certification names (MSME, IEC, APEDA, FSSAI, Make in India, FDA) render as text badges in
   the footer — swap for official logos when available.

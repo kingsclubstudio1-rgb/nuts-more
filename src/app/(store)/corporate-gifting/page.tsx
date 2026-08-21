@@ -150,7 +150,7 @@ export default function CorporateGiftingPage() {
               </ul>
             </div>
             <div className="rounded-2xl border border-border bg-surface p-6 shadow-[var(--shadow-soft)] sm:p-8">
-              <EnquiryForm />
+              <EnquiryForm kind="gifting" />
             </div>
           </div>
         </Container>

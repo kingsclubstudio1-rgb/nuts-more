@@ -9,7 +9,7 @@ const isEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
 export async function POST(req: Request) {
   const body = await req.json().catch(() => ({}));
-  const type = body.type === "bulk" ? "bulk" : "contact";
+  const type = body.type === "bulk" || body.type === "gifting" ? body.type : "contact";
 
   const input: EnquiryInput = {
     type,

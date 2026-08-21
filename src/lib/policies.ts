@@ -139,7 +139,8 @@ export const POLICIES: Record<string, Policy> = {
       {
         heading: "Order cancellation",
         body: [
-          "Orders can be cancelled only before they are dispatched. Once an order has been shipped, it cannot be cancelled. Please refer to our Return & Refund Policy for more information.",
+          "To cancel an order, contact us on WhatsApp or email as soon as possible with your order number. Cancellations can only be accepted while the order has not yet been dispatched — once it has shipped, it cannot be cancelled, and you may instead refer to our Return & Refund Policy.",
+          "Approved cancellations are refunded to the original payment method, usually within 5-7 working days.",
         ],
       },
       {

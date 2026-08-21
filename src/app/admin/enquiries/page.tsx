@@ -1,4 +1,5 @@
 import { Inbox } from "lucide-react";
+import { EnquiryStatusButton } from "@/components/admin/enquiry-status-button";
 import { listEnquiries, type Enquiry } from "@/lib/orders";
 
 export const dynamic = "force-dynamic";
@@ -36,7 +37,7 @@ export default async function AdminEnquiriesPage() {
     <div>
       <h1 className="font-heading text-2xl font-bold text-foreground">Enquiries</h1>
       <p className="mt-1 text-sm text-muted-foreground">
-        {enquiries.length} enquir{enquiries.length === 1 ? "y" : "ies"} — contact &amp; bulk-order
+        {enquiries.length} enquir{enquiries.length === 1 ? "y" : "ies"} — contact, bulk &amp; gifting
         requests from the website.
       </p>
 
@@ -45,7 +46,7 @@ export default async function AdminEnquiriesPage() {
           <Inbox className="mx-auto h-10 w-10 text-muted-foreground" />
           <p className="mt-3 font-heading text-lg font-bold text-foreground">No enquiries yet</p>
           <p className="mt-1 text-sm text-muted-foreground">
-            Contact-form and bulk-order enquiries will appear here.
+            Contact, bulk-order and corporate gifting enquiries will appear here.
           </p>
         </div>
       ) : (
@@ -76,16 +77,28 @@ function EnquiryCard({ e }: { e: Enquiry }) {
                 "rounded-full px-2.5 py-1 text-xs font-bold uppercase tracking-wider " +
                 (e.type === "bulk"
                   ? "bg-gold/15 text-gold-deep"
-                  : e.type === "return"
-                    ? "bg-red-100 text-red-700"
-                    : "bg-cream-2 text-foreground")
+                  : e.type === "gifting"
+                    ? "bg-purple-100 text-purple-700"
+                    : e.type === "return"
+                      ? "bg-red-100 text-red-700"
+                      : "bg-cream-2 text-foreground")
               }
             >
-              {e.type === "bulk" ? "Bulk order" : e.type === "return" ? "Return request" : "Contact"}
+              {e.type === "bulk"
+                ? "Bulk order"
+                : e.type === "gifting"
+                  ? "Corporate gifting"
+                  : e.type === "return"
+                    ? "Return request"
+                    : "Contact"}
             </span>
-            {e.status === "new" && (
+            {e.status === "new" ? (
               <span className="rounded-full bg-emerald-500 px-2 py-0.5 text-[0.65rem] font-bold uppercase tracking-wider text-white">
                 New
+              </span>
+            ) : (
+              <span className="rounded-full bg-cream-2 px-2 py-0.5 text-[0.65rem] font-bold uppercase tracking-wider text-muted-foreground">
+                Handled
               </span>
             )}
           </div>
@@ -99,7 +112,10 @@ function EnquiryCard({ e }: { e: Enquiry }) {
             {e.phone ? ` · ${e.phone}` : ""}
           </p>
         </div>
-        <p className="text-xs text-muted-foreground">{fmt(e.created_at)}</p>
+        <div className="flex flex-col items-end gap-2">
+          <p className="text-xs text-muted-foreground">{fmt(e.created_at)}</p>
+          <EnquiryStatusButton id={e.id} status={e.status} />
+        </div>
       </div>
 
       {extras.length > 0 && (

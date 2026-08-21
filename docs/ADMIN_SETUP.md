@@ -76,7 +76,7 @@ create table products (
   reviews     integer default 0,
   updated_at  timestamptz default now()
 );
--- Create a public Storage bucket named "product-images" for uploads.
+-- Create a public Storage bucket named "uploads" for product images.
 ```
 
 3. Add environment variables (Vercel → Settings → Environment Variables, and `.env.local`):
@@ -88,7 +88,7 @@ SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 
 4. Seed the database with the current 46 products (a one-time script can push `src/data/seed.json` into the `products` table).
 
-Because **every read and write already goes through `src/lib/inventory.ts`**, switching from the file store to a Supabase store is a single, contained change — the storefront, admin panel and cart don't change at all. Ping me with the keys and I'll wire the Supabase adapter + seed script.
+Supabase is already wired and live: the catalog, orders, enquiries and site settings all read and write through it via `src/lib/cms.ts`, with the bundled JSON seed used only as a fallback when Supabase is not configured. The authoritative schema is `supabase/schema.sql` — run that, not the abbreviated sample above, when rebuilding a project.
 
 ## Offers / discounts
 

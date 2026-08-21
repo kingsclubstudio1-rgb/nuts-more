@@ -35,7 +35,7 @@ const REQUIRED = [
   "expected_date",
 ];
 
-export function EnquiryForm() {
+export function EnquiryForm({ kind = "bulk" }: { kind?: "bulk" | "gifting" } = {}) {
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -65,7 +65,7 @@ export function EnquiryForm() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          type: "bulk",
+          type: kind,
           company: data.get("company"),
           name: data.get("name"),
           phone: data.get("phone"),

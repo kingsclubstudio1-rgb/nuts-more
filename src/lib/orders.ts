@@ -45,33 +45,6 @@ export type Order = {
   updated_at: string | null;
 };
 
-/** Record an order for the signed-in customer. No-op for guests / unconfigured. */
-export async function recordOrder(input: {
-  items: OrderItem[];
-  subtotal: number;
-  discount: number;
-  total: number;
-}): Promise<boolean> {
-  if (!isSupabaseConfigured()) return false;
-  try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (!user) return false; // guest checkout — nothing to save
-    const { error } = await supabase.from("orders").insert({
-      user_id: user.id,
-      items: input.items,
-      subtotal: input.subtotal,
-      discount: input.discount,
-      total: input.total,
-    });
-    return !error;
-  } catch {
-    return false;
-  }
-}
-
 /** Purchase history for the signed-in customer. */
 export async function getMyOrders(): Promise<Order[]> {
   if (!isSupabaseConfigured()) return [];
@@ -189,7 +162,7 @@ export async function getUserEmail(userId: string): Promise<string | null> {
 /* ------------------------------ Enquiries ----------------------------- */
 
 export type EnquiryInput = {
-  type: "contact" | "bulk" | "return";
+  type: "contact" | "bulk" | "return" | "gifting";
   name?: string;
   email?: string;
   phone?: string;
@@ -279,5 +252,21 @@ export async function listCustomers(): Promise<Customer[]> {
       .sort((a, b) => +new Date(b.created_at) - +new Date(a.created_at));
   } catch {
     return [];
+  }
+}
+
+/** Mark an enquiry handled (or back to new) so the admin inbox can be worked through. */
+export async function setEnquiryStatus(
+  id: string,
+  status: "new" | "handled",
+): Promise<{ ok: boolean; error?: string }> {
+  if (!isSupabaseAdminConfigured()) return { ok: false, error: "storage not configured" };
+  try {
+    const sb = createAdminClient();
+    const { error } = await sb.from("enquiries").update({ status }).eq("id", id);
+    if (error) return { ok: false, error: error.message };
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : "update failed" };
   }
 }

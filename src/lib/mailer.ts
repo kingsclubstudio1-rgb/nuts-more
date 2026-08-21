@@ -195,7 +195,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.nuts-and-more.
 
 /** Notify the store team of a new contact / bulk enquiry. */
 export async function sendEnquiryNotification(e: {
-  type: "contact" | "bulk" | "return";
+  type: "contact" | "bulk" | "return" | "gifting";
   fields: Record<string, string | undefined>;
 }): Promise<{ sent: boolean }> {
   if (!isMailerConfigured() || !ADMIN_INBOX) return { sent: false };
@@ -209,6 +209,8 @@ export async function sendEnquiryNotification(e: {
   const title =
     e.type === "bulk"
       ? "New Bulk Order Enquiry"
+      : e.type === "gifting"
+        ? "New Corporate Gifting Enquiry"
       : e.type === "return"
         ? "New Return Request"
         : "New Contact Enquiry";

@@ -238,3 +238,38 @@ revoke execute on function public.decrement_stock(jsonb) from public;
 revoke execute on function public.decrement_stock(jsonb) from anon;
 revoke execute on function public.decrement_stock(jsonb) from authenticated;
 grant  execute on function public.decrement_stock(jsonb) to service_role;
+
+-- ------------------------------------------------------------------
+-- Enquiries (contact form, bulk orders, corporate gifting, returns)
+--
+-- Live in production but previously missing from this file: rebuilding
+-- from schema.sql would have dropped every contact, bulk, gifting and
+-- return submission on the floor. saveEnquiry swallows the insert error
+-- and the API still answers ok when the notification email sends, so the
+-- failure would have been invisible.
+-- ------------------------------------------------------------------
+create table if not exists public.enquiries (
+  id                 uuid primary key default gen_random_uuid(),
+  type               text not null default 'contact',  -- contact|bulk|gifting|return
+  name               text,
+  email              text,
+  phone              text,
+  company            text,
+  city               text,
+  subject            text,
+  business_type      text,
+  products           text,
+  quantity           text,
+  packaging          text,
+  delivery_location  text,
+  expected_date      text,
+  message            text,
+  status             text not null default 'new',      -- new|handled
+  created_at         timestamptz default now()
+);
+
+create index if not exists enquiries_created_idx on public.enquiries (created_at desc);
+
+-- Written and read only through the service-role key (public API route +
+-- admin panel), so RLS stays on with no policy: nothing reaches it directly.
+alter table public.enquiries enable row level security;
