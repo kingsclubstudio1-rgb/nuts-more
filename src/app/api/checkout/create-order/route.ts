@@ -27,13 +27,31 @@ export async function POST(req: Request) {
   // Recompute prices server-side from the DB (never trust client prices).
   let subtotal = 0;
   const lineItems: { id: string; name: string; weight: string; price: number; qty: number }[] = [];
+  // Checked before payment so a customer isn't charged for goods that cannot
+  // ship. Stock is still reserved atomically after payment (someone else may
+  // buy the last unit in between) — this just keeps that refund path rare.
+  const shortfalls: string[] = [];
   for (const it of items) {
     const p = await getProductById(it.id);
     const v = p?.variants.find((x) => x.weight === it.weight);
     if (!p || !v) continue;
     const qty = Math.max(1, Math.floor(it.qty || 1));
+    if (v.stock <= 0) {
+      shortfalls.push(`${p.name} (${v.weight}) is sold out`);
+      continue;
+    }
+    if (v.stock < qty) {
+      shortfalls.push(`${p.name} (${v.weight}) — only ${v.stock} left`);
+      continue;
+    }
     subtotal += v.price * qty;
     lineItems.push({ id: p.id, name: p.name, weight: v.weight, price: v.price, qty });
+  }
+  if (shortfalls.length) {
+    return NextResponse.json(
+      { error: `Please update your cart: ${shortfalls.join(", ")}.`, outOfStock: shortfalls },
+      { status: 409 },
+    );
   }
   if (!lineItems.length) return NextResponse.json({ error: "Your cart is empty." }, { status: 400 });
 

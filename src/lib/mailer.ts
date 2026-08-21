@@ -285,3 +285,42 @@ export async function sendAuthLinkEmail(
     return { sent: false };
   }
 }
+
+/**
+ * Fires when a customer paid but the refund call failed — they are out of
+ * pocket for goods that cannot ship and no automated path will fix it. Sent
+ * to the store inbox so someone refunds it by hand from the Razorpay
+ * dashboard; a console error alone would go unread.
+ */
+export async function sendRefundFailureAlert(d: {
+  paymentId: string;
+  amountPaise: number;
+  email: string;
+  reason: string;
+}): Promise<{ sent: boolean }> {
+  if (!isMailerConfigured() || !ADMIN_INBOX) return { sent: false };
+  const amount = formatINR(Math.round(d.amountPaise / 100));
+  try {
+    await getTransport().sendMail({
+      from: FROM,
+      to: ADMIN_INBOX,
+      subject: `URGENT: refund failed — ${amount} owed to ${d.email}`,
+      html: `<div style="max-width:600px;margin:0 auto;font-family:Arial,Helvetica,sans-serif;padding:24px;background:#fff5f5;border:2px solid #dc2626;border-radius:14px;">
+        <h2 style="color:#dc2626;margin:0 0 4px;">Manual refund required</h2>
+        <p style="color:#7f1d1d;font-size:14px;margin:0 0 16px;">
+          A customer was charged but their order could not be fulfilled, and the automatic refund failed.
+          Refund this payment by hand in the Razorpay dashboard.
+        </p>
+        <table style="border-collapse:collapse;width:100%;font-size:14px;">
+          <tr><td style="padding:6px 12px 6px 0;color:#7f1d1d;">Amount</td><td style="padding:6px 0;color:#3b2f24;"><b>${esc(amount)}</b></td></tr>
+          <tr><td style="padding:6px 12px 6px 0;color:#7f1d1d;">Payment ID</td><td style="padding:6px 0;color:#3b2f24;font-family:monospace;">${esc(d.paymentId)}</td></tr>
+          <tr><td style="padding:6px 12px 6px 0;color:#7f1d1d;">Customer</td><td style="padding:6px 0;color:#3b2f24;">${esc(d.email)}</td></tr>
+          <tr><td style="padding:6px 12px 6px 0;color:#7f1d1d;">Reason</td><td style="padding:6px 0;color:#3b2f24;">${esc(d.reason)}</td></tr>
+        </table>
+      </div>`,
+    });
+    return { sent: true };
+  } catch {
+    return { sent: false };
+  }
+}

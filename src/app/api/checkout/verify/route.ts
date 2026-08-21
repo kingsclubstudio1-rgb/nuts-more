@@ -4,11 +4,11 @@ import { getCurrentUser } from "@/lib/user";
 import { decrementStock, restockItems, getProductById } from "@/lib/cms";
 import { discountRate, discountLabel } from "@/lib/pricing";
 import { shippingCharge } from "@/lib/shipping";
-import { verifyRazorpaySignature, fetchRazorpayPayment } from "@/lib/razorpay";
+import { verifyRazorpaySignature, fetchRazorpayPayment, refundRazorpayPayment } from "@/lib/razorpay";
 import { getInvoiceConfig, computeGst, nextInvoiceNumber } from "@/lib/gst";
 import { buildInvoiceData } from "@/lib/invoice";
 import { renderInvoicePdf } from "@/lib/invoice-pdf";
-import { sendInvoiceEmail, sendAdminOrderNotification } from "@/lib/mailer";
+import { sendInvoiceEmail, sendAdminOrderNotification, sendRefundFailureAlert } from "@/lib/mailer";
 import type { AdminOrder } from "@/lib/orders";
 
 export const runtime = "nodejs";
@@ -109,12 +109,46 @@ export async function POST(req: Request) {
         return `${li?.name ?? s.id} (${s.weight}) — only ${s.available} left`;
       })
       .join(", ");
+
+    // Razorpay has already taken the money and there is nothing to ship, so
+    // refund it here rather than promising a refund nothing would carry out.
+    const refund = await refundRazorpayPayment(razorpay_payment_id, payment.amount);
+    if (!refund) {
+      // The customer is out of pocket with no automated recovery — make sure
+      // this reaches a human instead of dying in a log nobody reads.
+      console.error(
+        "REFUND FAILED — manual action required. payment:",
+        razorpay_payment_id,
+        "amount(paise):",
+        payment.amount,
+        "user:",
+        user.id,
+      );
+      after(async () => {
+        try {
+          await sendRefundFailureAlert({
+            paymentId: razorpay_payment_id,
+            amountPaise: payment.amount,
+            email: user.email ?? "(unknown)",
+            reason: names || "Stock could not be reserved",
+          });
+        } catch {
+          /* alerting is best effort */
+        }
+      });
+    }
+
     return NextResponse.json(
       {
         error: names
-          ? `Some items sold out while you were paying: ${names}. Your payment will be refunded.`
+          ? `Some items sold out while you were paying: ${names}. ${
+              refund
+                ? "Your payment has been refunded and should appear in 5-7 working days."
+                : "We could not complete an automatic refund — please contact us and we'll return your money right away."
+            }`
           : "Could not reserve stock for this order.",
         outOfStock: stock.insufficient ?? [],
+        refunded: Boolean(refund),
       },
       { status: 409 },
     );

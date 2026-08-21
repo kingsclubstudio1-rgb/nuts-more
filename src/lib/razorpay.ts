@@ -86,6 +86,39 @@ export async function fetchRazorpayPayment(
   }
 }
 
+/**
+ * Refund a captured payment, in full unless `amountPaise` is given.
+ *
+ * Needed because checkout can only reserve stock after Razorpay has already
+ * taken the money: if the last unit sells during payment, the customer has
+ * paid for something that cannot ship. Without this the money is simply kept.
+ *
+ * Returns the refund id on success, or null — the caller must surface a
+ * failure loudly rather than assume the customer has been made whole.
+ */
+export async function refundRazorpayPayment(
+  paymentId: string,
+  amountPaise?: number,
+): Promise<{ id: string } | null> {
+  try {
+    const auth = Buffer.from(`${RAZORPAY_KEY_ID}:${RAZORPAY_KEY_SECRET}`).toString("base64");
+    const res = await fetch(`https://api.razorpay.com/v1/payments/${paymentId}/refund`, {
+      method: "POST",
+      headers: { Authorization: `Basic ${auth}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ...(amountPaise ? { amount: amountPaise } : {}),
+        speed: "normal",
+        notes: { reason: "Out of stock at checkout" },
+      }),
+    });
+    if (!res.ok) return null;
+    const data = (await res.json()) as { id?: string };
+    return data.id ? { id: data.id } : null;
+  } catch {
+    return null;
+  }
+}
+
 /** Verify the payment signature returned by Razorpay checkout. */
 export function verifyRazorpaySignature(
   orderId: string,

@@ -87,8 +87,12 @@ export async function signupAction(_prev: State, formData: FormData): Promise<St
     return { error: error.message };
   }
 
-  const link = data?.properties?.action_link;
-  if (!link) return { error: "Could not start sign-up. Please try again." };
+  // Send them to our own confirm route rather than Supabase's action_link:
+  // that one hands back the session in a URL fragment the server can never
+  // read, so the customer would "confirm" and still arrive signed out.
+  const hashedToken = data?.properties?.hashed_token;
+  if (!hashedToken) return { error: "Could not start sign-up. Please try again." };
+  const link = `${await siteOrigin()}/auth/confirm?token_hash=${encodeURIComponent(hashedToken)}&type=signup&next=/account`;
 
   const sent = await sendAuthLinkEmail(email, "confirm", link, name);
   if (!sent.sent) {
@@ -126,13 +130,10 @@ export async function forgotPasswordAction(_prev: State, formData: FormData): Pr
   // the response must look identical either way.
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const admin = createAdminClient();
-  const { data } = await admin.auth.admin.generateLink({
-    type: "recovery",
-    email,
-    options: { redirectTo: `${await siteOrigin()}/auth/callback?next=/reset-password` },
-  });
-  const link = data?.properties?.action_link;
-  if (link) {
+  const { data } = await admin.auth.admin.generateLink({ type: "recovery", email });
+  const hashedToken = data?.properties?.hashed_token;
+  if (hashedToken) {
+    const link = `${await siteOrigin()}/auth/confirm?token_hash=${encodeURIComponent(hashedToken)}&type=recovery&next=/reset-password`;
     await sendAuthLinkEmail(
       email,
       "reset",
