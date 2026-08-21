@@ -1,8 +1,30 @@
 import "server-only";
 import { Document, Page, View, Text, Image, StyleSheet, renderToBuffer } from "@react-pdf/renderer";
+import fs from "node:fs";
 import path from "node:path";
 import type { InvoiceData } from "./invoice";
 import { formatINR } from "./invoice";
+
+/**
+ * The logo is embedded as image data, not a file path: @react-pdf treats a
+ * path string as a URL to fetch, which fails and silently drops the logo.
+ * Read once and cache — an invoice must never be blocked by the logo, so a
+ * missing file just renders the header without it.
+ *
+ * `logo-invoice.png` is a small (~11KB) copy of the 433KB brand logo; the full
+ * one would be attached to every invoice email for no visual gain at 46pt.
+ * next.config.ts traces this file into the functions that render invoices.
+ */
+let logoCache: Buffer | null | undefined;
+function invoiceLogo(): Buffer | null {
+  if (logoCache !== undefined) return logoCache;
+  try {
+    logoCache = fs.readFileSync(path.join(process.cwd(), "public", "brand", "logo-invoice.png"));
+  } catch {
+    logoCache = null;
+  }
+  return logoCache;
+}
 
 const BROWN = "#4a3018";
 const GOLD = "#b8912f";
@@ -58,7 +80,7 @@ function Row({ label, value, bold }: { label: string; value: string; bold?: bool
 }
 
 export function InvoiceDocument({ data }: { data: InvoiceData }) {
-  const logoPath = path.join(process.cwd(), "public", "brand", "logo.png");
+  const logo = invoiceLogo();
   const date = new Date(data.invoiceDate).toLocaleDateString("en-IN", {
     day: "2-digit",
     month: "short",
@@ -71,7 +93,7 @@ export function InvoiceDocument({ data }: { data: InvoiceData }) {
         {/* Header */}
         <View style={styles.headerRow}>
           <View style={styles.companyBlock}>
-            <Image src={logoPath} style={styles.logo} />
+            {logo && <Image src={{ data: logo, format: "png" }} style={styles.logo} />}
             <View>
               <Text style={styles.companyName}>{data.seller.name}</Text>
               <Text style={styles.companySub}>{data.seller.address}</Text>

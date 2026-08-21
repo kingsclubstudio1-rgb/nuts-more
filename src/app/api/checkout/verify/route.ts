@@ -47,10 +47,15 @@ export async function POST(req: Request) {
   const total = subtotal - discount + shipping;
 
   // Tax: computed and frozen at the time of sale (rate changes later must
-  // never retroactively alter an already-issued invoice).
-  const taxableAmount = Math.max(0, subtotal - discount + shipping);
+  // never retroactively alter an already-issued invoice). Prices are
+  // GST-inclusive, so tax is extracted from `total` — the exact amount
+  // charged — keeping taxable + cgst + sgst equal to the grand total.
   const invoiceConfig = await getInvoiceConfig();
-  const { cgst, sgst, igst, gstRate } = computeGst(taxableAmount, address?.state, invoiceConfig.gstRate);
+  const { taxableAmount, cgst, sgst, igst, gstRate } = computeGst(
+    total,
+    address?.state,
+    invoiceConfig.gstRate,
+  );
 
   const payment = await fetchRazorpayPayment(razorpay_payment_id);
 

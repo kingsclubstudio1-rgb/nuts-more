@@ -31,22 +31,32 @@ function normalizeState(s: string | undefined | null): string {
 }
 
 /**
- * Split a taxable amount into CGST+SGST (same state as the seller) or IGST
- * (different state / unknown). Amounts are rounded to the nearest rupee.
+ * Break a GST-inclusive gross amount (exactly what the customer is charged)
+ * into its taxable base plus CGST+SGST (buyer in the seller's state) or IGST
+ * (anywhere else / unknown).
+ *
+ * Listed prices are inclusive of GST, and checkout charges
+ * `subtotal - discount + shipping`, so tax must be extracted from that gross
+ * figure rather than added on top — otherwise the invoice would show tax the
+ * customer never paid and the totals would not reconcile.
+ *
+ * The halves are derived as `tax - cgst` rather than rounding twice, so
+ * taxable + cgst + sgst always equals the gross amount to the rupee.
  */
 export function computeGst(
-  taxableAmount: number,
+  grossAmount: number,
   buyerState: string | undefined | null,
   gstRatePercent: number,
-): { cgst: number; sgst: number; igst: number; gstRate: number } {
+): { taxableAmount: number; cgst: number; sgst: number; igst: number; gstRate: number } {
   const rate = gstRatePercent / 100;
+  const taxableAmount = Math.round(grossAmount / (1 + rate));
+  const tax = grossAmount - taxableAmount;
   const sameState = normalizeState(buyerState) === normalizeState(SELLER_STATE);
   if (sameState) {
-    const half = Math.round((taxableAmount * rate) / 2);
-    return { cgst: half, sgst: half, igst: 0, gstRate: gstRatePercent };
+    const cgst = Math.round(tax / 2);
+    return { taxableAmount, cgst, sgst: tax - cgst, igst: 0, gstRate: gstRatePercent };
   }
-  const igst = Math.round(taxableAmount * rate);
-  return { cgst: 0, sgst: 0, igst, gstRate: gstRatePercent };
+  return { taxableAmount, cgst: 0, sgst: 0, igst: tax, gstRate: gstRatePercent };
 }
 
 /** Indian financial year key for "now" or a given date: Apr 1 - Mar 31, e.g. "2526" for FY 2025-26. */
