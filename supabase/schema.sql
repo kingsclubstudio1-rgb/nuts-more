@@ -157,3 +157,11 @@ begin
   return next_val;
 end;
 $$;
+
+-- GST requires a gap-free invoice series, so only the server may draw a number.
+-- Without this, the default PUBLIC grant exposes it at /rest/v1/rpc/next_invoice_seq
+-- where anyone could burn numbers and punch holes in the sequence.
+revoke execute on function public.next_invoice_seq(text) from public;
+revoke execute on function public.next_invoice_seq(text) from anon;
+revoke execute on function public.next_invoice_seq(text) from authenticated;
+grant  execute on function public.next_invoice_seq(text) to service_role;
