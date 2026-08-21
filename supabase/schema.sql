@@ -165,3 +165,76 @@ revoke execute on function public.next_invoice_seq(text) from public;
 revoke execute on function public.next_invoice_seq(text) from anon;
 revoke execute on function public.next_invoice_seq(text) from authenticated;
 grant  execute on function public.next_invoice_seq(text) to service_role;
+
+-- ------------------------------------------------------------------
+-- Order idempotency: one captured payment must never book two orders.
+-- Without this, a retried or replayed checkout/verify call takes stock
+-- twice and sends a second set of invoice emails for a single payment.
+-- ------------------------------------------------------------------
+create unique index if not exists orders_payment_id_key
+  on public.orders (payment_id)
+  where payment_id is not null;
+
+-- ------------------------------------------------------------------
+-- Atomic stock decrement.
+-- A read-modify-write in application code oversold the last unit: two
+-- concurrent checkouts both read stock=1, both wrote 0, and both orders
+-- shipped. This locks the rows, verifies every requested quantity is
+-- available, and only then applies the decrement -- all in one
+-- transaction -- returning which lines were short if any.
+-- ------------------------------------------------------------------
+create or replace function public.decrement_stock(p_items jsonb)
+returns jsonb
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  it           jsonb;
+  cur          int;
+  insufficient jsonb := '[]'::jsonb;
+begin
+  -- Consistent lock order avoids deadlocks between concurrent checkouts.
+  perform 1 from public.products
+   where id in (select value->>'id' from jsonb_array_elements(p_items))
+   order by id
+     for update;
+
+  for it in select value from jsonb_array_elements(p_items) loop
+    select (v->>'stock')::int into cur
+      from public.products p, jsonb_array_elements(p.variants) v
+     where p.id = it->>'id' and v->>'weight' = it->>'weight';
+
+    if cur is null or cur < (it->>'qty')::int then
+      insufficient := insufficient || jsonb_build_object(
+        'id',        it->>'id',
+        'weight',    it->>'weight',
+        'requested', (it->>'qty')::int,
+        'available', coalesce(cur, 0));
+    end if;
+  end loop;
+
+  if jsonb_array_length(insufficient) > 0 then
+    return jsonb_build_object('ok', false, 'insufficient', insufficient);
+  end if;
+
+  for it in select value from jsonb_array_elements(p_items) loop
+    update public.products p
+       set variants = (
+             select jsonb_agg(
+                      case when v->>'weight' = it->>'weight'
+                           then jsonb_set(v, '{stock}',
+                                  to_jsonb(((v->>'stock')::int) - (it->>'qty')::int))
+                           else v end)
+               from jsonb_array_elements(p.variants) v)
+     where p.id = it->>'id';
+  end loop;
+
+  return jsonb_build_object('ok', true);
+end;
+$$;
+
+revoke execute on function public.decrement_stock(jsonb) from public;
+revoke execute on function public.decrement_stock(jsonb) from anon;
+revoke execute on function public.decrement_stock(jsonb) from authenticated;
+grant  execute on function public.decrement_stock(jsonb) to service_role;

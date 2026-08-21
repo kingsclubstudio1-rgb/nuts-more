@@ -2,18 +2,27 @@
  * Minimal admin auth — signed, httpOnly cookie session (SERVER ONLY)
  * ------------------------------------------------------------------
  * Set ADMIN_PASSWORD (and ideally ADMIN_SECRET) in your environment.
- * If unset, a dev default is used so the panel works locally out of the
- * box — CHANGE IT before deploying (see docs/ADMIN_SETUP.md).
+ *
+ * The dev defaults below only apply outside production. They used to apply
+ * everywhere, which meant any deployment missing these env vars — a preview
+ * build, a redeploy, a fork — accepted a password that is printed in this
+ * file, granting full access to customer data, orders and pricing. Outside
+ * development, missing credentials now disable admin login entirely rather
+ * than silently falling back to a public one.
  * ------------------------------------------------------------------ */
 import { cookies } from "next/headers";
 import crypto from "node:crypto";
 
+const IS_DEV = process.env.NODE_ENV !== "production";
+
 export const ADMIN_COOKIE = "nm_admin";
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "nutsandmore2019";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || (IS_DEV ? "nutsandmore2019" : "");
 /** Email that, with ADMIN_PASSWORD, logs in as admin on the shared login page. */
 export const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@nutsandmore.store";
 const SECRET =
-  process.env.ADMIN_SECRET || process.env.ADMIN_PASSWORD || "nm-dev-secret-change-me";
+  process.env.ADMIN_SECRET ||
+  process.env.ADMIN_PASSWORD ||
+  (IS_DEV ? "nm-dev-secret-change-me" : crypto.randomBytes(32).toString("hex"));
 const MAX_AGE = 60 * 60 * 24 * 7; // 7 days
 
 function hmac(payload: string): string {
@@ -38,6 +47,9 @@ function verifyToken(token?: string): boolean {
 }
 
 export function checkPassword(password: string): boolean {
+  // No configured password (production without ADMIN_PASSWORD) means admin
+  // login is closed, not open to the empty string.
+  if (!ADMIN_PASSWORD) return false;
   const a = Buffer.from(password);
   const b = Buffer.from(ADMIN_PASSWORD);
   return a.length === b.length && crypto.timingSafeEqual(a, b);

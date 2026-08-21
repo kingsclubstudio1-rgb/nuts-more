@@ -4,6 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 import type { InvoiceData } from "./invoice";
 import { formatINR } from "./invoice";
+import { formatIST } from "./ist";
 
 /**
  * The logo is embedded as image data, not a file path: @react-pdf treats a
@@ -81,11 +82,9 @@ function Row({ label, value, bold }: { label: string; value: string; bold?: bool
 
 export function InvoiceDocument({ data }: { data: InvoiceData }) {
   const logo = invoiceLogo();
-  const date = new Date(data.invoiceDate).toLocaleDateString("en-IN", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
+  // Invoice Date is a legal field — must read as the Indian calendar date the
+  // sale happened on, not the server's UTC date.
+  const date = formatIST(data.invoiceDate);
 
   return (
     <Document title={`Invoice ${data.invoiceNumber}`}>

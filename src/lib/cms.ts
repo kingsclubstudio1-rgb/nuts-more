@@ -199,21 +199,45 @@ export async function setVariantStock(id: string, weight: string, stock: number)
   return res.ok;
 }
 
+export type StockShortfall = { id: string; weight: string; requested: number; available: number };
+
+/**
+ * Take stock for an order, atomically.
+ *
+ * Deliberately delegates to a Postgres function rather than reading each
+ * product and writing it back: two concurrent checkouts both reading stock=1
+ * would each write 0 and both succeed, overselling the last unit. The function
+ * locks the rows, checks every line, and only then applies the decrement.
+ *
+ * Returns the lines that were short when nothing could be taken, so the caller
+ * can name exactly what ran out. `ok: true` means all stock was reserved.
+ */
 export async function decrementStock(
   items: { id: string; weight: string; qty: number }[],
-): Promise<void> {
+): Promise<{ ok: boolean; insufficient?: StockShortfall[] }> {
+  if (!items.length) return { ok: true };
+
   if (await supabaseReady()) {
-    for (const it of items) {
-      const p = await getProductById(it.id);
-      if (!p) continue;
-      const variants = p.variants.map((v) =>
-        v.weight === it.weight ? { ...v, stock: Math.max(0, v.stock - it.qty) } : v,
-      );
-      await saveProduct({ ...p, variants });
-    }
-    return;
+    const sb = createAdminClient();
+    const { data, error } = await sb.rpc("decrement_stock", { p_items: items });
+    if (error) return { ok: false };
+    const res = data as { ok: boolean; insufficient?: StockShortfall[] } | null;
+    return res ?? { ok: false };
   }
+
   fileStore.decrementStock(items);
+  return { ok: true };
+}
+
+/**
+ * Put reserved stock back (order failed to book after stock was taken).
+ * Negative quantities pass the availability check trivially and add back.
+ */
+export async function restockItems(
+  items: { id: string; weight: string; qty: number }[],
+): Promise<void> {
+  if (!items.length) return;
+  await decrementStock(items.map((i) => ({ ...i, qty: -i.qty })));
 }
 
 /* =========================== CATEGORIES ============================== */

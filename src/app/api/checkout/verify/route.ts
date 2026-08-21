@@ -1,7 +1,7 @@
 import { NextResponse, after } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { getCurrentUser } from "@/lib/user";
-import { decrementStock, getProductById } from "@/lib/cms";
+import { decrementStock, restockItems, getProductById } from "@/lib/cms";
 import { discountRate, discountLabel } from "@/lib/pricing";
 import { shippingCharge } from "@/lib/shipping";
 import { verifyRazorpaySignature, fetchRazorpayPayment } from "@/lib/razorpay";
@@ -31,6 +31,19 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Payment verification failed." }, { status: 400 });
   }
 
+  // One captured payment = one order. Without this, retrying or replaying the
+  // same (valid) payload books the order again, takes stock again and sends a
+  // second set of invoice emails for a single payment.
+  const sbAdminEarly = (await import("@/lib/supabase/admin")).createAdminClient();
+  const { data: existing } = await sbAdminEarly
+    .from("orders")
+    .select("id")
+    .eq("payment_id", razorpay_payment_id)
+    .maybeSingle();
+  if (existing) {
+    return NextResponse.json({ ok: true, orderId: existing.id, duplicate: true });
+  }
+
   // Recompute totals server-side (authoritative record).
   let subtotal = 0;
   const lineItems: { id: string; name: string; weight: string; price: number; qty: number }[] = [];
@@ -42,6 +55,10 @@ export async function POST(req: Request) {
     subtotal += v.price * qty;
     lineItems.push({ id: p.id, name: p.name, weight: v.weight, price: v.price, qty });
   }
+  if (!lineItems.length) {
+    return NextResponse.json({ error: "No valid items in this order." }, { status: 400 });
+  }
+
   const discount = Math.round(subtotal * discountRate(subtotal));
   const shipping = shippingCharge(subtotal, address?.city ?? "", address?.pincode ?? "");
   const total = subtotal - discount + shipping;
@@ -57,7 +74,51 @@ export async function POST(req: Request) {
     invoiceConfig.gstRate,
   );
 
+  // The signature only proves Razorpay issued this order/payment pair — it
+  // says nothing about the basket or the amount. Without comparing against the
+  // real payment, someone could pay for one cheap item and then replay that
+  // valid signature with a basket of expensive ones.
   const payment = await fetchRazorpayPayment(razorpay_payment_id);
+  if (!payment) {
+    return NextResponse.json(
+      { error: "Could not confirm the payment with Razorpay. Please contact support." },
+      { status: 502 },
+    );
+  }
+  if (payment.orderId !== razorpay_order_id) {
+    return NextResponse.json({ error: "Payment does not match this order." }, { status: 400 });
+  }
+  if (payment.status !== "captured" && payment.status !== "authorized") {
+    return NextResponse.json({ error: "Payment was not completed." }, { status: 400 });
+  }
+  if (payment.amount !== total * 100) {
+    return NextResponse.json(
+      { error: "Paid amount does not match the order total." },
+      { status: 400 },
+    );
+  }
+
+  // Reserve stock before booking the order so the last unit can't be sold twice.
+  const stock = await decrementStock(
+    lineItems.map((i) => ({ id: i.id, weight: i.weight, qty: i.qty })),
+  );
+  if (!stock.ok) {
+    const names = (stock.insufficient ?? [])
+      .map((s) => {
+        const li = lineItems.find((l) => l.id === s.id && l.weight === s.weight);
+        return `${li?.name ?? s.id} (${s.weight}) — only ${s.available} left`;
+      })
+      .join(", ");
+    return NextResponse.json(
+      {
+        error: names
+          ? `Some items sold out while you were paying: ${names}. Your payment will be refunded.`
+          : "Could not reserve stock for this order.",
+        outOfStock: stock.insufficient ?? [],
+      },
+      { status: 409 },
+    );
+  }
 
   try {
     const supabase = await createClient();
@@ -88,8 +149,6 @@ export async function POST(req: Request) {
 
     const orderId = data!.id as string;
 
-    await decrementStock(lineItems.map((i) => ({ id: i.id, weight: i.weight, qty: i.qty })));
-
     // Invoice numbering, PDF rendering and both emails happen after the response
     // is sent (via `after`) so a slow SMTP server or PDF render can never delay
     // — or, on a serverless function's time limit, truncate — the checkout
@@ -119,6 +178,11 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ ok: true, orderId });
   } catch (e) {
+    // Stock was already reserved above; if the order row never landed, give it
+    // back rather than leaving phantom stock loss behind.
+    await restockItems(lineItems.map((i) => ({ id: i.id, weight: i.weight, qty: i.qty }))).catch(
+      () => {},
+    );
     return NextResponse.json(
       { error: e instanceof Error ? e.message : "Could not save order." },
       { status: 500 },

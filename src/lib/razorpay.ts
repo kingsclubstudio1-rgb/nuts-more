@@ -40,23 +40,47 @@ export async function createRazorpayOrder(amountPaise: number, receipt: string) 
   return (await res.json()) as { id: string; amount: number; currency: string };
 }
 
+export type RazorpayPayment = {
+  method: string;
+  /** Paise actually captured by Razorpay. */
+  amount: number;
+  /** The Razorpay order this payment belongs to. */
+  orderId: string;
+  status: string;
+};
+
 /**
- * Look up a completed payment server-side (authoritative — never trust the
- * client for which method was used). Returns null on any failure; the
- * invoice falls back to a generic "Online" label rather than blocking
- * the order.
+ * Look up a payment server-side. This is the authoritative record of what the
+ * customer actually paid — the signature only proves Razorpay issued the
+ * order/payment pair, it says nothing about the amount or the basket, so the
+ * caller must compare `amount` and `orderId` against its own totals before
+ * trusting a "paid" claim.
+ *
+ * Returns null on any network/API failure so the caller can decide; it must
+ * never be treated as a successful verification.
  */
 export async function fetchRazorpayPayment(
   paymentId: string,
-): Promise<{ method: string } | null> {
+): Promise<RazorpayPayment | null> {
   try {
     const auth = Buffer.from(`${RAZORPAY_KEY_ID}:${RAZORPAY_KEY_SECRET}`).toString("base64");
     const res = await fetch(`https://api.razorpay.com/v1/payments/${paymentId}`, {
       headers: { Authorization: `Basic ${auth}` },
+      cache: "no-store",
     });
     if (!res.ok) return null;
-    const data = (await res.json()) as { method?: string };
-    return { method: data.method ?? "" };
+    const data = (await res.json()) as {
+      method?: string;
+      amount?: number;
+      order_id?: string;
+      status?: string;
+    };
+    return {
+      method: data.method ?? "",
+      amount: Number(data.amount ?? 0),
+      orderId: String(data.order_id ?? ""),
+      status: String(data.status ?? ""),
+    };
   } catch {
     return null;
   }

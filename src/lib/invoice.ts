@@ -42,6 +42,21 @@ export type InvoiceData = {
 
 export { paymentModeLabel };
 
+/**
+ * Taxable base for a row that predates the stored GST columns. Mirrors
+ * computeGst: prices are GST-inclusive, so the base is the total less the tax
+ * already contained in it. Falls back to the total when no rate is recorded,
+ * which keeps the invoice internally consistent (zero tax, base = total).
+ */
+function derivedTaxable(order: AdminOrder): number {
+  const total = order.total ?? 0;
+  const rate = Number(order.gst_rate ?? 0) / 100;
+  const tax = (order.cgst ?? 0) + (order.sgst ?? 0) + (order.igst ?? 0);
+  if (tax > 0) return Math.max(0, total - tax);
+  if (rate > 0) return Math.round(total / (1 + rate));
+  return total;
+}
+
 /** Assemble the one invoice data shape used by the PDF, emails and both account UIs. */
 export async function buildInvoiceData(order: AdminOrder): Promise<InvoiceData> {
   const config = await getInvoiceConfig();
@@ -87,7 +102,11 @@ export async function buildInvoiceData(order: AdminOrder): Promise<InvoiceData> 
     discount: order.discount,
     discountLabel: order.discount_label || (order.discount > 0 ? "Discount" : ""),
     shipping: order.shipping,
-    taxableAmount: order.taxable_amount || Math.max(0, order.subtotal - order.discount + order.shipping),
+    // Older rows (pre-GST-columns) stored no tax breakdown. Derive the taxable
+    // base the same way computeGst does — extracting it from the GST-inclusive
+    // total — so taxable + tax always reconciles to the grand total. Using the
+    // gross here instead would print an invoice that does not add up.
+    taxableAmount: order.taxable_amount || derivedTaxable(order),
     cgst: order.cgst,
     sgst: order.sgst,
     igst: order.igst,

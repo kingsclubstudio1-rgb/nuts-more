@@ -2,6 +2,7 @@ import "server-only";
 import nodemailer from "nodemailer";
 import { formatINR } from "@/lib/catalog";
 import type { InvoiceData } from "@/lib/invoice";
+import { formatIST } from "@/lib/ist";
 
 /**
  * Transactional email via SMTP (Gmail app-password by default).
@@ -86,7 +87,7 @@ function summaryRows(data: InvoiceData): string {
 }
 
 function invoiceHtml(data: InvoiceData, audience: "customer" | "admin"): string {
-  const date = new Date(data.invoiceDate).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
+  const date = formatIST(data.invoiceDate);
   const intro =
     audience === "customer"
       ? `<p style="color:#3b2f24;font-size:15px;margin:22px 0 4px;">Hi ${esc(data.customerName || "there")},</p>

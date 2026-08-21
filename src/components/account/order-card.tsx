@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ChevronDown, Truck, FileText, Download } from "lucide-react";
 import { statusLabel, STATUS_STYLE } from "@/lib/order-status";
 import { formatINR } from "@/lib/catalog";
+import { formatIST } from "@/lib/ist";
 import { paymentModeLabel } from "@/lib/payment-mode";
 import type { Order } from "@/lib/orders";
 import { ReturnRequest } from "@/components/account/return-request";
@@ -22,7 +23,7 @@ export function OrderCard({ order: o }: { order: Order }) {
           <div>
             <p className="text-sm font-semibold text-foreground">Order #{o.id.slice(0, 8).toUpperCase()}</p>
             <p className="text-xs text-muted-foreground">
-              {new Date(o.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
+              {formatIST(o.created_at, { day: "numeric", month: "short", year: "numeric" })}
             </p>
           </div>
           <span

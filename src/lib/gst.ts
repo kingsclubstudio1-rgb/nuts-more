@@ -1,6 +1,7 @@
 import "server-only";
 import { createAdminClient } from "./supabase/admin";
 import { isSupabaseAdminConfigured } from "./supabase/config";
+import { istParts } from "./ist";
 import * as cms from "./cms";
 
 /** Seller's home state — determines CGST+SGST (intra-state) vs IGST (inter-state). */
@@ -26,8 +27,35 @@ export async function saveInvoiceConfig(config: InvoiceConfig): Promise<boolean>
   return cms.saveSetting("invoice_config", config);
 }
 
+/**
+ * Buyer state is typed by hand at checkout, so "Karnataka", "karnataka",
+ * "KA" and "Bengaluru, Karnataka" must all resolve to the same state —
+ * otherwise the same customer is charged IGST instead of CGST+SGST, which is
+ * a real tax-head error, not a display quirk. Anything unrecognised falls
+ * through to IGST, the safe default for an out-of-state supply.
+ */
+const STATE_ALIASES: Record<string, string> = {
+  ka: "karnataka",
+  bengaluru: "karnataka",
+  bangalore: "karnataka",
+  blr: "karnataka",
+};
+
 function normalizeState(s: string | undefined | null): string {
-  return (s ?? "").trim().toLowerCase();
+  const raw = (s ?? "").trim().toLowerCase().replace(/\s+/g, " ");
+  if (!raw) return "";
+  if (STATE_ALIASES[raw]) return STATE_ALIASES[raw];
+  // "bengaluru, karnataka" / "karnataka, india" -> match on any part
+  for (const part of raw.split(/[,/]/).map((p) => p.trim())) {
+    if (!part) continue;
+    if (STATE_ALIASES[part]) return STATE_ALIASES[part];
+    if (part === normalizeSellerState()) return part;
+  }
+  return raw;
+}
+
+function normalizeSellerState(): string {
+  return SELLER_STATE.trim().toLowerCase();
 }
 
 /**
@@ -51,7 +79,7 @@ export function computeGst(
   const rate = gstRatePercent / 100;
   const taxableAmount = Math.round(grossAmount / (1 + rate));
   const tax = grossAmount - taxableAmount;
-  const sameState = normalizeState(buyerState) === normalizeState(SELLER_STATE);
+  const sameState = normalizeState(buyerState) === normalizeSellerState();
   if (sameState) {
     const cgst = Math.round(tax / 2);
     return { taxableAmount, cgst, sgst: tax - cgst, igst: 0, gstRate: gstRatePercent };
@@ -59,11 +87,18 @@ export function computeGst(
   return { taxableAmount, cgst: 0, sgst: 0, igst: tax, gstRate: gstRatePercent };
 }
 
-/** Indian financial year key for "now" or a given date: Apr 1 - Mar 31, e.g. "2526" for FY 2025-26. */
+/**
+ * Indian financial year key for "now" or a given date: Apr 1 - Mar 31,
+ * e.g. "2526" for FY 2025-26.
+ *
+ * Must be evaluated in IST, not UTC. IST is UTC+5:30, so 1 Apr 00:00-05:29 IST
+ * is still 31 Mar in UTC — a UTC reading would keep numbering those invoices
+ * into the closed financial year instead of opening the new series, breaking
+ * the per-FY consecutive numbering GST requires.
+ */
 export function financialYearKey(date: Date = new Date()): string {
-  const y = date.getUTCFullYear();
-  const m = date.getUTCMonth() + 1; // 1-12
-  const startYear = m >= 4 ? y : y - 1;
+  const { year, month } = istParts(date);
+  const startYear = month >= 4 ? year : year - 1;
   const endYear = startYear + 1;
   return `${String(startYear).slice(-2)}${String(endYear).slice(-2)}`;
 }

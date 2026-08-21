@@ -5,7 +5,11 @@ import { getSalesReport, type GroupBy } from "@/lib/reports";
 export const dynamic = "force-dynamic";
 
 function csvCell(v: string | number): string {
-  const s = String(v);
+  let s = String(v);
+  // Excel and Sheets execute a cell starting with = + - @ as a formula, so a
+  // product name like "=HYPERLINK(...)" would run on open. Prefix with a
+  // single quote to force it to be read as text.
+  if (/^[=+\-@\t\r]/.test(s)) s = `'${s}`;
   return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 }
 

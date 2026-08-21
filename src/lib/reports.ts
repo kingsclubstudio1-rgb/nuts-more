@@ -1,6 +1,7 @@
 import "server-only";
 import { createAdminClient } from "./supabase/admin";
 import { isSupabaseAdminConfigured } from "./supabase/config";
+import { istDayStart, istDayEnd, istShifted } from "./ist";
 import type { OrderItem } from "./orders";
 
 export type GroupBy = "day" | "week" | "month";
@@ -39,28 +40,36 @@ export type SalesReport = {
 async function fetchOrders(from: string, to: string): Promise<OrderRow[]> {
   if (!isSupabaseAdminConfigured()) return [];
   const sb = createAdminClient();
-  // `to` is inclusive of the whole day.
-  const toExclusive = new Date(to + "T00:00:00Z");
-  toExclusive.setUTCDate(toExclusive.getUTCDate() + 1);
+  // Range boundaries are IST calendar days, not UTC ones: "today" must mean
+  // midnight-to-midnight in India. `to` is inclusive of its whole day.
   const { data, error } = await sb
     .from("orders")
     .select("id, items, subtotal, discount, shipping, total, status, cgst, sgst, igst, created_at")
-    .gte("created_at", `${from}T00:00:00.000Z`)
-    .lt("created_at", toExclusive.toISOString())
+    .gte("created_at", istDayStart(from).toISOString())
+    .lt("created_at", istDayEnd(to).toISOString())
     .order("created_at", { ascending: true });
   if (error || !data) return [];
   return data as OrderRow[];
 }
 
+/**
+ * Which day/week/month an order belongs to, as seen in India. `istShifted`
+ * moves the instant so its UTC fields read as IST wall-clock, letting the
+ * existing UTC-based calendar arithmetic stay correct for Indian dates.
+ */
 function bucketKey(iso: string, groupBy: GroupBy): { key: string; label: string } {
-  const d = new Date(iso);
+  const d = istShifted(new Date(iso));
+  const fmtOpts = { timeZone: "UTC" } as const; // `d` already carries IST wall-clock
   if (groupBy === "day") {
     const key = d.toISOString().slice(0, 10);
-    return { key, label: d.toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" }) };
+    return {
+      key,
+      label: d.toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric", ...fmtOpts }),
+    };
   }
   if (groupBy === "month") {
     const key = d.toISOString().slice(0, 7);
-    return { key, label: d.toLocaleDateString("en-IN", { month: "long", year: "numeric" }) };
+    return { key, label: d.toLocaleDateString("en-IN", { month: "long", year: "numeric", ...fmtOpts }) };
   }
   // ISO week (Mon-Sun)
   const t = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
@@ -69,7 +78,7 @@ function bucketKey(iso: string, groupBy: GroupBy): { key: string; label: string 
   const key = t.toISOString().slice(0, 10);
   const end = new Date(t);
   end.setUTCDate(end.getUTCDate() + 6);
-  const fmt = (x: Date) => x.toLocaleDateString("en-IN", { day: "2-digit", month: "short" });
+  const fmt = (x: Date) => x.toLocaleDateString("en-IN", { day: "2-digit", month: "short", ...fmtOpts });
   return { key, label: `${fmt(t)} – ${fmt(end)}, ${end.getUTCFullYear()}` };
 }
 
@@ -133,7 +142,9 @@ function iso(d: Date): string {
 export function datePreset(
   key: "today" | "yesterday" | "7d" | "30d" | "this_month" | "last_month" | "this_year",
 ): { from: string; to: string } {
-  const now = new Date();
+  // Anchored to the IST calendar so "today" matches the storefront's day, not
+  // the server's UTC day (which lags India by 5h30m).
+  const now = istShifted(new Date());
   const todayIso = iso(now);
   switch (key) {
     case "today":
