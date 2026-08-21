@@ -6,6 +6,7 @@ import { isAdminLogin, setSession, clearSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { sendAuthLinkEmail } from "@/lib/mailer";
+import { checkRateLimit, recordFailure, clearFailures, clientIp } from "@/lib/rate-limit";
 
 type State = { error?: string; ok?: boolean; message?: string } | undefined;
 
@@ -22,8 +23,22 @@ export async function loginAction(_prev: State, formData: FormData): Promise<Sta
 
   if (!email || !password) return { error: "Please enter your email and password." };
 
+  // Throttle per email and per IP: the email cap stops one account being
+  // hammered, the IP cap stops one attacker spraying many accounts. This
+  // guards the admin password too, which is otherwise unlimited guesses.
+  const ip = await clientIp();
+  for (const id of [email, `ip:${ip}`]) {
+    const gate = await checkRateLimit(id, "login");
+    if (!gate.allowed) return { error: gate.message };
+  }
+
+  const fail = async () => {
+    await Promise.all([recordFailure(email, "login"), recordFailure(`ip:${ip}`, "login")]);
+  };
+
   // 1) Admin credentials → admin panel
   if (isAdminLogin(email, password)) {
+    await Promise.all([clearFailures(email, "login"), clearFailures(`ip:${ip}`, "login")]);
     await setSession();
     redirect(safeNext(next, "/admin").startsWith("/admin") ? safeNext(next, "/admin") : "/admin");
   }
@@ -34,8 +49,12 @@ export async function loginAction(_prev: State, formData: FormData): Promise<Sta
   }
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
-  if (error) return { error: "Incorrect email or password." };
+  if (error) {
+    await fail();
+    return { error: "Incorrect email or password." };
+  }
 
+  await Promise.all([clearFailures(email, "login"), clearFailures(`ip:${ip}`, "login")]);
   redirect(safeNext(next, "/account"));
 }
 
@@ -53,6 +72,15 @@ export async function signupAction(_prev: State, formData: FormData): Promise<St
   if (!isSupabaseConfigured()) {
     return { error: "Sign-up isn't available yet — the store owner needs to finish setup." };
   }
+
+  // Throttle account creation so the form can't be used to mass-create junk
+  // accounts (each one also sends a confirmation email on our SMTP quota).
+  const signupIp = await clientIp();
+  for (const id of [email, `ip:${signupIp}`]) {
+    const gate = await checkRateLimit(id, "signup");
+    if (!gate.allowed) return { error: gate.message };
+  }
+  await recordFailure(`ip:${signupIp}`, "signup");
 
   // Where the email-confirmation link should land: our callback route exchanges
   // the code for a session and logs the user in (previously it hit the homepage
@@ -123,6 +151,15 @@ export async function forgotPasswordAction(_prev: State, formData: FormData): Pr
   if (!isSupabaseConfigured()) {
     return { error: "Password reset isn't available yet — the store owner needs to finish setup." };
   }
+
+  // Each request emails a third party, so throttle by address and by sender to
+  // stop the form being used to flood someone else's inbox.
+  const resetIp = await clientIp();
+  for (const id of [email, `ip:${resetIp}`]) {
+    const gate = await checkRateLimit(id, "reset");
+    if (!gate.allowed) return { error: gate.message };
+  }
+  await Promise.all([recordFailure(email, "reset"), recordFailure(`ip:${resetIp}`, "reset")]);
 
   // Same reasoning as sign-up: mint the link ourselves and send it over the
   // store's SMTP so a rate-limited Supabase mailer can't strand a locked-out

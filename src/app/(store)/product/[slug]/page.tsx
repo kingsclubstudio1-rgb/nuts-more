@@ -9,6 +9,7 @@ import { ProductCard } from "@/components/products/product-card";
 import { ProductGallery } from "@/components/products/product-gallery";
 import { galleryImages } from "@/lib/catalog";
 import { getCategory, getProductBySlug, getProducts } from "@/lib/cms";
+import { SITE } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -18,7 +19,30 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
   if (!product) return { title: "Not found" };
-  return { title: product.name, description: product.blurb };
+
+  const url = `https://${SITE.web}/product/${product.slug}`;
+  const image = product.image ? [product.image] : undefined;
+
+  return {
+    title: product.name,
+    description: product.blurb,
+    // Without a canonical, the same product reachable via different query
+    // strings looks like duplicate pages to a crawler and splits its ranking.
+    alternates: { canonical: url },
+    openGraph: {
+      title: `${product.name} · ${SITE.name}`,
+      description: product.blurb,
+      url,
+      type: "website",
+      images: image,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${product.name} · ${SITE.name}`,
+      description: product.blurb,
+      images: image,
+    },
+  };
 }
 
 export default async function ProductPage({ params }: Params) {
@@ -31,8 +55,43 @@ export default async function ProductPage({ params }: Params) {
     .filter((p) => p.id !== product.id)
     .slice(0, 4);
 
+  // Product/Offer structured data so search results can show price and
+  // availability rather than a bare link. Each weight is its own offer.
+  const productLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: product.description || product.blurb,
+    image: product.images?.length ? product.images : product.image ? [product.image] : undefined,
+    sku: product.id,
+    category: cat?.name ?? product.category,
+    brand: { "@type": "Brand", name: SITE.name },
+    offers: product.variants.map((v) => ({
+      "@type": "Offer",
+      name: `${product.name} (${v.weight})`,
+      price: v.price,
+      priceCurrency: "INR",
+      availability: `https://schema.org/${v.stock > 0 ? "InStock" : "OutOfStock"}`,
+      url: `https://${SITE.web}/product/${product.slug}`,
+    })),
+    ...((product.reviews ?? 0) > 0
+      ? {
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: product.rating ?? 4.7,
+            reviewCount: product.reviews ?? 0,
+          },
+        }
+      : {}),
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        // Values come from our own catalog, not user input.
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productLd) }}
+      />
       {/* Breadcrumb */}
       <div className="border-b border-line bg-cream-2">
         <Container className="py-3">

@@ -274,3 +274,26 @@ create index if not exists enquiries_created_idx on public.enquiries (created_at
 -- Written and read only through the service-role key (public API route +
 -- admin panel), so RLS stays on with no policy: nothing reaches it directly.
 alter table public.enquiries enable row level security;
+
+-- ------------------------------------------------------------------
+-- Auth rate limiting (sign-in, sign-up, password reset)
+--
+-- Kept in the database rather than process memory: serverless functions
+-- share no state between invocations, so an in-memory counter resets on
+-- every cold start and protects nothing. Only failures are recorded, so
+-- a legitimate user is never locked out by their own past sign-ins.
+-- ------------------------------------------------------------------
+create table if not exists public.auth_attempts (
+  id          bigserial primary key,
+  identifier  text not null,   -- lowercased email, or client IP
+  action      text not null,   -- login | signup | reset
+  created_at  timestamptz not null default now()
+);
+
+create index if not exists auth_attempts_lookup_idx
+  on public.auth_attempts (identifier, action, created_at desc);
+
+alter table public.auth_attempts enable row level security;
+
+-- See supabase migration 'auth_rate_limiting' for check_auth_rate_limit(),
+-- record_auth_failure() and clear_auth_failures(), all service-role only.
