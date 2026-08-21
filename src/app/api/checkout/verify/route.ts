@@ -5,7 +5,7 @@ import { decrementStock, restockItems, getProductById } from "@/lib/cms";
 import { discountRate, discountLabel } from "@/lib/pricing";
 import { shippingCharge } from "@/lib/shipping";
 import { verifyRazorpaySignature, fetchRazorpayPayment, refundRazorpayPayment } from "@/lib/razorpay";
-import { getInvoiceConfig, computeGst, nextInvoiceNumber } from "@/lib/gst";
+import { getInvoiceConfig, computeOrderGst, nextInvoiceNumber } from "@/lib/gst";
 import { buildInvoiceData } from "@/lib/invoice";
 import { renderInvoicePdf } from "@/lib/invoice-pdf";
 import { sendInvoiceEmail, sendAdminOrderNotification, sendRefundFailureAlert } from "@/lib/mailer";
@@ -44,16 +44,35 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true, orderId: existing.id, duplicate: true });
   }
 
-  // Recompute totals server-side (authoritative record).
+  // Recompute totals server-side (authoritative record). The product's HSN and
+  // GST rate are copied onto the line and frozen: reclassifying a product later
+  // must never change the tax on an invoice already issued.
+  const invoiceConfigEarly = await getInvoiceConfig();
   let subtotal = 0;
-  const lineItems: { id: string; name: string; weight: string; price: number; qty: number }[] = [];
+  const lineItems: {
+    id: string;
+    name: string;
+    weight: string;
+    price: number;
+    qty: number;
+    hsn?: string;
+    gstRate: number;
+  }[] = [];
   for (const it of items ?? []) {
     const p = await getProductById(it.id);
     const v = p?.variants.find((x: { weight: string }) => x.weight === it.weight);
     if (!p || !v) continue;
     const qty = Math.max(1, Math.floor(it.qty || 1));
     subtotal += v.price * qty;
-    lineItems.push({ id: p.id, name: p.name, weight: v.weight, price: v.price, qty });
+    lineItems.push({
+      id: p.id,
+      name: p.name,
+      weight: v.weight,
+      price: v.price,
+      qty,
+      hsn: p.hsn,
+      gstRate: p.gstRate ?? invoiceConfigEarly.gstRate,
+    });
   }
   if (!lineItems.length) {
     return NextResponse.json({ error: "No valid items in this order." }, { status: 400 });
@@ -65,14 +84,18 @@ export async function POST(req: Request) {
 
   // Tax: computed and frozen at the time of sale (rate changes later must
   // never retroactively alter an already-issued invoice). Prices are
-  // GST-inclusive, so tax is extracted from `total` — the exact amount
-  // charged — keeping taxable + cgst + sgst equal to the grand total.
-  const invoiceConfig = await getInvoiceConfig();
-  const { taxableAmount, cgst, sgst, igst, gstRate } = computeGst(
-    total,
+  // GST-inclusive, so tax is extracted from what is actually charged, per line
+  // at that line's own rate — the catalog mixes 5% raw goods with higher-rated
+  // roasted and flavoured ones.
+  const invoiceConfig = invoiceConfigEarly;
+  const tax = computeOrderGst(
+    lineItems.map((l) => ({ value: l.price * l.qty, ratePercent: l.gstRate })),
+    discount,
+    shipping,
     address?.state,
     invoiceConfig.gstRate,
   );
+  const { taxableAmount, cgst, sgst, igst, gstRate } = tax;
 
   // The signature only proves Razorpay issued this order/payment pair — it
   // says nothing about the basket or the amount. Without comparing against the

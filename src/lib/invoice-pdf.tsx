@@ -144,6 +144,7 @@ export function InvoiceDocument({ data }: { data: InvoiceData }) {
           <View style={styles.tHeadRow}>
             <Text style={[styles.th, styles.colItem]}>Item</Text>
             <Text style={[styles.th, styles.colHsn]}>HSN</Text>
+            <Text style={[styles.th, styles.colQty]}>GST%</Text>
             <Text style={[styles.th, styles.colQty]}>Qty</Text>
             <Text style={[styles.th, styles.colRate]}>Rate</Text>
             <Text style={[styles.th, styles.colValue]}>Value</Text>
@@ -154,6 +155,7 @@ export function InvoiceDocument({ data }: { data: InvoiceData }) {
                 {l.name} ({l.weight})
               </Text>
               <Text style={[styles.td, styles.colHsn]}>{l.hsn || "—"}</Text>
+              <Text style={[styles.td, styles.colQty]}>{l.gstRate != null ? l.gstRate + "%" : "—"}</Text>
               <Text style={[styles.td, styles.colQty]}>{l.qty}</Text>
               <Text style={[styles.td, styles.colRate]}>{formatINR(l.rate)}</Text>
               <Text style={[styles.td, styles.colValue]}>{formatINR(l.value)}</Text>

@@ -95,7 +95,8 @@ create table if not exists public.products (
   hidden      boolean default false,
   rating      numeric default 4.7,
   reviews     integer default 0,
-  hsn         text,                          -- HSN code for GST invoices (optional; fill in per product)
+  hsn         text,                          -- HSN code for GST invoices (verify with your accountant)
+  gst_rate    numeric,                       -- GST % for this product; null uses the store-wide rate
   updated_at  timestamptz default now()
 );
 

@@ -87,6 +87,103 @@ export function computeGst(
   return { taxableAmount, cgst: 0, sgst: 0, igst: tax, gstRate: gstRatePercent };
 }
 
+export type TaxableLine = {
+  /** Line value before discount/shipping, i.e. unit price x qty. */
+  value: number;
+  /** GST % for this line. */
+  ratePercent: number;
+};
+
+export type OrderTax = {
+  taxableAmount: number;
+  cgst: number;
+  sgst: number;
+  igst: number;
+  /** Blended effective rate, for display on a mixed-rate order. */
+  gstRate: number;
+  /** Per-line breakdown, frozen onto the order so invoices never drift. */
+  lines: { taxable: number; cgst: number; sgst: number; igst: number; ratePercent: number }[];
+};
+
+/**
+ * Tax an order whose lines may sit at different GST rates.
+ *
+ * A single store-wide rate cannot describe a catalog mixing raw nuts with
+ * roasted and flavoured ones, so each line is taxed at its own rate and the
+ * results summed.
+ *
+ * Order-level discount and shipping are apportioned across lines by value,
+ * with the rounding remainder pushed onto the largest line so the apportioned
+ * amounts add back to the originals exactly. Every line is GST-inclusive, so
+ * taxable + tax equals the amount charged — for each line and for the order.
+ */
+export function computeOrderGst(
+  lines: TaxableLine[],
+  discount: number,
+  shipping: number,
+  buyerState: string | undefined | null,
+  fallbackRatePercent: number,
+): OrderTax {
+  const subtotal = lines.reduce((s, l) => s + l.value, 0);
+  const sameState = normalizeState(buyerState) === normalizeSellerState();
+
+  if (!lines.length || subtotal <= 0) {
+    return { taxableAmount: 0, cgst: 0, sgst: 0, igst: 0, gstRate: fallbackRatePercent, lines: [] };
+  }
+
+  // Apportion by value, then correct the residue on the largest line so the
+  // parts sum to the whole (plain rounding would drift by a rupee or two).
+  const alloc = (amount: number): number[] => {
+    const parts = lines.map((l) => Math.round((amount * l.value) / subtotal));
+    const drift = amount - parts.reduce((s, p) => s + p, 0);
+    if (drift !== 0) {
+      let biggest = 0;
+      lines.forEach((l, i) => {
+        if (l.value > lines[biggest].value) biggest = i;
+      });
+      parts[biggest] += drift;
+    }
+    return parts;
+  };
+
+  const discountParts = alloc(discount);
+  const shippingParts = alloc(shipping);
+
+  const out: OrderTax["lines"] = [];
+  let taxableAmount = 0,
+    cgst = 0,
+    sgst = 0,
+    igst = 0;
+
+  lines.forEach((l, i) => {
+    const gross = Math.max(0, l.value - discountParts[i] + shippingParts[i]);
+    const rate = (Number.isFinite(l.ratePercent) ? l.ratePercent : fallbackRatePercent) / 100;
+    const taxable = Math.round(gross / (1 + rate));
+    const tax = gross - taxable;
+
+    const lineCgst = sameState ? Math.round(tax / 2) : 0;
+    const lineSgst = sameState ? tax - lineCgst : 0;
+    const lineIgst = sameState ? 0 : tax;
+
+    taxableAmount += taxable;
+    cgst += lineCgst;
+    sgst += lineSgst;
+    igst += lineIgst;
+    out.push({
+      taxable,
+      cgst: lineCgst,
+      sgst: lineSgst,
+      igst: lineIgst,
+      ratePercent: rate * 100,
+    });
+  });
+
+  const totalTax = cgst + sgst + igst;
+  const blended = taxableAmount > 0 ? Math.round((totalTax / taxableAmount) * 10000) / 100 : 0;
+
+  return { taxableAmount, cgst, sgst, igst, gstRate: blended, lines: out };
+}
+
 /**
  * Indian financial year key for "now" or a given date: Apr 1 - Mar 31,
  * e.g. "2526" for FY 2025-26.

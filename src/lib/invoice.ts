@@ -13,6 +13,8 @@ export type InvoiceLine = {
   qty: number;
   rate: number; // price per unit
   value: number; // qty * rate
+  /** GST % applied to this line, frozen at time of sale. */
+  gstRate?: number;
 };
 
 export type InvoiceData = {
@@ -65,16 +67,23 @@ export async function buildInvoiceData(order: AdminOrder): Promise<InvoiceData> 
     ? [addr.line1, addr.city, addr.state, addr.pincode].filter(Boolean).join(", ")
     : "—";
 
+  // Prefer the HSN and GST rate frozen onto the line at the time of sale.
+  // Reclassifying a product later must not alter an invoice already issued;
+  // the product lookup is only a fallback for orders placed before those
+  // fields were stored.
   const lines: InvoiceLine[] = await Promise.all(
     order.items.map(async (i) => {
-      const product = await getProductById(i.id).catch(() => undefined);
+      const stored = i as typeof i & { hsn?: string; gstRate?: number };
+      const needsLookup = !stored.hsn || stored.gstRate == null;
+      const product = needsLookup ? await getProductById(i.id).catch(() => undefined) : undefined;
       return {
         name: i.name,
-        hsn: product?.hsn || undefined,
+        hsn: stored.hsn || product?.hsn || undefined,
         weight: i.weight,
         qty: i.qty,
         rate: i.price,
         value: i.price * i.qty,
+        gstRate: stored.gstRate ?? product?.gstRate ?? config.gstRate,
       };
     }),
   );

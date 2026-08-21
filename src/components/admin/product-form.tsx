@@ -34,6 +34,7 @@ export function ProductForm({
   const [benefitsText, setBenefitsText] = useState((product?.benefits ?? []).join("\n"));
   const [storage, setStorage] = useState(product?.storage ?? "");
   const [hsn, setHsn] = useState(product?.hsn ?? "");
+  const [gstRate, setGstRate] = useState(product?.gstRate == null ? "" : String(product.gstRate));
   const [nutrition, setNutrition] = useState<NutritionRow[]>(product?.nutrition ?? []);
   const [badge, setBadge] = useState(product?.badge ?? "");
   const [featured, setFeatured] = useState(product?.featured ?? false);
@@ -107,6 +108,7 @@ export function ProductForm({
         .filter((n) => n.label && n.value),
       storage: storage.trim() || undefined,
       hsn: hsn.trim() || undefined,
+      gstRate: gstRate.trim() === "" ? undefined : Number(gstRate),
       badge: (badge || undefined) as Product["badge"],
       featured,
       hidden,
@@ -285,6 +287,24 @@ export function ProductForm({
               className="w-full max-w-xs rounded-xl border border-line bg-card px-3.5 py-2.5 text-sm font-mono focus:border-gold focus:outline-none"
               placeholder="e.g. 08013200"
             />
+          </label>
+
+          <label className="block">
+            <span className="mb-1.5 block text-sm font-medium text-foreground">GST rate %</span>
+            <input
+              type="number"
+              min={0}
+              max={28}
+              step="0.01"
+              value={gstRate}
+              onChange={(e) => setGstRate(e.target.value)}
+              className="w-full max-w-xs rounded-xl border border-line bg-card px-3.5 py-2.5 text-sm focus:border-gold focus:outline-none"
+              placeholder="leave blank to use store default"
+            />
+            <span className="mt-1 block text-xs text-muted-foreground">
+              Blank uses the store-wide rate. Roasted, salted or flavoured items (HSN 2008) and
+              cereal preparations (1904) usually attract a higher rate than raw nuts and dried fruit.
+            </span>
             <span className="mt-1 block text-xs text-muted-foreground">
               Optional — shown on tax invoices when set. Leave blank if unsure.
             </span>
