@@ -3,7 +3,7 @@ import { getProducts, getCategories } from "@/lib/cms";
 import { SITE } from "@/lib/site";
 import { POLICIES } from "@/lib/policies";
 
-const BASE = `https://${SITE.web.replace(/^www\./, "www.")}`;
+const BASE = `https://${SITE.web}`;
 
 export const dynamic = "force-dynamic";
 
@@ -24,6 +24,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/bulk`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE}/corporate-gifting`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE}/case-studies`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${BASE}/track`, lastModified: now, changeFrequency: "yearly", priority: 0.4 },
   ];
 
   const policyPages: MetadataRoute.Sitemap = Object.keys(POLICIES).map((slug) => ({
